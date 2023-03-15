@@ -1,12 +1,10 @@
 import { useState } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Collapse from "react-bootstrap/Collapse";
+import Link from "next/link";
+import FlatifyDashboard from "@/pages/dashboard";
 import styles from "src/styles/login_register.module.css";
-
 export default function Login() {
   const [open, setOpen] = useState(false);
 
@@ -15,7 +13,7 @@ export default function Login() {
   };
   return (
     <div>
-      <p></p>
+      <Link href="/dashboard">Head to dashboard</Link>
       <Button
         className={styles.login_btn}
         onClick={handleToggle}
