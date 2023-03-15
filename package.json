@@ -9,10 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@splinetool/react-spline": "^2.2.6",
+    "@splinetool/runtime": "^0.9.257",
+    "bootstrap": "^5.2.3",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.4",
+    "mdb-react-ui-kit": "^5.1.0",
     "next": "13.2.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-bootstrap": "^2.7.2",
+    "react-dom": "18.2.0",
+    "react-router-dom": "^6.8.2"
   }
 }
