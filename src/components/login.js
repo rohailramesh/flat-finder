@@ -13,7 +13,7 @@ export default function Login() {
   };
   return (
     <div>
-      <Link href="/dashboard">Head to dashboard</Link>
+      {/* <Link href="/dashboard">Head to dashboard</Link> */}
       <Button
         className={styles.login_btn}
         onClick={handleToggle}
