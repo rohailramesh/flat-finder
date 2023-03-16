@@ -24,12 +24,20 @@ export default function Home() {
             </div>
             <Row>
               <Col>
-                <Login />
+                <Login
+                  email={email}
+                  setEmail={setEmail}
+                  password={password}
+                  setPassword={setPassword}
+                />
               </Col>
               <Col>
                 <Register
-                  setName={setName}
+                  email={email}
                   setEmail={setEmail}
+                  name={name}
+                  setName={setName}
+                  password={password}
                   setPassword={setPassword}
                 />
               </Col>
