@@ -2,20 +2,30 @@
 export default class User {
   constructor() {}
 
-  async register(name, email, password) {
-    const response = await fetch("http://127.0.0.1:3001/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Successful registration: ", {data});
-      return data;
-    } else {
-      console.log("Error registring");
+  async register(supabase, name, email, password) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      //options specifies "user_metadata" property
+      options: {
+        data: {
+          name,
+      }
     }
+    })
+
+    console.log({data, error})
+    return data
+  }
+
+
+  async getAuthUser(supabase){
+    const { data } = await supabase.auth.getUser()
+    console.log({data})
+    return data.user;
+  }
+
+  async logout(supabase) {
+    const { error } = await supabase.auth.signOut()
   }
 }
