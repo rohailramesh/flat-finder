@@ -22,6 +22,7 @@ export default function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    props.handleLogin()
     // Do something with email and password
   };
 
@@ -59,7 +60,7 @@ export default function Login(props) {
             />
           </Form.Group>
           <br></br>
-          <Button variant="light" type="submit">
+          <Button variant="light" type="submit" onClick={handleSubmit}>
             Submit
           </Button>
         </Form>

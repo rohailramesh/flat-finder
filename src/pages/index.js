@@ -36,10 +36,17 @@ export default function Home() {
   };
 
   async function handleRegister() {
-    const data = await userService.register(supabase, name, email, password);
+    const user = await userService.register(supabase, name, email, password);
     openNotificationWithIcon("success")
-    setUser(data.user);
+    setUser(user);
   }
+
+  async function handleLogin() {
+    const user = await userService.login(supabase, email, password)
+    setUser(user)
+  }
+
+
   return (
     <div className="main-div">
       {popUp}
@@ -59,6 +66,7 @@ export default function Home() {
                     setEmail={setEmail}
                     password={password}
                     setPassword={setPassword}
+                    handleLogin={handleLogin}
                   />
                 </Col>
                 <Col>
