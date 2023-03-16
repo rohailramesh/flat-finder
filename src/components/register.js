@@ -11,6 +11,23 @@ export default function Register(props) {
     setOpen(!open);
   };
 
+  const handleNameChange = (e) => {
+    props.setName(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    props.setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    props.setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    props.handleRegister();
+    // Do something with email and password
+  };
   return (
     <div>
       <Button
@@ -29,8 +46,8 @@ export default function Register(props) {
             <Form.Control
               type="text"
               placeholder="Enter your name"
-              required
-              onChange={(e) => props.setName(e.target.value)}
+              value={props.name}
+              onChange={handleNameChange}
             />
           </Form.Group>
           <Form.Group controlId="formBasicEmail">
@@ -39,7 +56,8 @@ export default function Register(props) {
               type="email"
               placeholder="Enter email"
               required
-              onChange={(e) => props.setEmail(e.target.value)}
+              value={props.email}
+              onChange={handleEmailChange}
             />
           </Form.Group>
           <Form.Group controlId="formBasicPassword">
@@ -48,11 +66,12 @@ export default function Register(props) {
               type="password"
               placeholder="Password"
               required
-              onChange={(e) => props.setPassword(e.target.value)}
+              value={props.password}
+              onChange={handlePasswordChange}
             />
           </Form.Group>
           <br></br>
-          <Button variant="light" type="submit" /*onClick={registerUser}*/>
+          <Button variant="light" type="submit" onClick={handleSubmit}>
             Register
           </Button>
         </Form>

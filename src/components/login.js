@@ -6,29 +6,24 @@ import Link from "next/link";
 import FlatifyDashboard from "@/pages/dashboard";
 import styles from "src/styles/login_register.module.css";
 
-export default function Login() {
+export default function Login(props) {
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const handleToggle = () => {
     setOpen(!open);
   };
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handleEmailChange = (e) => {
+    props.setEmail(e.target.value);
   };
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+  const handlePasswordChange = (e) => {
+    props.setPassword(e.target.value);
   };
 
-  const handleLogin = () => {
-    // Your login logic here
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Do something with email and password
   };
-
-  console.log(email);
-  console.log(password);
 
   return (
     <div>
@@ -49,6 +44,7 @@ export default function Login() {
               type="email"
               placeholder="Enter email"
               required
+              value={props.email}
               onChange={handleEmailChange}
             />
           </Form.Group>
@@ -58,11 +54,12 @@ export default function Login() {
               type="password"
               placeholder="Password"
               required
+              value={props.password}
               onChange={handlePasswordChange}
             />
           </Form.Group>
           <br></br>
-          <Button variant="light" type="submit" onClick={handleLogin}>
+          <Button variant="light" type="submit">
             Submit
           </Button>
         </Form>
