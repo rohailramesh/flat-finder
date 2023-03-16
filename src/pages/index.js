@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,20 +10,28 @@ import Image from "next/image";
 import styles from "src/styles/login_register.module.css";
 
 export default function Home() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="main-div">
       <Container className="main-container">
         <Row>
           <Col sm={12} md={6} className="text-light p-5">
             <div className={styles.logo}>
-              <Image src="/fdmlogo.png" width={200} height={200} />
+              <Image src="/fdmlogo.png" width={200} height={200} alt="logo" />
             </div>
             <Row>
               <Col>
                 <Login />
               </Col>
               <Col>
-                <Register />
+                <Register
+                  setName={setName}
+                  setEmail={setEmail}
+                  setPassword={setPassword}
+                />
               </Col>
             </Row>
           </Col>
