@@ -25,6 +25,7 @@ export default function Register(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    props.handleRegister();
     // Do something with email and password
   };
   return (
@@ -70,7 +71,7 @@ export default function Register(props) {
             />
           </Form.Group>
           <br></br>
-          <Button variant="light" type="submit" /*onClick={registerUser}*/>
+          <Button variant="light" type="submit" onClick={handleSubmit}>
             Register
           </Button>
         </Form>
