@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,34 +10,41 @@ import Register from "@/components/register";
 import Image from "next/image";
 import styles from "src/styles/login_register.module.css";
 import User from "@/services/user";
+import FlatifyDashboard from "./dashboard";
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { notification } from 'antd'
 
 export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [session, setSession] = useState("");
   const [user, setUser] = useState("");
+  const [api, popUp] = notification.useNotification()
+
   const userService = new User();
 
-  useEffect(() => {
-    setSession(localStorage.getItem("access_token"));
-    if (session) {
-      console.log("The session");
-    } else {
-      console.log("No session");
-    }
-  });
+  const session = useSession();
+  const supabase = useSupabaseClient()
+
+  function openNotificationWithIcon(type) {
+    api[type]({
+      message: 'Confirmation email sent!',
+      duration: 3,
+      description:
+        'We sent you a confirmation email. Click on the link provided to confirm your account and login',
+    });
+  };
 
   async function handleRegister() {
-    const data = await userService.register(name, email, password);
-    localStorage.setItem("access_token", data.session.access_token);
-    setSession(data.session.access_token);
+    const data = await userService.register(supabase, name, email, password);
+    openNotificationWithIcon("success")
     setUser(data.user);
   }
   return (
     <div className="main-div">
+      {popUp}
       {session ? (
-        <div>Dashboard</div>
+        <FlatifyDashboard/>
       ) : (
         <Container className="main-container">
           <Row>
