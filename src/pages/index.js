@@ -9,7 +9,6 @@ import Spline from "@splinetool/react-spline";
 import Login from "@/components/login";
 import Register from "@/components/register";
 import Image from "next/image";
-import styles from "src/styles/login_register.module.css";
 import FlatifyDashboard from "./dashboard";
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { notification } from 'antd'
