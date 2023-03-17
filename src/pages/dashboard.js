@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import User from "@/services/user";
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import UserService from "@/services/user";
 
 export default function FlatifyDashboard() {
 
-  const userService = new User()
+  const userService = new UserService()
   const supabase = useSupabaseClient()
   const [user, setUser] = useState({
     name: '',
