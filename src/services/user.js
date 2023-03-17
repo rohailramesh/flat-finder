@@ -32,8 +32,13 @@ export default class UserService {
       email,
       password
     })
-    console.log("Login result: ", {data, error})
-    return data.user
+
+    // const response = await supabase.from('profiles').update({ last_sign_in_at: data.user.last_sign_in_at }).eq('id', data.user.id)
+    // console.log("Here is the response: ", response)
+    // const user_data = response.data[0]
+    const user = new User(data.user)
+    // console.log("Inserted profile, got back: ", response, " and a user: ", user_data)
+    return user
   }
 
   async getAuthUser(supabase){
