@@ -1,5 +1,5 @@
 
-import User from "@/models/User"
+import { User } from "@/models/User"
 
 export default class UserService {
   constructor() {}
@@ -15,36 +15,24 @@ export default class UserService {
       }
     }
     })
-    const response = await supabase
-    .from('profiles')
-    .insert({ email, name, user_id: data.user.id, last_sign_in_at: data.user.last_sign_in_at }).select().eq("user_id", data.user.id)
-    
-    const user_data = response.data[0]
-    const user = new User(user_data)
-    console.log("Inserted profile, got back: ", response, " and a user: ", user_data)
-    // console.log("Registration result: ", {data, error}
-
-    return user
+    const response = await supabase.from('profile').insert({ email, name, user_id: data.user.id, last_sign_in_at: data.user.last_sign_in_at })
+    .select().eq("user_id", data.user.id)
+    return new User(response.data[0])
   }
 
   async login(supabase, email, password){
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
-    })
-
-    // const response = await supabase.from('profiles').update({ last_sign_in_at: data.user.last_sign_in_at }).eq('id', data.user.id)
-    // console.log("Here is the response: ", response)
-    // const user_data = response.data[0]
-    const user = new User(data.user)
-    // console.log("Inserted profile, got back: ", response, " and a user: ", user_data)
-    return user
+    })    
+    const response = await supabase.from('profile').update({ last_sign_in_at: data.user.last_sign_in_at }).select("*").eq('user_id', String(data.user.id))
+    return new User(response.data[0])
   }
 
-  async getAuthUser(supabase){
+  async getAuthUserProfile(supabase){
     const { data } = await supabase.auth.getUser()
-    console.log({data})
-    return data.user;
+    const user_profile = await supabase.from('profile').select("*").eq("user_id", String(data.user.id))
+    return new User(user_profile.data[0]);
   }
 
   async logout(supabase) {

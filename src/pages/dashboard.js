@@ -2,7 +2,8 @@ import { Layout, Space } from "antd";
 import { useEffect, useState } from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
-import User from "@/services/user";
+import UserService from "@/services/user";
+import { User, emptyUser } from "@/models/User";
 import LeftDashboard from "@/components/consultantdashboardleft";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 const { Header, Footer, Sider, Content } = Layout;
@@ -38,18 +39,14 @@ const footerStyle = {
 };
 
 export default function FlatifyDashboard() {
-  const userService = new User();
+  const userService = new UserService();
   const supabase = useSupabaseClient();
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    avatar_url: "",
-  });
+  const [user, setUser] = useState(new User(emptyUser))
 
   useEffect(() => {
     (async () => {
-      const user = await userService.getAuthUser(supabase);
-      setUser({ email: user.email, ...user.user_metadata });
+      const user_profile = await userService.getAuthUserProfile(supabase);
+      setUser(user_profile);
     })();
   }, []);
 
@@ -102,8 +99,13 @@ export default function FlatifyDashboard() {
           </Layout>
           <Layout>
             <Sider style={siderStyle}>
-              <h1>{user.name}</h1>
-              <h2>{user.email}</h2>
+              {user.email ?
+                <div>
+                  <h1>{user.name}</h1>
+                  <h2>{user.email}</h2>
+                </div>
+                : <></> // put a loader here
+            }
             </Sider>
           </Layout>
         </Layout>

@@ -51,7 +51,7 @@ export default function Home() {
     <div className="main-div">
       {popUp}
       {session ? (
-        <FlatifyDashboard />
+        <FlatifyDashboard/>
       ) : (
         <Container className="main-container">
           <Row>
