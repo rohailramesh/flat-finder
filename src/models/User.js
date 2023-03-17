@@ -1,4 +1,4 @@
-export default class User {
+class User {
 
     id;
     name;
@@ -16,4 +16,18 @@ export default class User {
         // this.message_inbox = user.message_inbox
     }
 
+}
+
+const emptyUser = {
+    id: null,
+    name: null,
+    email: null,
+    avatar_url: null,
+    last_sign_in_at: null
+
+}
+
+export {
+    User,
+    emptyUser
 }
