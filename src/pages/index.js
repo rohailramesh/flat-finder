@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import styles from "../styles/login_register.module.css";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Container from "react-bootstrap/Container";
@@ -8,50 +9,48 @@ import Spline from "@splinetool/react-spline";
 import Login from "@/components/login";
 import Register from "@/components/register";
 import Image from "next/image";
-import styles from "src/styles/login_register.module.css";
 import User from "@/services/user";
 import FlatifyDashboard from "./dashboard";
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { notification } from 'antd'
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { notification } from "antd";
 
 export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState("");
-  const [api, popUp] = notification.useNotification()
+  const [api, popUp] = notification.useNotification();
 
   const userService = new User();
 
   const session = useSession();
-  const supabase = useSupabaseClient()
+  const supabase = useSupabaseClient();
 
   function openNotificationWithIcon(type) {
     api[type]({
-      message: 'Confirmation email sent!',
+      message: "Confirmation email sent!",
       duration: 3,
       description:
-        'We sent you a confirmation email. Click on the link provided to confirm your account and login',
+        "We sent you a confirmation email. Click on the link provided to confirm your account and login",
     });
-  };
+  }
 
   async function handleRegister() {
     const user = await userService.register(supabase, name, email, password);
-    openNotificationWithIcon("success")
+    openNotificationWithIcon("success");
     setUser(user);
   }
 
   async function handleLogin() {
-    const user = await userService.login(supabase, email, password)
-    setUser(user)
+    const user = await userService.login(supabase, email, password);
+    setUser(user);
   }
-
 
   return (
     <div className="main-div">
       {popUp}
       {session ? (
-        <FlatifyDashboard/>
+        <FlatifyDashboard />
       ) : (
         <Container className="main-container">
           <Row>
