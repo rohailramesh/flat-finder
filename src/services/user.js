@@ -14,6 +14,10 @@ export default class User {
     }
     })
 
+    const { res } = await supabase
+    .from('profiles')
+    .insert({ email, name, user_id: data.user.id })
+
     console.log("Registration result: ", {data, error})
     return data.user
   }
