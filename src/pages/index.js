@@ -9,10 +9,12 @@ import Spline from "@splinetool/react-spline";
 import Login from "@/components/login";
 import Register from "@/components/register";
 import Image from "next/image";
-import User from "@/services/user";
+import styles from "src/styles/login_register.module.css";
 import FlatifyDashboard from "./dashboard";
-import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { notification } from "antd";
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { notification } from 'antd'
+import UserService from "@/services/user";
+
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -21,7 +23,7 @@ export default function Home() {
   const [user, setUser] = useState("");
   const [api, popUp] = notification.useNotification();
 
-  const userService = new User();
+  const userService = new UserService();
 
   const session = useSession();
   const supabase = useSupabaseClient();

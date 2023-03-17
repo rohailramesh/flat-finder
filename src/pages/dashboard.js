@@ -6,6 +6,7 @@ import User from "@/services/user";
 import LeftDashboard from "@/components/consultantdashboardleft";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 const { Header, Footer, Sider, Content } = Layout;
+
 const headerStyle = {
   textAlign: "center",
   color: "#fff",
