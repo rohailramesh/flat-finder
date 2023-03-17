@@ -4,6 +4,7 @@ export default class Listing {
   title;
   images;
   monthly_price;
+  deposit;
   address;
   description;
   owner;
@@ -17,6 +18,7 @@ export default class Listing {
     this.title = listing.title
     this.images = listing.images //array of strings
     this.monthly_price = listing.monthly_price
+    this.deposit = listing.deposit
     this.address = listing.address
     this.description = listing.description
     this.created_at = listing.created_at
