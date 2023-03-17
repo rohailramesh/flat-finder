@@ -44,6 +44,8 @@ const coordinates = {
 
 
 const key_features = {
+  bathrooms: 2,
+  beds: 3,
   monthly_bills: 300, //if 0, then bills included
   pets_allowed: false,
   closest_station: 'mile end station',
