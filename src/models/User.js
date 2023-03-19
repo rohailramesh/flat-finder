@@ -5,6 +5,7 @@ class User {
     email;
     avatar_url;
     last_sign_in_at;
+    is_admin;
     // message_inbox;
 
     constructor(user) {
@@ -13,6 +14,7 @@ class User {
         this.email = user.email
         this.avatar_url = user.avatar_url
         this.last_sign_in_at = user.last_sign_in_at
+        this.is_admin = user.is_admin
         // this.message_inbox = user.message_inbox
     }
 
@@ -23,7 +25,8 @@ const emptyUser = {
     name: null,
     email: null,
     avatar_url: null,
-    last_sign_in_at: null
+    last_sign_in_at: null,
+    is_admin: false
 
 }
 
