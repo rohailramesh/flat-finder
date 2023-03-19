@@ -38,4 +38,8 @@ export default class UserService {
   async logout(supabase) {
     const { error } = await supabase.auth.signOut()
   }
+
+  async updateAvatar(url, profile_id){
+    
+  }
 }
