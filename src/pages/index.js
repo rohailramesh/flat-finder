@@ -12,7 +12,7 @@ import Image from "next/image";
 import FlatifyDashboard from "./dashboard";
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { notification } from 'antd'
-import UserService from "@/services/user";
+import UserService from "@/services/UserService";
 
 
 export default function Home() {
