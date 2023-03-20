@@ -12,7 +12,7 @@ import Image from "next/image";
 import FlatifyDashboard from "./dashboard";
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { notification } from 'antd'
-import UserService from "@/services/user";
+import UserService from "@/services/UserService";
 
 
 export default function Home() {
@@ -51,7 +51,7 @@ export default function Home() {
     <div className="main-div">
       {popUp}
       {session ? (
-        <FlatifyDashboard />
+        <FlatifyDashboard/>
       ) : (
         <Container className="main-container">
           <Row>
@@ -92,11 +92,6 @@ export default function Home() {
           </Row>
         </Container>
       )}
-      <Row>
-        <div className={styles.slogan}>
-          <h1>Helping Connect FDMers Globally</h1>
-        </div>
-      </Row>
     </div>
   );
 }

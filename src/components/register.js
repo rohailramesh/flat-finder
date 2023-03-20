@@ -71,6 +71,7 @@ export default function Register(props) {
             />
           </Form.Group>
           <br></br>
+          <div></div>
           <Button variant="light" type="submit" onClick={handleSubmit}>
             Register
           </Button>

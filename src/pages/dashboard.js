@@ -1,64 +1,66 @@
-import { Layout, Space } from "antd";
-import { useEffect, useState } from "react";
+import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
-import User from "@/services/user";
-import LeftDashboard from "@/components/consultantdashboardleft";
+import {
+  SearchOutlined,
+  AppstoreAddOutlined,
+  InboxOutlined,
+  HomeOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
+import { useEffect, useState } from "react";
+import UserService from "@/services/UserService";
+import { User, emptyUser } from "@/models/User";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import RecentListingsComponent from "@/components/RecentListings";
+import TicketsComponent from "@/components/Tickets";
+import Listing from "@/models/Listing";
+import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/consultantdashboardright";
-import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 
-const headerStyle = {
-  textAlign: "center",
-  color: "#fff",
-  height: 64,
-  paddingInline: 10,
-  lineHeight: "64px",
-  backgroundColor: "#7dbcea",
-  maxWidth: 800,
-};
-const contentStyle = {
-  textAlign: "center",
-  minHeight: 120,
-  lineHeight: "120px",
-  color: "#fff",
-  backgroundColor: "#108ee9",
-  maxWidth: 800,
-};
-const siderStyle = {
-  textAlign: "center",
-  lineHeight: "100px",
-  color: "#fff",
-  backgroundColor: "#3ba0e9",
-  width: 100,
-};
-const footerStyle = {
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#7dbcea",
-};
+function getItem(label, key, icon, children) {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  };
+}
 
-export default function FlatifyDashboard() {
-  const userService = new User();
+const items = [
+  getItem("Home", "1", <HomeOutlined />),
+  getItem("Search", "2", <SearchOutlined />),
+  getItem("Add listings", "3", <AppstoreAddOutlined />),
+  getItem("Inbox", "4", <InboxOutlined />),
+  getItem("Logout", "5", <LogoutOutlined />),
+];
+
+const FlatifyDashboard = () => {
+  const [user, setUser] = useState(new User(emptyUser))
+  const [listings, setListings] = useState([])
+  const [collapsed, setCollapsed] = useState(false);
+  const [options, setOptions] = useState([]);
+
+  const userService = new UserService();
+  const listingService = new ListingService();
   const supabase = useSupabaseClient();
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    avatar_url: "",
-  });
-
-  useEffect(() => {
-    (async () => {
-      const user = await userService.getAuthUser(supabase);
-      setUser({ email: user.email, ...user.user_metadata });
-    })();
-  }, []);
 
   async function handleLogout() {
     const result = await userService.logout(supabase);
   }
 
-  const [options, setOptions] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const [user_profile, allListings] = await Promise.all([
+        userService.getAuthUserProfile(supabase),
+        listingService.getListings()
+      ])
+      setUser(user_profile);
+      setListings(allListings);
+    })();
+  }, []);
 
   const handleSearch = (value) => {
     let res = [];
@@ -75,44 +77,119 @@ export default function FlatifyDashboard() {
     }
     setOptions(res);
   };
-
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
   return (
-    <div>
-      <Space
-        direction="vertical"
-        style={{
-          width: "100%",
-        }}
-        size={[0, 48]}
+    <Layout
+      style={{
+        minHeight: "100vh",
+      }}
+    >
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
       >
-        <Layout>
-          <Sider style={siderStyle}>
-            <LeftDashboard />
-          </Sider>
+        <div
+          style={{
+            height: 38,
+            margin: 12,
+            background: "rgba(255, 255, 255, 0.2)",
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          FDM
+        </div>
 
-          <Layout>
-            <Header style={headerStyle}>
-              Search bar
-              <AutoComplete
-                style={{ width: 200 }}
-                onSearch={handleSearch}
-                placeholder="Search by city"
-                options={options}
-              />
-            </Header>
-            <Content style={contentStyle}>Saved Listings & Tickets</Content>
-          </Layout>
-
-          <Layout>
-            <Sider style={siderStyle}>
-              <RightDashboard />
-            </Sider>
-          </Layout>
-
-        </Layout>
-      </Space>
-
-      <button onClick={handleLogout}>LOGOUT FAM XD</button>
-    </div>
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          mode="inline"
+          items={items}
+          onClick={({ key }) => {
+            if (key === "5") {
+              handleLogout();
+            }
+          }}
+        />
+      </Sider>
+      <Layout className="site-layout">
+        <Header
+          style={{
+            textAlign: "center",
+            color: "#fff",
+            height: 64,
+            paddingInline: 10,
+            lineHeight: "64px",
+            backgroundColor: "#001628",
+            // maxWidth: 800,
+          }}
+        >
+          <AutoComplete
+            style={{ width: 800 }}
+            onSearch={handleSearch}
+            placeholder="Search by city"
+            options={options}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: "0 16px",
+          }}
+        >
+          <Breadcrumb
+            style={{
+              margin: "16px 0",
+            }}
+          >
+            <Breadcrumb.Item>Consultant</Breadcrumb.Item>
+            <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
+          </Breadcrumb>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 570,
+              background: colorBgContainer,
+            }}
+          >
+            <div>
+              <RecentListingsComponent />
+            </div>
+            <div
+              style={{
+                margin: 60,
+                textAlign: "center",
+              }}
+            >
+              <TicketsComponent />
+            </div>
+          </div>
+        </Content>
+        <Footer
+          style={{
+            textAlign: "center",
+            backgroundColor: "white",
+            color: "black",
+          }}
+        >
+          FDM | FLATIFY
+        </Footer>
+      </Layout>
+      <Sider
+        style={{
+          textAlign: "center",
+          lineHeight: "120px",
+          // color: "#fff",
+          width: "50",
+        }}
+      >
+        <Space size={26} wrap>
+          <RightDashboard />
+        </Space>
+      </Sider>
+    </Layout>
   );
-}
+};
+export default FlatifyDashboard;

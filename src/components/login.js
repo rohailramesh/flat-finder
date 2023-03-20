@@ -22,7 +22,7 @@ export default function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.handleLogin()
+    props.handleLogin();
     // Do something with email and password
   };
 
