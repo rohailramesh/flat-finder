@@ -17,8 +17,11 @@ export default class TicketService{
                 content
             })
         })
-        
-        return response
+        if (response.ok) {
+            const result = await response.json()
+            return result
+          }
+          return response
     }
 
 }

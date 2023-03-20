@@ -50,21 +50,16 @@ const FlatifyDashboard = () => {
     const result = await userService.logout(supabase);
   }
 
-  //refactor useEffects to use Promise.all()
   useEffect(() => {
     (async () => {
-      const user_profile = await userService.getAuthUserProfile(supabase);
+      const [user_profile, allListings] = await Promise.all([
+        userService.getAuthUserProfile(supabase),
+        listingService.getListings()
+      ])
       setUser(user_profile);
+      setListings(allListings);
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      const allListings = await listingService.getListings();
-      setListings(allListings)
-    })();
-  }, []);
-
 
   const handleSearch = (value) => {
     let res = [];
