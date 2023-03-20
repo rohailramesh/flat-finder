@@ -1,58 +1,55 @@
-import { Layout, Space } from "antd";
-import { useEffect, useState } from "react";
+import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
-import UserService from "@/services/user";
-import { User, emptyUser } from "@/models/User";
-import LeftDashboard from "@/components/consultantdashboardleft";
+import {
+  SearchOutlined,
+  AppstoreAddOutlined,
+  InboxOutlined,
+  HomeOutlined,
+  LogoutOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
+import { useEffect, useState } from "react";
+import User from "@/services/user";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-const { Header, Footer, Sider, Content } = Layout;
+import RecentListingsComponent from "@/components/RecentListings";
+import TicketsComponent from "@/components/Tickets";
+const { Header, Content, Footer, Sider } = Layout;
+function getItem(label, key, icon, children) {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  };
+}
 
-const headerStyle = {
-  textAlign: "center",
-  color: "#fff",
-  height: 64,
-  paddingInline: 10,
-  lineHeight: "64px",
-  backgroundColor: "#7dbcea",
-  maxWidth: 800,
-};
-const contentStyle = {
-  textAlign: "center",
-  minHeight: 120,
-  lineHeight: "120px",
-  color: "#fff",
-  backgroundColor: "#108ee9",
-  maxWidth: 800,
-};
-const siderStyle = {
-  textAlign: "center",
-  lineHeight: "100px",
-  color: "#fff",
-  backgroundColor: "#3ba0e9",
-  width: 100,
-};
-const footerStyle = {
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#7dbcea",
-};
+const items = [
+  getItem("Home", "1", <HomeOutlined />),
+  getItem("Search", "2", <SearchOutlined />),
+  getItem("Add listings", "3", <AppstoreAddOutlined />),
+  getItem("Inbox", "4", <InboxOutlined />),
+  getItem("Logout", "5", <LogoutOutlined />),
+];
 
-export default function FlatifyDashboard() {
-  const userService = new UserService();
+const FlatifyDashboard = () => {
+  const userService = new User();
   const supabase = useSupabaseClient();
-  const [user, setUser] = useState(new User(emptyUser))
-
-  useEffect(() => {
-    (async () => {
-      const user_profile = await userService.getAuthUserProfile(supabase);
-      setUser(user_profile);
-    })();
-  }, []);
-
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    avatar_url: "",
+  });
   async function handleLogout() {
     const result = await userService.logout(supabase);
   }
+  useEffect(() => {
+    (async () => {
+      const user = await userService.getAuthUser(supabase);
+      setUser({ email: user.email, ...user.user_metadata });
+    })();
+  }, []);
 
   const [options, setOptions] = useState([]);
 
@@ -71,47 +68,120 @@ export default function FlatifyDashboard() {
     }
     setOptions(res);
   };
-
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
   return (
-    <div>
-      <Space
-        direction="vertical"
-        style={{
-          width: "100%",
-        }}
-        size={[0, 48]}
+    <Layout
+      style={{
+        minHeight: "100vh",
+      }}
+    >
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
       >
-        <Layout>
-          <Sider style={siderStyle}>
-            <LeftDashboard />
-          </Sider>
-          <Layout>
-            <Header style={headerStyle}>
-              Search bar
-              <AutoComplete
-                style={{ width: 200 }}
-                onSearch={handleSearch}
-                placeholder="Search by city"
-                options={options}
-              />
-            </Header>
-            <Content style={contentStyle}>Saved Listings & Tickets</Content>
-          </Layout>
-          <Layout>
-            <Sider style={siderStyle}>
-              {user.email ?
-                <div>
-                  <h1>{user.name}</h1>
-                  <h2>{user.email}</h2>
-                </div>
-                : <></> // put a loader here
-            }
-            </Sider>
-          </Layout>
-        </Layout>
-      </Space>
+        <div
+          style={{
+            height: 38,
+            margin: 12,
+            background: "rgba(255, 255, 255, 0.2)",
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          FDM
+        </div>
 
-      <button onClick={handleLogout}>LOGOUT FAM XD</button>
-    </div>
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          mode="inline"
+          items={items}
+          onClick={({ key }) => {
+            if (key === "5") {
+              handleLogout();
+            }
+          }}
+        />
+      </Sider>
+      <Layout className="site-layout">
+        <Header
+          style={{
+            textAlign: "center",
+            color: "#fff",
+            height: 64,
+            paddingInline: 10,
+            lineHeight: "64px",
+            backgroundColor: "#001628",
+            // maxWidth: 800,
+          }}
+        >
+          <AutoComplete
+            style={{ width: 800 }}
+            onSearch={handleSearch}
+            placeholder="Search by city"
+            options={options}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: "0 16px",
+          }}
+        >
+          <Breadcrumb
+            style={{
+              margin: "16px 0",
+            }}
+          >
+            <Breadcrumb.Item>Consultant</Breadcrumb.Item>
+            <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
+          </Breadcrumb>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 570,
+              background: colorBgContainer,
+            }}
+          >
+            <div>
+              <RecentListingsComponent />
+            </div>
+            <div
+              style={{
+                margin: 60,
+                textAlign: "center",
+              }}
+            >
+              <TicketsComponent />
+            </div>
+          </div>
+        </Content>
+        <Footer
+          style={{
+            textAlign: "center",
+            backgroundColor: "white",
+            color: "black",
+          }}
+        >
+          FDM | FLATIFY
+        </Footer>
+      </Layout>
+      <Sider
+        style={{
+          textAlign: "center",
+          lineHeight: "120px",
+          // color: "#fff",
+          width: "50",
+        }}
+      >
+        <Space size={26} wrap>
+          <Avatar size={100}>USER PROFILE</Avatar>
+        </Space>
+      </Sider>
+    </Layout>
   );
-}
+};
+export default FlatifyDashboard;

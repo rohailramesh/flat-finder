@@ -92,11 +92,6 @@ export default function Home() {
           </Row>
         </Container>
       )}
-      <Row>
-        <div className={styles.slogan}>
-          <h1>Helping Connect FDMers Globally</h1>
-        </div>
-      </Row>
     </div>
   );
 }
