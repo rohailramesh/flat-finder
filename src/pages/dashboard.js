@@ -4,6 +4,7 @@ import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
 import User from "@/services/user";
 import LeftDashboard from "@/components/consultantdashboardleft";
+import RightDashboard from "@/components/consultantdashboardright";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -88,6 +89,7 @@ export default function FlatifyDashboard() {
           <Sider style={siderStyle}>
             <LeftDashboard />
           </Sider>
+
           <Layout>
             <Header style={headerStyle}>
               Search bar
@@ -100,12 +102,13 @@ export default function FlatifyDashboard() {
             </Header>
             <Content style={contentStyle}>Saved Listings & Tickets</Content>
           </Layout>
+
           <Layout>
             <Sider style={siderStyle}>
-              <h1>{user.name}</h1>
-              <h2>{user.email}</h2>
+              <RightDashboard />
             </Sider>
           </Layout>
+
         </Layout>
       </Space>
 

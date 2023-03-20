@@ -1,0 +1,12 @@
+.flexContainer {
+   display: flex;
+   justify-content: center;
+   gap: 1rem;
+}
+
+.outerContainer {
+   display: flex;
+   flex-direction: column;
+   gap: 0.9rem;
+   padding: 1rem;
+}
