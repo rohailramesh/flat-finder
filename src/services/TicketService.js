@@ -7,7 +7,7 @@ export default class TicketService{
     constructor() {}
 
     async addTicket(title, content){
-        const response = await fetch(`${url}/ticket`, {
+        const response = await fetch(`${this.url}/ticket`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

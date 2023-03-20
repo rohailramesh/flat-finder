@@ -11,7 +11,7 @@ export default class ListingService {
    * @returns {Promise<Listing[]>} an array of Listing objects
    */
   async getListings() {
-    const response = await fetch(`${url}/listing`)
+    const response = await fetch(`${this.url}/listing`)
     console.log(response)
     return response
   }
@@ -21,7 +21,7 @@ export default class ListingService {
    * @returns {Promise}
    */
   async addListing(listing) {
-    const response = await fetch(`${url}/listing`, {
+    const response = await fetch(`${this.url}/listing`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
