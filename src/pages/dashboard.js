@@ -10,11 +10,13 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
 import { useEffect, useState } from "react";
-import UserService from "@/services/user";
+import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
+import Listing from "@/models/Listing";
+import ListingService from "@/services/ListingService";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -36,18 +38,30 @@ const items = [
 
 const FlatifyDashboard = () => {
   const [user, setUser] = useState(new User(emptyUser))
+  const [listings, setListings] = useState([])
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+
   const userService = new UserService();
+  const listingService = new ListingService();
   const supabase = useSupabaseClient();
 
   async function handleLogout() {
     const result = await userService.logout(supabase);
   }
+
+  //refactor useEffects to use Promise.all()
   useEffect(() => {
     (async () => {
       const user_profile = await userService.getAuthUserProfile(supabase);
       setUser(user_profile);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const allListings = await listingService.getListings();
+      setListings(allListings)
     })();
   }, []);
 
