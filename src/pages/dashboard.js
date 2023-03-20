@@ -38,6 +38,7 @@ const items = [
 
 const FlatifyDashboard = () => {
   const [user, setUser] = useState(new User(emptyUser))
+  const [listings, setListings] = useState([])
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
 
@@ -48,6 +49,8 @@ const FlatifyDashboard = () => {
   async function handleLogout() {
     const result = await userService.logout(supabase);
   }
+
+  //refactor useEffects to use Promise.all()
   useEffect(() => {
     (async () => {
       const user_profile = await userService.getAuthUserProfile(supabase);
@@ -57,8 +60,8 @@ const FlatifyDashboard = () => {
 
   useEffect(() => {
     (async () => {
-      const listings = await listingService.getListings();
-      setUser(user_profile);
+      const allListings = await listingService.getListings();
+      setListings(allListings)
     })();
   }, []);
 

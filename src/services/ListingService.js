@@ -8,7 +8,7 @@ export default class ListingService {
   constructor() {}
 
   /**
-   * @returns {Listing[]} an array of Listing objects
+   * @returns {Promise<Listing[]>} an array of Listing objects
    */
   async getListings() {
     const response = await fetch(`${url}/listing`)
