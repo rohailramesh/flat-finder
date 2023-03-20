@@ -7,15 +7,16 @@ import {
   InboxOutlined,
   HomeOutlined,
   LogoutOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
 import { useEffect, useState } from "react";
-import User from "@/services/user";
-import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import UserService from "@/services/user";
+import { User, emptyUser } from "@/models/User";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
 const { Header, Content, Footer, Sider } = Layout;
+
 function getItem(label, key, icon, children) {
   return {
     key,
@@ -34,24 +35,22 @@ const items = [
 ];
 
 const FlatifyDashboard = () => {
-  const userService = new User();
+  const [user, setUser] = useState(new User(emptyUser))
+  const [collapsed, setCollapsed] = useState(false);
+  const [options, setOptions] = useState([]);
+  const userService = new UserService();
   const supabase = useSupabaseClient();
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    avatar_url: "",
-  });
+
   async function handleLogout() {
     const result = await userService.logout(supabase);
   }
   useEffect(() => {
     (async () => {
-      const user = await userService.getAuthUser(supabase);
-      setUser({ email: user.email, ...user.user_metadata });
+      const user_profile = await userService.getAuthUserProfile(supabase);
+      setUser(user_profile);
     })();
   }, []);
 
-  const [options, setOptions] = useState([]);
 
   const handleSearch = (value) => {
     let res = [];
@@ -68,7 +67,6 @@ const FlatifyDashboard = () => {
     }
     setOptions(res);
   };
-  const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
