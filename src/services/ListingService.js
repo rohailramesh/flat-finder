@@ -15,4 +15,24 @@ export default class ListingService {
     console.log(response)
     return response
   }
+
+  /**
+   * @param {Listing} listing - a listing object! 
+   * @returns {Promise}
+   */
+  async addListing(listing) {
+    const response = await fetch(`${url}/listing`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(listing)
+    })
+
+    return response
+  }
+
+
+
+
 }
