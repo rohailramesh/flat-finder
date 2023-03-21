@@ -38,10 +38,11 @@ const items = [
 ];
 
 const FlatifyDashboard = () => {
-  const [user, setUser] = useState(new User(emptyUser))
-  const [listings, setListings] = useState([])
+  const [user, setUser] = useState(new User(emptyUser));
+  const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+  const [tabKey, setTabKey] = useState("1");
 
   const userService = new UserService();
   const listingService = new ListingService();
@@ -55,8 +56,8 @@ const FlatifyDashboard = () => {
     (async () => {
       const [user_profile, allListings] = await Promise.all([
         userService.getAuthUserProfile(supabase),
-        listingService.getListings()
-      ])
+        listingService.getListings(),
+      ]);
       setUser(user_profile);
       setListings(allListings);
     })();
@@ -112,6 +113,11 @@ const FlatifyDashboard = () => {
             if (key === "5") {
               handleLogout();
             }
+            if (key === "3") {
+              setTabKey("1");
+            } else {
+              setTabKey(key);
+            }
           }}
         />
       </Sider>
@@ -147,25 +153,29 @@ const FlatifyDashboard = () => {
             <Breadcrumb.Item>Consultant</Breadcrumb.Item>
             <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
           </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 570,
-              background: colorBgContainer,
-            }}
-          >
-            <div>
-              <RecentListingsComponent />
-            </div>
+          {tabKey == "1" && (
             <div
               style={{
-                margin: 60,
-                textAlign: "center",
+                padding: 24,
+                minHeight: 570,
+                background: colorBgContainer,
               }}
             >
-              <TicketsComponent />
+              <div>
+                <RecentListingsComponent />
+              </div>
+              <div
+                style={{
+                  margin: 60,
+                  textAlign: "center",
+                }}
+              >
+                <TicketsComponent />
+              </div>
             </div>
-          </div>
+          )}
+          {tabKey == "2" && <div>Result</div>}
+          {tabKey == "4" && <div>Inbox</div>}
         </Content>
         <Footer
           style={{

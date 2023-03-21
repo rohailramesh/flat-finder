@@ -1,5 +1,4 @@
 export default class Listing {
-
   id;
   title;
   images;
@@ -14,43 +13,40 @@ export default class Listing {
   key_features;
 
   constructor(listing) {
-    this.id = listing.id
-    this.title = listing.title
-    this.images = listing.images //array of strings
-    this.monthly_price = listing.monthly_price
-    this.deposit = listing.deposit
-    this.address = listing.address
-    this.description = listing.description
-    this.created_at = listing.created_at
-    this.owner = listing.owner
-    this.coordinates = listing.coordinates
-    this.contract_length = listing.contract_length
-    this.key_features = listing.key_features
+    this.id = listing.id; //
+    this.title = listing.title; //string
+    this.images = listing.images; //array of strings
+    this.monthly_price = listing.monthly_price; //
+    this.deposit = listing.deposit; //
+    this.address = listing.address; //string
+    this.description = listing.description; //string
+    this.created_at = listing.created_at; //
+    this.owner = listing.owner; //string
+    this.coordinates = listing.coordinates;
+    this.contract_length = listing.contract_length; //
+    this.key_features = listing.key_features; //
   }
-
 }
-
 
 const address = {
-  first_line: '',
-  second_line: '',
-  postcode: '',
-  city: '',
-  country: '',
-}
+  first_line: "",
+  second_line: "",
+  postcode: "",
+  city: "",
+  country: "",
+};
 
 const coordinates = {
-  latitude: '',
-  longitude: ''
-}
-
+  latitude: "",
+  longitude: "",
+};
 
 const key_features = {
   bathrooms: 2,
   beds: 3,
   monthly_bills: 300, //if 0, then bills included
   pets_allowed: false,
-  closest_station: 'mile end station',
+  closest_station: "mile end station",
   smoking_allowed: false,
-  gym_nearby: true
-}
+  gym_nearby: true,
+};
