@@ -17,6 +17,7 @@ import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
 import Listing from "@/models/Listing";
 import ListingService from "@/services/ListingService";
+import RightDashboard from "@/components/consultantdashboardright";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -50,21 +51,16 @@ const FlatifyDashboard = () => {
     const result = await userService.logout(supabase);
   }
 
-  //refactor useEffects to use Promise.all()
   useEffect(() => {
     (async () => {
-      const user_profile = await userService.getAuthUserProfile(supabase);
+      const [user_profile, allListings] = await Promise.all([
+        userService.getAuthUserProfile(supabase),
+        listingService.getListings()
+      ])
       setUser(user_profile);
+      setListings(allListings);
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      const allListings = await listingService.getListings();
-      setListings(allListings)
-    })();
-  }, []);
-
 
   const handleSearch = (value) => {
     let res = [];
@@ -190,7 +186,7 @@ const FlatifyDashboard = () => {
         }}
       >
         <Space size={26} wrap>
-          <Avatar size={100}>USER PROFILE</Avatar>
+          <RightDashboard />
         </Space>
       </Sider>
     </Layout>

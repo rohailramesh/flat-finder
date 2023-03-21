@@ -9,9 +9,12 @@ export default class ListingService {
    * @returns {Promise<Listing[]>} an array of Listing objects
    */
   async getListings() {
-    const response = await fetch(`${this.url}/listing`);
-    console.log(response);
-    return response;
+    const response = await fetch(`${this.url}/listing`)
+    if (response.ok){
+      const listings = await response.json()
+      return listings
+    }
+    return response
   }
 
   /**
@@ -19,14 +22,17 @@ export default class ListingService {
    * @returns {Promise}
    */
   async addListing(listing) {
-    const response = await fetch(`${url}/listing`, {
+    const response = await fetch(`${this.url}/listing`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(listing),
-    });
-
-    return response;
+      body: JSON.stringify(listing)
+    })
+    if (response.ok) {
+      const result = await response.json()
+      return result
+    }
+    return response
   }
 }
