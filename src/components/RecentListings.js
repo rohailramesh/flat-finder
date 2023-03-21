@@ -22,7 +22,7 @@ const cardData = [
     content: <img src="./house.png" alt="Listing 3" width="100px" />,
   },
   {
-    title: "CaListingrd 4",
+    title: "Listing 4",
     content: <img src="./house.png" alt="Listing 4" width="100px" />,
   },
 ];
