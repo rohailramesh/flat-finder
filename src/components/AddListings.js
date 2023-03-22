@@ -30,7 +30,7 @@ const suffixSelector = (
       <Option value="USD">$</Option>
       <Option value="CNY">¥</Option>
       <Option value="GBP">£</Option>
-      <Option value="Eur">€</Option>
+      <Option value="EUR">€</Option>
     </Select>
   </Form.Item>
 );
@@ -68,6 +68,23 @@ const AddListingComponent = () => {
         <Form.Item label="Address (second line)" name="second_line">
           <Input />
         </Form.Item>
+        {/* <Form.Item
+          name="donation"
+          label="Donation"
+          rules={[
+            {
+              required: true,
+              message: "Please input donation amount!",
+            },
+          ]}
+        >
+          <InputNumber
+            addonAfter={suffixSelector}
+            style={{
+              width: "100%",
+            }}
+          />
+        </Form.Item> */}
         <Form.Item label="City" name="city">
           <Input />
         </Form.Item>
@@ -80,14 +97,18 @@ const AddListingComponent = () => {
         <Form.Item label="Monthly rent">
           <InputNumber
             addonAfter={suffixSelector}
-            min={0}
             style={{
               width: "100%",
             }}
           />
         </Form.Item>
         <Form.Item label="Deposit">
-          <InputNumber addonAfter={suffixSelector} />
+          <InputNumber
+            addonAfter={suffixSelector}
+            style={{
+              width: "100%",
+            }}
+          />
         </Form.Item>
         <Form.Item label="Contract duration(Months)">
           <InputNumber />

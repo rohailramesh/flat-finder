@@ -1,6 +1,7 @@
 import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
+import SearchResultPage from "@/components/searchResults";
 import {
   SearchOutlined,
   AppstoreAddOutlined,
@@ -175,8 +176,8 @@ const FlatifyDashboard = () => {
               </div>
             </div>
           )}
-
-          {tabKey == "3" && <AddListingComponent ref={addListingRef} />}
+          {tabKey == "2" && <SearchResultPage />}
+          {tabKey == "3" && <AddListingComponent />}
         </Content>
         <Footer
           style={{
@@ -193,10 +194,10 @@ const FlatifyDashboard = () => {
           textAlign: "center",
           lineHeight: "120px",
           // color: "#fff",
-          width: "50",
+          width: 70,
         }}
       >
-        <Space size={26} wrap>
+        <Space size={35} wrap style={{ width: 200 }}>
           <RightDashboard />
         </Space>
       </Sider>
