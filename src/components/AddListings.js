@@ -44,7 +44,7 @@ const AddListingComponent = () => {
 
       <Form
         labelCol={{
-          span: 4.5,
+          span: 5,
         }}
         wrapperCol={{
           span: 8,
@@ -115,7 +115,7 @@ const AddListingComponent = () => {
           <InputNumber />
         </Form.Item>
         <Form.Item label="Property description">
-          <TextArea rows={4} />
+          <TextArea rows={6} />
         </Form.Item>
 
         <Form.Item label="Upload" valuePropName="fileList">
