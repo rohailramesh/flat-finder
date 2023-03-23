@@ -176,7 +176,7 @@ const FlatifyDashboard = () => {
               </div>
             </div>
           )}
-          {tabKey == "2" && <SearchResultPage />}
+          {tabKey == "2" && <SearchResultPage listings={listings} />}
           {tabKey == "3" && <AddListingComponent />}
         </Content>
         <Footer
@@ -198,7 +198,7 @@ const FlatifyDashboard = () => {
         }}
       >
         <Space size={26} wrap>
-          <RightDashboard user={user}/>
+          <RightDashboard user={user} />
         </Space>
       </Sider>
     </Layout>

@@ -13,18 +13,18 @@ export default class Listing {
   key_features;
 
   constructor(listing) {
-    this.id = listing.id; //
-    this.title = listing.title; //string
-    this.images = listing.images; //array of strings
-    this.monthly_price = listing.monthly_price; //
-    this.deposit = listing.deposit; //
-    this.address = listing.address; //string
-    this.description = listing.description; //string
-    this.created_at = listing.created_at; //
-    this.owner = listing.owner; //string
+    this.id = listing.id;
+    this.title = listing.title;
+    this.images = listing.images;
+    this.monthly_price = listing.monthly_price;
+    this.deposit = listing.deposit;
+    this.address = listing.address;
+    this.description = listing.description;
+    this.created_at = listing.created_at;
+    this.owner = listing.owner;
     this.coordinates = listing.coordinates;
-    this.contract_length = listing.contract_length; //
-    this.key_features = listing.key_features; //
+    this.contract_length = listing.contract_length;
+    this.key_features = listing.key_features;
   }
 }
 
