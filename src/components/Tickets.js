@@ -1,4 +1,6 @@
 import React from "react";
+import Lottie from 'react-lottie'
+import successData from '../data/successfully-done.json'
 import { PlusOutlined } from "@ant-design/icons";
 import { Card } from "antd";
 import { Modal } from "antd";
@@ -14,20 +16,49 @@ import {
   Space,
 } from "antd";
 import { useState } from "react";
+import TicketService from "@/services/TicketService";
 const { Option } = Select;
-const TicketsComponent = () => {
+
+
+const TicketsComponent = ({ user_id, setTickets }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState("Content of the modal");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('')
+  const [success, setSuccess] = useState(false)
+
+  const ticketService = new TicketService()
+
+  const defaultOptions = {
+    loop: false,
+    autoplay: true,
+    animationData: successData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
+  
   const showModal = () => {
     setOpen(true);
   };
-  const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
+  const handleOk = async () => {
+    // setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
+    
+    if (title && content) {
+      const new_ticket = await ticketService.addTicket(title, content, user_id)
+      console.log('Ticket that we got back: ', new_ticket)
+      setTickets((prev) => prev.concat([new_ticket]))
+    }
+    setConfirmLoading(false);
+    setSuccess(true)
+    
     setTimeout(() => {
+      setTitle('')
+      setContent('')
       setOpen(false);
-      setConfirmLoading(false);
+      setSuccess(false)
     }, 2000);
   };
   const handleCancel = () => {
@@ -35,7 +66,7 @@ const TicketsComponent = () => {
     setOpen(false);
   };
   return (
-    <>
+    <> 
       <Row style={{ marginLeft: "100" }}>
         <Card
           title="Ticket id:"
@@ -81,51 +112,39 @@ const TicketsComponent = () => {
         Add ticket
       </Button>
       <Modal
-        title="Title"
+        title="Ticket form"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <Form layout="vertical" hideRequiredMark>
+      {
+        success ? 
+        <div>
+        <Lottie 
+	        options={defaultOptions}
+          height={300}
+          width={300}
+          />
+      </div> : 
+        <Form layout="vertical" >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="name"
-                label="Name"
+                name="title"
+                label="Title"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter user name",
+                    message: "Please enter a ticket title",
                   },
                 ]}
-              >
-                <Input placeholder="Please enter user name" />
+                >
+                <Input placeholder="Please eneter a ticket title" onChange={(e) => setTitle(e.target.value)}/>
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}></Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="dateTime"
-                label="DateTime"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please choose the dateTime",
-                  },
-                ]}
-              >
-                <DatePicker
-                  style={{
-                    width: "100%",
-                  }}
-                  getPopupContainer={(trigger) => trigger.parentElement}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
@@ -137,15 +156,15 @@ const TicketsComponent = () => {
                     message: "please enter ticket description",
                   },
                 ]}
-              >
+                >
                 <Input.TextArea
                   rows={4}
-                  placeholder="please enter ticket description"
-                />
+                  placeholder="Please enter ticket description" onChange={(e) => setContent(e.target.value)}/>
               </Form.Item>
             </Col>
           </Row>
         </Form>
+      }
       </Modal>
       {/* <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
           Add ticket

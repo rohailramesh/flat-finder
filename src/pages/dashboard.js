@@ -10,7 +10,6 @@ import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
-import Listing from "@/models/Listing";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
 import AddListingComponent from "@/components/AddListings";
@@ -168,7 +167,7 @@ function FlatifyDashboard () {
                   textAlign: "center",
                 }}
               >
-                <TicketsComponent />
+                <TicketsComponent user_id={user.id} setTickets={setTickets}/>
               </div>
             </div>
           )}

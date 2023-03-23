@@ -1,6 +1,6 @@
 class Ticket {
     id;
-    create_at;
+    created_at;
     content;
     title;
     creator;
@@ -8,7 +8,7 @@ class Ticket {
 
     constructor(ticket) {
         this.id = ticket.id
-        this.create_at = ticket.create_at
+        this.created_at = ticket.created_at
         this.content = ticket.content
         this.title = ticket.ticket
         this.creator = ticket.creator
