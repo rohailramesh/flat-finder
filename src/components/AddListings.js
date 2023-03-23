@@ -20,6 +20,7 @@ import {
 import { useState } from "react";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
+const { Option } = Select;
 const suffixSelector = (
   <Form.Item name="suffix" noStyle>
     <Select
