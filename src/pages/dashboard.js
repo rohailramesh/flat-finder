@@ -21,6 +21,8 @@ import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
 import AddListingComponent from "@/components/AddListings";
 import { useRouter } from "next/router";
+import FavListingService from "@/services/FavListingService";
+import TicketService from "@/services/TicketService";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -45,10 +47,15 @@ const FlatifyDashboard = () => {
   const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+  const [favListings, setFavListings] = useState([]);
+  const [tickets, setTickets] = useState([])
   const [tabKey, setTabKey] = useState("1");
 
   const userService = new UserService();
   const listingService = new ListingService();
+  const favListingSevice = new FavListingService()
+  const ticketService = new TicketService()
+
   const supabase = useSupabaseClient();
   const router = useRouter()
 
@@ -65,6 +72,10 @@ const FlatifyDashboard = () => {
       user_profile.is_admin && router.push('/admin')
       setUser(user_profile);
       setListings(allListings);
+      const new_favListings = await favListingSevice.getFavListing(user_profile.id)
+      setFavListings(new_favListings);
+      const new_tickets = await ticketService.getUserTicket(user_profile.id)
+      setTickets(new_tickets)
     })();
   }, []);
 

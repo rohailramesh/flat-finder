@@ -42,12 +42,12 @@ export default class TicketService{
         return response
     }
 
-    async getUserTicket(){
-        const response = await fetch(`${this.url}/ticket`)
+    async getUserTicket(user_id){
+        const response = await fetch(`${this.url}/ticket?user_id=${user_id}`)
 
         if(response.ok){
             const ticket = await response.json()
-            return ticket
+            return ticket.data
         }
 
         return response
