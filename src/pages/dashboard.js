@@ -18,7 +18,7 @@ import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
 import Listing from "@/models/Listing";
 import ListingService from "@/services/ListingService";
-import RightDashboard from "@/components/consultantdashboardright";
+import RightDashboard from "@/components/rightdashboard";
 import AddListingComponent from "@/components/AddListings";
 const { Header, Content, Footer, Sider } = Layout;
 
