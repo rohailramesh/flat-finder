@@ -1,4 +1,5 @@
 import { Form, Select } from "antd";
+import successData from './data/successfully-done.json'
 import {
   SearchOutlined,
   AppstoreAddOutlined,
@@ -42,6 +43,15 @@ const suffixSelector = (
   </Form.Item>
 );
 
+const successOptions = {
+  loop: false,
+  autoplay: true,
+  animationData: successData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
 
 
-export { items, suffixSelector } 
+
+export { items, suffixSelector, successOptions } 
