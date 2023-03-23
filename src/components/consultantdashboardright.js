@@ -7,9 +7,9 @@ import styles from "../styles/dashboardright.module.css";
 
 //const url = 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
-const RightDashboard = () => (
+const RightDashboard = ({user}) => (
   <div className={styles.outerContainer}>
-    <ProfilePicture />
+    <ProfilePicture user={user}/>
     <div className={styles.flexContainer}>
       <InboxOutlined />
       <MessageFilled />

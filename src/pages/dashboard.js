@@ -196,7 +196,7 @@ const FlatifyDashboard = () => {
         }}
       >
         <Space size={26} wrap>
-          <RightDashboard />
+          <RightDashboard user={user}/>
         </Space>
       </Sider>
     </Layout>
