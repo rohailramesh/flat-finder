@@ -10,7 +10,6 @@ import {
   Card,
   Text,
 } from "@chakra-ui/react";
-
 const SearchResultPage = () => {
   return (
     <ChakraProvider>
