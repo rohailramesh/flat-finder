@@ -1,9 +1,11 @@
 import React from "react";
 //import "./index.css";
 import { PlusOutlined, LoadingOutlined, ConsoleSqlOutlined } from "@ant-design/icons";
-import { Upload, message } from "antd";
-import { useState } from "react";
+import { Upload, message, Image } from "antd";
+import { useState, useEffect } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
+import UserService from "@/services/UserService";
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
@@ -22,10 +24,15 @@ const beforeUpload = (file) => {
   return isJpgOrPng && isLt2M;
 };
 
-const ProfilePicture = () => {
+const ProfilePicture = ({ url, user_id }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const supabase = useSupabaseClient();
+  const userService = new UserService()
+
+  useEffect(() => {
+    setImageUrl(url)
+  }, [url])
 
   const handleChange = async (info) => {
     console.log(info)
@@ -47,11 +54,10 @@ const ProfilePicture = () => {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, (url) => {
       const { data } = supabase.storage
-      .from('assets')
-      .getPublicUrl(avatarFile.name)
+        .from('assets')
+        .getPublicUrl(avatarFile.name)
         setLoading(false);
-        // console.log("Here is thee info file: ", info.file.originFileObj)
-        console.log({data})
+        userService.updateAvatar(supabase, data.publicUrl, user_id)      
         setImageUrl(data.publicUrl);
       });
     }
@@ -75,18 +81,20 @@ const ProfilePicture = () => {
         listType="picture-circle"
         className="avatar-uploader"
         showUploadList={false}
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         beforeUpload={beforeUpload}
         onChange={handleChange}
+
       >
         {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt="avatar"
-            style={{
-              width: "100%"
-            }}
-          />
+          <Image
+          preview={false}
+          width={200}
+          src={imageUrl}
+          alt="avatar"
+          style={{
+            width: "100%",
+          }}
+        />
         ) : (
           uploadButton
         )}
