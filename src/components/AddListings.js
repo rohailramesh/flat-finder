@@ -4,44 +4,21 @@ import {
   Row,
   Col,
   Button,
-  Cascader,
-  Checkbox,
   DatePicker,
   Form,
   Input,
   InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
   Upload,
-  Drawer,
 } from "antd";
 import { useState } from "react";
+import { suffixSelector } from "@/utils";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-const { Option } = Select;
-const suffixSelector = (
-  <Form.Item name="suffix" noStyle>
-    <Select
-      style={{
-        width: 70,
-      }}
-    >
-      <Option value="USD">$</Option>
-      <Option value="CNY">¥</Option>
-      <Option value="GBP">£</Option>
-      <Option value="EUR">€</Option>
-    </Select>
-  </Form.Item>
-);
-const AddListingComponent = () => {
+
+
+function AddListingComponent() {
   return (
     <div>
-      {/* <Button type="primary" onClick={showDrawer}>
-        Add listing
-      </Button> */}
-
       <Form
         labelCol={{
           span: 5,
@@ -54,12 +31,6 @@ const AddListingComponent = () => {
           maxWidth: 3000,
         }}
       >
-        {/* <Form.Item label="Radio">
-          <Radio.Group>
-            <Radio value="apple"> Apple </Radio>
-            <Radio value="pear"> Pear </Radio>
-          </Radio.Group>
-        </Form.Item> */}
         <Form.Item label="Property title">
           <Input />
         </Form.Item>
@@ -69,23 +40,6 @@ const AddListingComponent = () => {
         <Form.Item label="Address (second line)" name="second_line">
           <Input />
         </Form.Item>
-        {/* <Form.Item
-          name="donation"
-          label="Donation"
-          rules={[
-            {
-              required: true,
-              message: "Please input donation amount!",
-            },
-          ]}
-        >
-          <InputNumber
-            addonAfter={suffixSelector}
-            style={{
-              width: "100%",
-            }}
-          />
-        </Form.Item> */}
         <Form.Item label="City" name="city">
           <Input />
         </Form.Item>
@@ -117,8 +71,7 @@ const AddListingComponent = () => {
         <Form.Item label="Property description">
           <TextArea rows={6} />
         </Form.Item>
-
-        <Form.Item label="Upload" valuePropName="fileList">
+        <Form.Item label="Listing pictures" valuePropName="fileList">
           <Upload action="/upload.do" listType="picture-card">
             <div>
               <PlusOutlined />
