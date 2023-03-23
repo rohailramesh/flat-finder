@@ -1,4 +1,7 @@
 import React from "react";
+import { Divider, Radio, Typography } from "antd";
+
+const { Paragraph } = Typography;
 //import './index.css';
 import {
   UserOutlined,
@@ -15,7 +18,11 @@ import styles from "../styles/dashboardright.module.css";
 
 const RightDashboard = ({ user }) => (
   <div className={styles.outerContainer}>
-    <ProfilePicture user={user} />
+    <ProfilePicture url={user.avatar_url} user_id={user.id} />
+    <div>
+      <Paragraph>{user.name}</Paragraph>
+      <Paragraph>{user.email}</Paragraph>
+    </div>
     <div className={styles.flexContainer}>
       <InboxOutlined />
       <MessageFilled />
