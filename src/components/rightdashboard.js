@@ -13,9 +13,9 @@ import styles from "../styles/dashboardright.module.css";
 
 //const url = 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
-const RightDashboard = () => (
-  <div className={styles.outerContainer} style={{ width: 200, marginTop: 68 }}>
-    <ProfilePicture />
+const RightDashboard = ({user}) => (
+  <div className={styles.outerContainer}>
+    <ProfilePicture user={user}/>
     <div className={styles.flexContainer}>
       <InboxOutlined />
       <MessageFilled />

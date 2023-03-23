@@ -2,7 +2,7 @@ import { Ticket } from "@/models/Ticket";
 
 export default class TicketService{
 
-    url = 'http://127.0.0.1:3001'
+    url = 'https://flat-finder-server.onrender.com'
 
     constructor() {}
 
