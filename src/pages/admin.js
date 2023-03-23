@@ -1,7 +1,7 @@
 import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
-import SearchResultPage from "@/components/searchResults";
+import AdminResultPage from "@/components/adminResults";
 import {
   SearchOutlined,
   AppstoreAddOutlined,
@@ -20,7 +20,6 @@ import Listing from "@/models/Listing";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
 import AddListingComponent from "@/components/AddListings";
-import { useRouter } from "next/router";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -34,10 +33,10 @@ function getItem(label, key, icon, children) {
 
 const items = [
   getItem("Home", "1", <HomeOutlined />),
-  getItem("Search", "2", <SearchOutlined />),
-  getItem("Add listings", "3", <AppstoreAddOutlined />),
-  getItem("Inbox", "4", <InboxOutlined />),
-  getItem("Logout", "5", <LogoutOutlined />),
+  getItem("Delete listings", "2", <SearchOutlined />),
+  getItem("Delete forum post", "3", <AppstoreAddOutlined />),
+  getItem("Tickets", "4", <InboxOutlined />),
+  getItem("Logout", "5", <LogoutOutlined/>),
 ];
 
 const FlatifyDashboard = () => {
@@ -50,7 +49,6 @@ const FlatifyDashboard = () => {
   const userService = new UserService();
   const listingService = new ListingService();
   const supabase = useSupabaseClient();
-  const router = useRouter()
 
   async function handleLogout() {
     const result = await userService.logout(supabase);
@@ -62,7 +60,6 @@ const FlatifyDashboard = () => {
         userService.getAuthUserProfile(supabase),
         listingService.getListings(),
       ]);
-      user_profile.is_admin && router.push('/admin')
       setUser(user_profile);
       setListings(allListings);
     })();
@@ -155,7 +152,7 @@ const FlatifyDashboard = () => {
               margin: "16px 0",
             }}
           >
-            <Breadcrumb.Item>Consultant</Breadcrumb.Item>
+            <Breadcrumb.Item>Admin</Breadcrumb.Item>
             <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
           </Breadcrumb>
           {tabKey == "1" && (
@@ -179,7 +176,7 @@ const FlatifyDashboard = () => {
               </div>
             </div>
           )}
-          {tabKey == "2" && <SearchResultPage />}
+          {tabKey == "2" && <AdminResultPage />}
           {tabKey == "3" && <AddListingComponent />}
         </Content>
         <Footer
