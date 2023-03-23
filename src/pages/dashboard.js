@@ -2,13 +2,7 @@ import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
 import SearchResultPage from "@/components/searchResults";
-import {
-  SearchOutlined,
-  AppstoreAddOutlined,
-  InboxOutlined,
-  HomeOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
+
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
@@ -16,33 +10,17 @@ import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
-import Listing from "@/models/Listing";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
 import AddListingComponent from "@/components/AddListings";
 import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
+import { items } from "@/utils";
+
 const { Header, Content, Footer, Sider } = Layout;
 
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-const items = [
-  getItem("Home", "1", <HomeOutlined />),
-  getItem("Search", "2", <SearchOutlined />),
-  getItem("Add listings", "3", <AppstoreAddOutlined />),
-  getItem("Inbox", "4", <InboxOutlined />),
-  getItem("Logout", "5", <LogoutOutlined />),
-];
-
-const FlatifyDashboard = () => {
+function FlatifyDashboard () {
   const [user, setUser] = useState(new User(emptyUser));
   const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
@@ -60,7 +38,7 @@ const FlatifyDashboard = () => {
   const router = useRouter()
 
   async function handleLogout() {
-    const result = await userService.logout(supabase);
+    await userService.logout(supabase);
   }
 
   useEffect(() => {
@@ -72,9 +50,12 @@ const FlatifyDashboard = () => {
       user_profile.is_admin && router.push('/admin')
       setUser(user_profile);
       setListings(allListings);
-      const new_favListings = await favListingSevice.getFavListing(user_profile.id)
+
+      const [new_favListings, new_tickets] = await Promise.all([
+        favListingSevice.getFavListing(user_profile.id),
+        ticketService.getUserTicket(user_profile.id)
+      ]);
       setFavListings(new_favListings);
-      const new_tickets = await ticketService.getUserTicket(user_profile.id)
       setTickets(new_tickets)
     })();
   }, []);
@@ -186,7 +167,7 @@ const FlatifyDashboard = () => {
                   textAlign: "center",
                 }}
               >
-                <TicketsComponent />
+                <TicketsComponent user_id={user.id} setTickets={setTickets}/>
               </div>
             </div>
           )}
