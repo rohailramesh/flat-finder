@@ -18,13 +18,13 @@ import styles from "../styles/dashboardright.module.css";
 
 const RightDashboard = ({ user }) => (
   <div className={styles.outerContainer}>
-    <ProfilePicture url={user.avatar_url} user_id={user.id} />
+    <ProfilePicture url={user.avatar_url} user_id={user.id} name={user.name}/>
     <div>
       <Paragraph>{user.name}</Paragraph>
       <Paragraph>{user.email}</Paragraph>
     </div>
     <div className={styles.flexContainer}>
-      <InboxOutlined />
+      <InboxOutlined color="black" />
       <MessageFilled />
       <QuestionCircleFilled />
       <SettingFilled />

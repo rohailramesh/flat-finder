@@ -1,3 +1,5 @@
+import { Form, Select } from "antd";
+import successData from './data/successfully-done.json'
 import {
   SearchOutlined,
   AppstoreAddOutlined,
@@ -25,4 +27,31 @@ const items = [
 ];
 
 
-export { items } 
+const { Option } = Select;
+const suffixSelector = (
+  <Form.Item name="suffix" noStyle>
+    <Select
+      style={{
+        width: 70,
+      }}
+    >
+      <Option value="USD">$</Option>
+      <Option value="CNY">¥</Option>
+      <Option value="GBP">£</Option>
+      <Option value="EUR">€</Option>
+    </Select>
+  </Form.Item>
+);
+
+const successOptions = {
+  loop: false,
+  autoplay: true,
+  animationData: successData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+
+
+export { items, suffixSelector, successOptions } 
