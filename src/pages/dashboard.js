@@ -2,7 +2,7 @@ import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
 import SearchResultPage from "@/components/searchResults";
-
+import FavListings from "@/components/FavListings";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
@@ -20,22 +20,22 @@ import { items } from "@/utils";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-function FlatifyDashboard () {
+function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
   const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [favListings, setFavListings] = useState([]);
-  const [tickets, setTickets] = useState([])
+  const [tickets, setTickets] = useState([]);
   const [tabKey, setTabKey] = useState("1");
 
   const userService = new UserService();
   const listingService = new ListingService();
-  const favListingSevice = new FavListingService()
-  const ticketService = new TicketService()
+  const favListingSevice = new FavListingService();
+  const ticketService = new TicketService();
 
   const supabase = useSupabaseClient();
-  const router = useRouter()
+  const router = useRouter();
 
   async function handleLogout() {
     await userService.logout(supabase);
@@ -47,16 +47,16 @@ function FlatifyDashboard () {
         userService.getAuthUserProfile(supabase),
         listingService.getListings(),
       ]);
-      user_profile.is_admin && router.push('/admin')
+      user_profile.is_admin && router.push("/admin");
       setUser(user_profile);
       setListings(allListings);
 
       const [new_favListings, new_tickets] = await Promise.all([
         favListingSevice.getFavListing(user_profile.id),
-        ticketService.getUserTicket(user_profile.id)
+        ticketService.getUserTicket(user_profile.id),
       ]);
       setFavListings(new_favListings);
-      setTickets(new_tickets)
+      setTickets(new_tickets);
     })();
   }, []);
 
@@ -159,7 +159,7 @@ function FlatifyDashboard () {
               }}
             >
               <div>
-                <RecentListingsComponent />
+                <FavListings listings={listings} />
               </div>
               <div
                 style={{
@@ -167,7 +167,7 @@ function FlatifyDashboard () {
                   textAlign: "center",
                 }}
               >
-                <TicketsComponent user_id={user.id} setTickets={setTickets}/>
+                <TicketsComponent user_id={user.id} setTickets={setTickets} />
               </div>
             </div>
           )}
@@ -198,5 +198,5 @@ function FlatifyDashboard () {
       </Sider>
     </Layout>
   );
-};
+}
 export default FlatifyDashboard;
