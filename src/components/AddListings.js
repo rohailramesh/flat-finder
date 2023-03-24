@@ -11,16 +11,26 @@ import {
   Upload,
   Checkbox
 } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { suffixSelector } from "@/utils";
-import { emptyListing } from "@/utils";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
+import Listing from "@/models/Listing";
 
 
-function AddListingComponent() {
+function AddListingComponent({ listing, setListing }) {
 
-  const [listing, setListing] = useState(emptyListing)
+  const [address, setAddress] = useState({
+    first_line: "",
+    second_line: "",
+    postcode: "",
+    city: "",
+    country: "",
+  })
+
+  // useEffect(() => {
+  //   setAddress(listing.address)
+  // }, [])
 
   const handleChange = (e, field, nestedField) => {
     const { value } = e.target;
@@ -51,31 +61,31 @@ function AddListingComponent() {
             onChange={ (e) => handleChange(e, 'title')}
           />
         </Form.Item>
-        <Form.Item label="Address (first line)" name="first_line">
+        <Form.Item label="Address (first line)">
           <Input 
             value={listing.address.first_line}
             onChange={ (e) => handleChange(e, 'address', 'first_line')}
           />
         </Form.Item>
-        <Form.Item label="Address (second line)" name="second_line">
+        <Form.Item label="Address (second line)" >
           <Input 
             value={listing.address.second_line}
             onChange={ (e) => handleChange(e, 'address', 'second_line')}
           />
         </Form.Item>
-        <Form.Item label="City" name="city">
+        <Form.Item label="City" >
           <Input 
             value={listing.address.city}
             onChange={ (e) => handleChange(e, 'address', 'city')}
           />
         </Form.Item>
-        <Form.Item label="Country" name="country">
+        <Form.Item label="Country" >
           <Input 
             value={listing.address.country}
             onChange={ (e) => handleChange(e, 'address', 'country')}
           />
         </Form.Item>
-        <Form.Item label="Postcode" name="postcode">
+        <Form.Item label="Postcode" >
           <Input 
             value={listing.address.postcode}
             onChange={ (e) => handleChange(e, 'address', 'postcode')}
@@ -146,7 +156,7 @@ function AddListingComponent() {
                 style={{
                   lineHeight: '32px',
                 }}
-                value={listing.key_features.pets_allowed}
+                checked={listing.key_features.pets_allowed}
                 onChange={(e) => setListing(prevListing => ({
                   ...prevListing,
                   ['key_features']: { ...prevListing.key_features, pets_allowed: e.target.checked }
@@ -157,7 +167,7 @@ function AddListingComponent() {
             </Col>
             <Col span={10}>
               <Checkbox
-                value={listing.key_features.smoking_allowed}
+                checked={listing.key_features.smoking_allowed}
                 onChange={(e) => setListing(prevListing => ({
                   ...prevListing,
                   ['key_features']: { ...prevListing.key_features, smoking_allowed: e.target.checked }
@@ -171,7 +181,7 @@ function AddListingComponent() {
             </Col>
             <Col span={10}>
               <Checkbox
-                value={listing.key_features.station_nearby}
+                checked={listing.key_features.station_nearby}
                 onChange={(e) => setListing(prevListing => ({
                   ...prevListing,
                   ['key_features']: { ...prevListing.key_features, station_nearby: e.target.checked }
@@ -185,7 +195,7 @@ function AddListingComponent() {
             </Col>
             <Col span={10}>
               <Checkbox
-                value={listing.key_features.gym_nearby}
+                checked={listing.key_features.gym_nearby}
                 onChange={(e) => setListing(prevListing => ({
                   ...prevListing,
                   ['key_features']: { ...prevListing.key_features, gym_nearby: e.target.checked }
@@ -244,4 +254,4 @@ function AddListingComponent() {
     </div>
   );
 };
-export default () => <AddListingComponent />;
+export default AddListingComponent
