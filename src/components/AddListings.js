@@ -9,6 +9,7 @@ import {
   Input,
   InputNumber,
   Upload,
+  Checkbox
 } from "antd";
 import { useState } from "react";
 import { suffixSelector } from "@/utils";
@@ -17,22 +18,20 @@ const { TextArea } = Input;
 
 
 function AddListingComponent() {
+
+  
+
+
   return (
     <div>
       <Form
-        labelCol={{
-          span: 5,
-        }}
-        wrapperCol={{
-          span: 8,
-        }}
+        labelCol={{span: 5}}
+        wrapperCol={{span: 10}}
         layout="horizontal"
-        style={{
-          maxWidth: 3000,
-        }}
+        style={{maxWidth: 3000}}
       >
         <Form.Item label="Property title">
-          <Input />
+          <Input  />
         </Form.Item>
         <Form.Item label="Address (first line)" name="first_line">
           <Input />
@@ -68,9 +67,61 @@ function AddListingComponent() {
         <Form.Item label="Contract duration(Months)">
           <InputNumber />
         </Form.Item>
+        <Form.Item label="Bathrooms">
+          <InputNumber />
+        </Form.Item>
+        <Form.Item label="Beds">
+          <InputNumber />
+        </Form.Item>
         <Form.Item label="Property description">
           <TextArea rows={6} />
         </Form.Item>
+        <Form.Item name="checkbox-group" label="Key Features">
+        <Checkbox.Group>
+          <Row>
+            <Col span={10}>
+              <Checkbox
+                value="A"
+                style={{
+                  lineHeight: '32px',
+                }}
+              >
+                Pets allowed
+              </Checkbox>
+            </Col>
+            <Col span={10}>
+              <Checkbox
+                value="B"
+                style={{
+                  lineHeight: '32px',
+                }}
+              >
+                Smoking allowed
+              </Checkbox>
+            </Col>
+            <Col span={10}>
+              <Checkbox
+                value="C"
+                style={{
+                  lineHeight: '32px',
+                }}
+              >
+                Station nearby
+              </Checkbox>
+            </Col>
+            <Col span={10}>
+              <Checkbox
+                value="D"
+                style={{
+                  lineHeight: '32px',
+                }}
+              >
+                Gym nearby
+              </Checkbox>
+            </Col>
+          </Row>
+        </Checkbox.Group>
+      </Form.Item>
         <Form.Item label="Listing pictures" valuePropName="fileList">
           <Upload action="/upload.do" listType="picture-card">
             <div>
