@@ -13,14 +13,29 @@ import {
 } from "antd";
 import { useState } from "react";
 import { suffixSelector } from "@/utils";
+import { emptyListing } from "@/utils";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 
 function AddListingComponent() {
 
-  
+  const [listing, setListing] = useState(emptyListing)
 
+  const handleChange = (e, field, nestedField) => {
+    const { value } = e.target;
+    setListing((prevListing) => {
+      if (nestedField) {
+        return {
+          ...prevListing,
+          [field]: { ...prevListing[field], [nestedField]: value },
+        };
+      } else {
+        return { ...prevListing, [field]: value };
+      }
+    });
+  };
+  
 
   return (
     <div>
@@ -31,67 +46,122 @@ function AddListingComponent() {
         style={{maxWidth: 3000}}
       >
         <Form.Item label="Property title">
-          <Input  />
+          <Input 
+            value={listing.title}
+            onChange={ (e) => handleChange(e, 'title')}
+          />
         </Form.Item>
         <Form.Item label="Address (first line)" name="first_line">
-          <Input />
+          <Input 
+            value={listing.address.first_line}
+            onChange={ (e) => handleChange(e, 'address', 'first_line')}
+          />
         </Form.Item>
         <Form.Item label="Address (second line)" name="second_line">
-          <Input />
+          <Input 
+            value={listing.address.second_line}
+            onChange={ (e) => handleChange(e, 'address', 'second_line')}
+          />
         </Form.Item>
         <Form.Item label="City" name="city">
-          <Input />
+          <Input 
+            value={listing.address.city}
+            onChange={ (e) => handleChange(e, 'address', 'city')}
+          />
         </Form.Item>
         <Form.Item label="Country" name="country">
-          <Input />
+          <Input 
+            value={listing.address.country}
+            onChange={ (e) => handleChange(e, 'address', 'country')}
+          />
         </Form.Item>
         <Form.Item label="Postcode" name="postcode">
-          <Input />
+          <Input 
+            value={listing.address.postcode}
+            onChange={ (e) => handleChange(e, 'address', 'postcode')}
+          />
         </Form.Item>
         <Form.Item label="Monthly rent">
           <InputNumber
-            addonAfter={suffixSelector}
+            addonBefore={suffixSelector}
             style={{
               width: "100%",
             }}
+            step={50}
+            value={listing.monthly_price}
+            onChange={(value) => setListing(prevListing => ({
+              ...prevListing, monthly_price: value
+            }))}
           />
         </Form.Item>
         <Form.Item label="Deposit">
           <InputNumber
-            addonAfter={suffixSelector}
+            addonBefore={suffixSelector}
             style={{
               width: "100%",
             }}
+            step={50}
+            value={listing.deposit}
+            onChange={(value) => setListing(prevListing => ({
+              ...prevListing, deposit: value
+            }))}
           />
         </Form.Item>
         <Form.Item label="Contract duration(Months)">
-          <InputNumber />
+          <InputNumber
+           value={listing.contract_length}
+           onChange={(value) => setListing(prevListing => ({
+            ...prevListing, contract_length: value
+          }))}
+          />
         </Form.Item>
-        <Form.Item label="Bathrooms">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item label="Beds">
-          <InputNumber />
+          <Form.Item label="Bathrooms">
+            <InputNumber 
+              value={listing.key_features.bathrooms}
+              min={1}
+              onChange={(value) => setListing(prevListing => ({
+                ...prevListing, key_features: {...prevListing.key_features, bathrooms: value }
+              }))}
+            />
+          </Form.Item>
+          <Form.Item label="Beds">
+            <InputNumber 
+              value={listing.key_features.beds}
+              min={1}
+              onChange={(value) => setListing(prevListing => ({
+                ...prevListing, key_features: {...prevListing.key_features, beds: value }
+              }))}
+            />
         </Form.Item>
         <Form.Item label="Property description">
-          <TextArea rows={6} />
+          <TextArea rows={6} 
+            value={listing.description}
+            onChange={(e) => handleChange(e, 'description')}
+          />
         </Form.Item>
-        <Form.Item name="checkbox-group" label="Key Features">
-        <Checkbox.Group>
+        <Form.Item label="Key Features">
           <Row>
             <Col span={10}>
               <Checkbox
-                value="A"
                 style={{
                   lineHeight: '32px',
                 }}
+                value={listing.key_features.pets_allowed}
+                onChange={(e) => setListing(prevListing => ({
+                  ...prevListing,
+                  ['key_features']: { ...prevListing.key_features, pets_allowed: e.target.checked }
+                }))}
               >
                 Pets allowed
               </Checkbox>
             </Col>
             <Col span={10}>
               <Checkbox
-                value="B"
+                value={listing.key_features.smoking_allowed}
+                onChange={(e) => setListing(prevListing => ({
+                  ...prevListing,
+                  ['key_features']: { ...prevListing.key_features, smoking_allowed: e.target.checked }
+                }))}
                 style={{
                   lineHeight: '32px',
                 }}
@@ -101,7 +171,11 @@ function AddListingComponent() {
             </Col>
             <Col span={10}>
               <Checkbox
-                value="C"
+                value={listing.key_features.station_nearby}
+                onChange={(e) => setListing(prevListing => ({
+                  ...prevListing,
+                  ['key_features']: { ...prevListing.key_features, station_nearby: e.target.checked }
+                }))}
                 style={{
                   lineHeight: '32px',
                 }}
@@ -111,16 +185,19 @@ function AddListingComponent() {
             </Col>
             <Col span={10}>
               <Checkbox
-                value="D"
+                value={listing.key_features.gym_nearby}
+                onChange={(e) => setListing(prevListing => ({
+                  ...prevListing,
+                  ['key_features']: { ...prevListing.key_features, gym_nearby: e.target.checked }
+                }))}
                 style={{
                   lineHeight: '32px',
                 }}
               >
                 Gym nearby
               </Checkbox>
-            </Col>
+            </Col> 
           </Row>
-        </Checkbox.Group>
       </Form.Item>
         <Form.Item label="Listing pictures" valuePropName="fileList">
           <Upload action="/upload.do" listType="picture-card">
@@ -136,7 +213,7 @@ function AddListingComponent() {
             </div>
           </Upload>
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           label="Captcha"
           extra="We must make sure that your are a human."
         >
@@ -159,9 +236,9 @@ function AddListingComponent() {
               <Button>Get captcha</Button>
             </Col>
           </Row>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item>
-          <Button>Create listing</Button>
+          <Button type='primary'  htmlType="submit" >Create listing</Button>
         </Form.Item>
       </Form>
     </div>
