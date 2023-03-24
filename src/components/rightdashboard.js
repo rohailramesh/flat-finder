@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Radio, Typography } from 'antd';
+import { Divider, Radio, Typography } from "antd";
 
 const { Paragraph } = Typography;
 //import './index.css';
@@ -16,7 +16,7 @@ import styles from "../styles/dashboardright.module.css";
 
 //const url = 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
-const RightDashboard = ({user}) => (
+const RightDashboard = ({ user }) => (
   <div className={styles.outerContainer}>
     <ProfilePicture url={user.avatar_url} user_id={user.id} name={user.name}/>
     <div>
