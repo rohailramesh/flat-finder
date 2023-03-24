@@ -2,6 +2,7 @@ import React from "react";
 //import "./index.css";
 import { PlusOutlined, LoadingOutlined, ConsoleSqlOutlined } from "@ant-design/icons";
 import { Upload, message, Image } from "antd";
+import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
@@ -24,7 +25,7 @@ const beforeUpload = (file) => {
   return isJpgOrPng && isLt2M;
 };
 
-const ProfilePicture = ({ url, user_id }) => {
+const ProfilePicture = ({ url, user_id,  }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const supabase = useSupabaseClient();
@@ -83,7 +84,6 @@ const ProfilePicture = ({ url, user_id }) => {
         showUploadList={false}
         beforeUpload={beforeUpload}
         onChange={handleChange}
-
       >
         {imageUrl ? (
           <Image
@@ -94,10 +94,10 @@ const ProfilePicture = ({ url, user_id }) => {
           style={{
             width: "100%",
           }}
-        />
-        ) : (
+          />
+          ) : (
           uploadButton
-        )}
+          )}
       </Upload>
     </>
   );
@@ -106,6 +106,7 @@ export default ProfilePicture;
       
 
       
+
 // import React, { useEffect, useState } from 'react'
 // import { useSupabaseClient } from '@supabase/auth-helpers-react'
 // import UserService from '@/services/UserService'

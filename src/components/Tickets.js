@@ -1,5 +1,5 @@
 import React from "react";
-import Lottie from 'react-lottie';
+import Lottie from '@amelix/react-lottie'
 import { successOptions } from "@/utils";
 import { Card } from "antd";
 import { Modal } from "antd";
