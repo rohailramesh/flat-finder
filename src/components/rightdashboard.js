@@ -24,7 +24,7 @@ const RightDashboard = ({user}) => (
       <Paragraph>{user.email}</Paragraph>
     </div>
     <div className={styles.flexContainer}>
-      <InboxOutlined />
+      <InboxOutlined color="black" />
       <MessageFilled />
       <QuestionCircleFilled />
       <SettingFilled />

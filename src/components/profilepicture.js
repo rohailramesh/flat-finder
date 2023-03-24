@@ -25,7 +25,7 @@ const beforeUpload = (file) => {
   return isJpgOrPng && isLt2M;
 };
 
-const ProfilePicture = ({ url, user_id,  }) => {
+const ProfilePicture = ({ url, user_id,name }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const supabase = useSupabaseClient();
@@ -85,19 +85,7 @@ const ProfilePicture = ({ url, user_id,  }) => {
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
-        {imageUrl ? (
-          <Image
-          preview={false}
-          width={200}
-          src={imageUrl}
-          alt="avatar"
-          style={{
-            width: "100%",
-          }}
-          />
-          ) : (
-          uploadButton
-          )}
+        <Avatar size='xl' name={name} src={imageUrl}/>
       </Upload>
     </>
   );
@@ -106,6 +94,19 @@ export default ProfilePicture;
       
 
       
+// {imageUrl ? (
+//   <Image
+//   preview={false}
+//   width={200}
+//   src={imageUrl}
+//   alt="avatar"
+//   style={{
+//     width: "100%",
+//   }}
+//   />
+//   ) : (
+//   uploadButton
+//   )}
 
 // import React, { useEffect, useState } from 'react'
 // import { useSupabaseClient } from '@supabase/auth-helpers-react'
