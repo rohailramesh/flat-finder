@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@amelix/react-lottie": "^1.2.4",
     "@ant-design/icons": "^5.0.1",
     "@chakra-ui/react": "^2.5.2",
     "@emotion/react": "^11.10.6",
@@ -30,7 +31,6 @@
     "react": "18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "18.2.0",
-    "react-lottie": "^1.2.3",
     "react-router-dom": "^6.8.2"
   },
   "devDependencies": {

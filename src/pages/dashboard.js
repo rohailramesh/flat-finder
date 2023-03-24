@@ -139,7 +139,7 @@ function FlatifyDashboard() {
         </Header>
         <Content
           style={{
-            margin: "0 16px",
+            margin: "0 50px",
           }}
         >
           <Breadcrumb
@@ -167,7 +167,11 @@ function FlatifyDashboard() {
                   textAlign: "center",
                 }}
               >
-                <TicketsComponent user_id={user.id} setTickets={setTickets} />
+                <TicketsComponent
+                  user_id={user.id}
+                  setTickets={setTickets}
+                  tickets={tickets}
+                />
               </div>
             </div>
           )}
@@ -190,6 +194,8 @@ function FlatifyDashboard() {
           lineHeight: "120px",
           // color: "#fff",
           width: 70,
+          padding: "40px",
+          overflow: "auto",
         }}
       >
         <Space size={26} wrap>

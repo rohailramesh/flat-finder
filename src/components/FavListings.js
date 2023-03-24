@@ -36,9 +36,16 @@ const FavListings = (props) => {
     setIndexC1(selectedIndex);
   };
   return (
-    <div style={{ display: "flex", marginLeft: "25px" }}>
+    <div style={{ display: "flex", marginLeft: "15px", textAlign: "center" }}>
       {FavouriteListings.slice(0, 3).map((listing) => (
-        <Carousel style={{ width: "300px", padding: "5px" }}>
+        <Carousel
+          style={{
+            width: "350px",
+            padding: "5px",
+            overflow: "scroll",
+            whiteSpace: "nowrap",
+          }}
+        >
           <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
             <img
               className="d-block w-150"
