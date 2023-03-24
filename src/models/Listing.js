@@ -41,12 +41,25 @@ const coordinates = {
   longitude: "",
 };
 
+// const key_features = {
+//   bathrooms: 2,
+//   beds: 3,
+//   monthly_bills: 300, //if 0, then bills included
+//   pets_allowed: false,
+//   closest_station: "mile end station",
+//   smoking_allowed: false,
+//   gym_nearby: true,
+// };
+
+
 const key_features = {
-  bathrooms: 2,
-  beds: 3,
-  monthly_bills: 300, //if 0, then bills included
+  bathrooms: 0,
+  beds: 0,
+  monthly_bills: 0, //if 0, then bills included
   pets_allowed: false,
-  closest_station: "mile end station",
   smoking_allowed: false,
+  station_nearby: false,
   gym_nearby: true,
 };
+
+

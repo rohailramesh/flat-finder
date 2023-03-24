@@ -16,7 +16,7 @@ import AddListingComponent from "@/components/AddListings";
 import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
-import { items } from "@/utils";
+import { items, emptyListing} from "@/utils";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -26,7 +26,8 @@ function FlatifyDashboard() {
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [favListings, setFavListings] = useState([]);
-  const [tickets, setTickets] = useState([]);
+  const [tickets, setTickets] = useState([])
+  const [listing, setListing] = useState(emptyListing)
   const [tabKey, setTabKey] = useState("1");
 
   const userService = new UserService();
@@ -176,7 +177,7 @@ function FlatifyDashboard() {
             </div>
           )}
           {tabKey == "2" && <SearchResultPage listings={listings} />}
-          {tabKey == "3" && <AddListingComponent />}
+          {tabKey == "3" && <AddListingComponent listing={listing} setListing={setListing} />}
         </Content>
         <Footer
           style={{

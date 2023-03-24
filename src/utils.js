@@ -52,6 +52,33 @@ const successOptions = {
   }
 };
 
+const emptyListing = {
+  title: '',
+  description: '',
+  images: [],
+  monthly_price: 0,
+  deposit: 0,
+  address: {
+    first_line: "",
+    second_line: "",
+    postcode: "",
+    city: "",
+    country: "",
+  }, 
+  contract_length: 0,
+  coordinates: {
+    latitude: "",
+    longitude: "",
+  },
+  key_features: {
+    bathrooms: 0,
+    beds: 0,
+    monthly_bills: 0, //if 0, then bills included
+    pets_allowed: false,
+    smoking_allowed: false,
+    station_nearby: false,
+    gym_nearby: false,
+  } 
+}
 
-
-export { items, suffixSelector, successOptions } 
+export { items, suffixSelector, successOptions, emptyListing } 
