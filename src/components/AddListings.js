@@ -16,7 +16,7 @@ import {
 import { useState, useEffect } from "react";
 import { suffixSelector, beforeUpload, getBase64 } from "@/utils";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { FormLabel } from "react-bootstrap";
+import ListingService from "@/services/ListingService";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -32,11 +32,48 @@ const getBase64Url = (file) =>
 const SITE_KEY_HCAPTCHA = "63ab0739-ef17-4588-96f7-9d7d30fe3c68"
 
 
-function AddListingComponent({ listing, setListing, user_id }) {
+function AddListingComponent({ listing, setListing }) {
 
   const supabase = useSupabaseClient();
+  const listingService = new ListingService()
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
+
+
+  async function handleSubmit() {
+
+    //Handle pictures updloaded
+    for (const { originFileObj } of listing.temp_fileList){ 
+
+      //Step 1: upload image to db
+      const imgName = `${listing.owner}_${originFileObj.name}`
+      const { data, error } = await supabase.storage.from('listing-images')
+      .upload(imgName, originFileObj, {
+        cacheControl: '3600',
+        upsert: false
+      })
+      console.log({data, error}, "Uploaded picture to DB 🟢")
+
+      //Step 2: get image url from db
+      const { publicUrl } = supabase.storage.from('listing-images').getPublicUrl(imgName).data
+      console.log('Url received', {publicUrl})
+
+      //Step 3: update listing obj
+      setListing((prevListing) => ({
+        ...prevListing, images: prevListing.images.concat([publicUrl])
+      }))
+    }
+
+    //Delete temp_fileList 
+    delete listing.temp_fileList
+
+    //Get coordinates from google api
+    // to-do
+
+    //Add the listing
+    const response = await listingService.addListing(listing);
+    console.log('Here is the response: ', response)
+  }
 
   //Before adding the listing to db, make sure to delete temp_fileList prop.
   function updateFileList(info) {
@@ -53,36 +90,36 @@ function AddListingComponent({ listing, setListing, user_id }) {
     setPreviewOpen(true);
   }
 
-  const handleUploadChange = async (info) => {
-    console.log(info)
-    const originFile = info.file.originFileObj
-    if (info.file.status === "uploading") {
-      // setLoading(true);
-      console.count("Call")
-      const imgName = originFile.name + String(user_id)
-      const { data, error } = await supabase.storage.from('listing-images')
-      .upload(imgName, originFile, {
-        cacheControl: '3600',
-        upsert: false
-      })
-      console.log({data, error})
-      return;
-    }
-    if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (_) => {
-      const { data } = supabase.storage
-        .from('listing-images')
-        .getPublicUrl(originFile.name)
+  // const handleUploadChange = async (info) => {
+  //   console.log(info)
+  //   const originFile = info.file.originFileObj
+  //   if (info.file.status === "uploading") {
+  //     // setLoading(true);
+  //     console.count("Call")
+  //     const imgName = originFile.name + String(user_id)
+  //     const { data, error } = await supabase.storage.from('listing-images')
+  //     .upload(imgName, originFile, {
+  //       cacheControl: '3600',
+  //       upsert: false
+  //     })
+  //     console.log({data, error})
+  //     return;
+  //   }
+  //   if (info.file.status === "done") {
+  //     // Get this url from response in real world.
+  //     getBase64(info.file.originFileObj, (_) => {
+  //     const { data } = supabase.storage
+  //       .from('listing-images')
+  //       .getPublicUrl(originFile.name)
 
-        const url = data.publicUrl
-        console.log('Url received', {url})
-        setListing((prevListing) => ({
-          ...prevListing, images: prevListing.images.concat([url])
-        }))
-      });
-    }
-  };
+  //       const url = data.publicUrl
+  //       console.log('Url received', {url})
+  //       setListing((prevListing) => ({
+  //         ...prevListing, images: prevListing.images.concat([url])
+  //       }))
+  //     });
+  //   }
+  // };
 
 
   const handleChange = (e, field, nestedField) => {
@@ -264,7 +301,7 @@ function AddListingComponent({ listing, setListing, user_id }) {
       </Form.Item>
         <Form.Item label="Listing pictures" valuePropName="fileList">
           <Upload listType="picture-card"
-            fileList={listing.temp_fileList}
+            fileList={listing.temp_fileList && listing.temp_fileList}
             onPreview={handlePreview}
             beforeUpload={beforeUpload}
             onChange={updateFileList}
@@ -305,14 +342,14 @@ function AddListingComponent({ listing, setListing, user_id }) {
             </Col>
           </Row>
         </Form.Item> */}
-          <Form.Item label="Human Verification">
+          <Form.Item label="Verify">
             <HCaptcha
               sitekey={SITE_KEY_HCAPTCHA}
               onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
               />
           </Form.Item>
         <Form.Item>
-          <Button type='primary'  htmlType="submit" >Create listing</Button>
+          <Button type='primary'  htmlType="submit" onClick={handleSubmit} >Create listing</Button>
         </Form.Item>
       </Form>
       <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>

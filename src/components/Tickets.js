@@ -3,7 +3,7 @@ import Lottie from "@amelix/react-lottie";
 import { successOptions } from "@/utils";
 import { Card } from "antd";
 import { Modal } from "antd";
-import { Button, Col, Form, Input, Row, Badge, Space, Tag } from "antd";
+import { Button, Col, Form, Input, Row, Badge, Space, Tag, message} from "antd";
 import { useState } from "react";
 import TicketService from "@/services/TicketService";
 import {
@@ -21,6 +21,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [success, setSuccess] = useState(false);
+  const [messageApi, alert] = message.useMessage();
 
   const ticketService = new TicketService();
 
@@ -39,17 +40,22 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
     if (title && content) {
       const new_ticket = await ticketService.addTicket(title, content, user_id);
       console.log("Ticket that we got back: ", new_ticket);
-      setTickets((prev) => prev.concat([new_ticket]));
+      setConfirmLoading(false);
+      setSuccess(true);
+      setTimeout(() => {
+        setTickets((prev) => prev.concat([new_ticket]));
+        setTitle("");
+        setContent("");
+        setOpen(false);
+        setSuccess(false);
+      }, 2000);
+    } else {
+      setConfirmLoading(false);
+      messageApi.open({
+        type: 'error',
+        content: 'Please fill in both title and description',
+      });
     }
-    setConfirmLoading(false);
-    setSuccess(true);
-
-    setTimeout(() => {
-      setTitle("");
-      setContent("");
-      setOpen(false);
-      setSuccess(false);
-    }, 2000);
   };
 
   const handleCancel = () => {
@@ -59,6 +65,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
 
   return (
     <>
+      {alert}
       <div>
         <Button type="primary" onClick={showModal}>
           Add ticket
@@ -78,6 +85,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
       <Row style={{ overflow: "auto" }}>
         {tickets.map((ticket) => (
           <Card
+            id={ticket.id}
             title={ticket.title}
             size="20px"
             style={{ width: "200px", height: "200px" }}
