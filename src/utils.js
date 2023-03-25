@@ -78,7 +78,27 @@ const emptyListing = {
     smoking_allowed: false,
     station_nearby: false,
     gym_nearby: false,
-  } 
+  },
+  temp_fileList: [] //NOTE: this is NOT a column in the listing table in db. This is used in the addListing component to mantain state of pictures uploaded. 
 }
 
-export { items, suffixSelector, successOptions, emptyListing } 
+
+const beforeUpload = (file) => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG/PNG file!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error("Image must smaller than 2MB!");
+  }
+  return isJpgOrPng && isLt2M;
+};
+
+const getBase64 = (img, callback) => {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => callback(reader.result));
+  reader.readAsDataURL(img);
+};
+
+export { items, suffixSelector, successOptions, emptyListing, beforeUpload, getBase64 } 

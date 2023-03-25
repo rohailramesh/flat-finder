@@ -1,4 +1,5 @@
 import React from "react";
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { DashboardFilled, PlusOutlined } from "@ant-design/icons";
 import {
   Row,
@@ -9,28 +10,80 @@ import {
   Input,
   InputNumber,
   Upload,
-  Checkbox
+  Checkbox,
+  Modal
 } from "antd";
 import { useState, useEffect } from "react";
-import { suffixSelector } from "@/utils";
+import { suffixSelector, beforeUpload, getBase64 } from "@/utils";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { FormLabel } from "react-bootstrap";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-import Listing from "@/models/Listing";
 
 
-function AddListingComponent({ listing, setListing }) {
+const getBase64Url = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
-  const [address, setAddress] = useState({
-    first_line: "",
-    second_line: "",
-    postcode: "",
-    city: "",
-    country: "",
-  })
+const SITE_KEY_HCAPTCHA = "63ab0739-ef17-4588-96f7-9d7d30fe3c68"
 
-  // useEffect(() => {
-  //   setAddress(listing.address)
-  // }, [])
+
+function AddListingComponent({ listing, setListing, user_id }) {
+
+  const supabase = useSupabaseClient();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+
+  //Before adding the listing to db, make sure to delete temp_fileList prop.
+  function updateFileList(info) {
+    setListing(prevListing => ({
+      ...prevListing, temp_fileList: info.fileList
+    }))
+  }
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64Url(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  }
+
+  const handleUploadChange = async (info) => {
+    console.log(info)
+    const originFile = info.file.originFileObj
+    if (info.file.status === "uploading") {
+      // setLoading(true);
+      console.count("Call")
+      const imgName = originFile.name + String(user_id)
+      const { data, error } = await supabase.storage.from('listing-images')
+      .upload(imgName, originFile, {
+        cacheControl: '3600',
+        upsert: false
+      })
+      console.log({data, error})
+      return;
+    }
+    if (info.file.status === "done") {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, (_) => {
+      const { data } = supabase.storage
+        .from('listing-images')
+        .getPublicUrl(originFile.name)
+
+        const url = data.publicUrl
+        console.log('Url received', {url})
+        setListing((prevListing) => ({
+          ...prevListing, images: prevListing.images.concat([url])
+        }))
+      });
+    }
+  };
+
 
   const handleChange = (e, field, nestedField) => {
     const { value } = e.target;
@@ -210,7 +263,12 @@ function AddListingComponent({ listing, setListing }) {
           </Row>
       </Form.Item>
         <Form.Item label="Listing pictures" valuePropName="fileList">
-          <Upload action="/upload.do" listType="picture-card">
+          <Upload listType="picture-card"
+            fileList={listing.temp_fileList}
+            onPreview={handlePreview}
+            beforeUpload={beforeUpload}
+            onChange={updateFileList}
+          >
             <div>
               <PlusOutlined />
               <div
@@ -247,10 +305,25 @@ function AddListingComponent({ listing, setListing }) {
             </Col>
           </Row>
         </Form.Item> */}
+          <Form.Item label="Human Verification">
+            <HCaptcha
+              sitekey={SITE_KEY_HCAPTCHA}
+              onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
+              />
+          </Form.Item>
         <Form.Item>
           <Button type='primary'  htmlType="submit" >Create listing</Button>
         </Form.Item>
       </Form>
+      <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
+        <img
+          alt="example"
+          style={{
+            width: '100%',
+          }}
+          src={previewImage}
+        />
+      </Modal>
     </div>
   );
 };
