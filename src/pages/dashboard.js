@@ -177,7 +177,7 @@ function FlatifyDashboard() {
             </div>
           )}
           {tabKey == "2" && <SearchResultPage listings={listings} />}
-          {tabKey == "3" && <AddListingComponent listing={listing} setListing={setListing} />}
+          {tabKey == "3" && <AddListingComponent listing={listing} setListing={setListing} user_id={user.id} />}
         </Content>
         <Footer
           style={{

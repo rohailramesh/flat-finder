@@ -9,24 +9,79 @@ import {
   Input,
   InputNumber,
   Upload,
-  Checkbox
+  Checkbox,
+  Modal
 } from "antd";
 import { useState, useEffect } from "react";
-import { suffixSelector } from "@/utils";
+import { suffixSelector, beforeUpload, getBase64 } from "@/utils";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-import Listing from "@/models/Listing";
 
 
-function AddListingComponent({ listing, setListing }) {
+const getBase64Url = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
-  const [address, setAddress] = useState({
-    first_line: "",
-    second_line: "",
-    postcode: "",
-    city: "",
-    country: "",
-  })
+
+function AddListingComponent({ listing, setListing, user_id }) {
+
+  const supabase = useSupabaseClient();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+
+  //Before adding the listing to db, make sure to delete temp_fileList prop.
+  function updateFileList(info) {
+    setListing(prevListing => ({
+      ...prevListing, temp_fileList: info.fileList
+    }))
+  }
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64Url(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  }
+
+  const handleUploadChange = async (info) => {
+    console.log(info)
+    const originFile = info.file.originFileObj
+    if (info.file.status === "uploading") {
+      // setLoading(true);
+      console.count("Call")
+      const imgName = originFile.name + String(user_id)
+      const { data, error } = await supabase.storage.from('listing-images')
+      .upload(imgName, originFile, {
+        cacheControl: '3600',
+        upsert: false
+      })
+      console.log({data, error})
+      return;
+    }
+    if (info.file.status === "done") {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, (_) => {
+      const { data } = supabase.storage
+        .from('listing-images')
+        .getPublicUrl(originFile.name)
+
+        const url = data.publicUrl
+        console.log('Url received', {url})
+        setListing((prevListing) => ({
+          ...prevListing, images: prevListing.images.concat([url])
+        }))
+        // setLoading(false);
+        // userService.updateAvatar(supabase, data.publicUrl, user_id)      
+        // setImageUrl(data.publicUrl);
+      });
+    }
+  };
 
   // useEffect(() => {
   //   setAddress(listing.address)
@@ -210,7 +265,12 @@ function AddListingComponent({ listing, setListing }) {
           </Row>
       </Form.Item>
         <Form.Item label="Listing pictures" valuePropName="fileList">
-          <Upload action="/upload.do" listType="picture-card">
+          <Upload listType="picture-card"
+            fileList={listing.temp_fileList}
+            onPreview={handlePreview}
+            beforeUpload={beforeUpload}
+            onChange={updateFileList}
+          >
             <div>
               <PlusOutlined />
               <div
@@ -251,6 +311,15 @@ function AddListingComponent({ listing, setListing }) {
           <Button type='primary'  htmlType="submit" >Create listing</Button>
         </Form.Item>
       </Form>
+      <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
+        <img
+          alt="example"
+          style={{
+            width: '100%',
+          }}
+          src={previewImage}
+        />
+      </Modal>
     </div>
   );
 };

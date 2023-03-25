@@ -5,25 +5,10 @@ import { Upload, message, Image } from "antd";
 import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { beforeUpload, getBase64 } from "@/utils";
 
 import UserService from "@/services/UserService";
-const getBase64 = (img, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-};
 
-const beforeUpload = (file) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-};
 
 const ProfilePicture = ({ url, user_id,name }) => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +22,6 @@ const ProfilePicture = ({ url, user_id,name }) => {
 
   const handleChange = async (info) => {
     console.log(info)
-    
     const avatarFile = info.file.originFileObj
     if (info.file.status === "uploading") {
       setLoading(true);
