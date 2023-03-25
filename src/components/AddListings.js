@@ -17,24 +17,30 @@ import { useState, useEffect } from "react";
 import { suffixSelector, beforeUpload, getBase64 } from "@/utils";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import ListingService from "@/services/ListingService";
+import GoogleMapsService from "@/services/GoogleMapsService";
+
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 
+
+
+
 const getBase64Url = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = (error) => reject(error);
+});
 
 const SITE_KEY_HCAPTCHA = "63ab0739-ef17-4588-96f7-9d7d30fe3c68"
 
 
 function AddListingComponent({ listing, setListing }) {
-
+  
   const supabase = useSupabaseClient();
+  const googleMapsService = new GoogleMapsService()
   const listingService = new ListingService()
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -59,20 +65,26 @@ function AddListingComponent({ listing, setListing }) {
       console.log('Url received', {publicUrl})
 
       //Step 3: update listing obj
-      setListing((prevListing) => ({
-        ...prevListing, images: prevListing.images.concat([publicUrl])
-      }))
+      // setListing((prevListing) => ({
+      //   ...prevListing, images: prevListing.images.concat([publicUrl])
+      // }))
+      listing.images.push(publicUrl)
     }
 
     //Delete temp_fileList 
     delete listing.temp_fileList
 
     //Get coordinates from google api
-    // to-do
+    const {first_line, second_line, postcode, country, city} = listing.address
+    const coordinates = await googleMapsService.getCoordinates(`${first_line}, ${second_line}, ${postcode}, ${city}, ${country}`)
+    listing.coordinates = coordinates
 
     //Add the listing
     const response = await listingService.addListing(listing);
     console.log('Here is the response: ', response)
+
+    //reset listing state
+    //to-do
   }
 
   //Before adding the listing to db, make sure to delete temp_fileList prop.
@@ -90,36 +102,7 @@ function AddListingComponent({ listing, setListing }) {
     setPreviewOpen(true);
   }
 
-  // const handleUploadChange = async (info) => {
-  //   console.log(info)
-  //   const originFile = info.file.originFileObj
-  //   if (info.file.status === "uploading") {
-  //     // setLoading(true);
-  //     console.count("Call")
-  //     const imgName = originFile.name + String(user_id)
-  //     const { data, error } = await supabase.storage.from('listing-images')
-  //     .upload(imgName, originFile, {
-  //       cacheControl: '3600',
-  //       upsert: false
-  //     })
-  //     console.log({data, error})
-  //     return;
-  //   }
-  //   if (info.file.status === "done") {
-  //     // Get this url from response in real world.
-  //     getBase64(info.file.originFileObj, (_) => {
-  //     const { data } = supabase.storage
-  //       .from('listing-images')
-  //       .getPublicUrl(originFile.name)
 
-  //       const url = data.publicUrl
-  //       console.log('Url received', {url})
-  //       setListing((prevListing) => ({
-  //         ...prevListing, images: prevListing.images.concat([url])
-  //       }))
-  //     });
-  //   }
-  // };
 
 
   const handleChange = (e, field, nestedField) => {
