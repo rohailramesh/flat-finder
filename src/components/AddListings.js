@@ -305,7 +305,7 @@ function AddListingComponent({ listing, setListing, user_id }) {
             </Col>
           </Row>
         </Form.Item> */}
-          <Form.Item label="Human Verification">
+          <Form.Item label="Verify">
             <HCaptcha
               sitekey={SITE_KEY_HCAPTCHA}
               onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
