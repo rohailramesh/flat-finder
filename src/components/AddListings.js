@@ -1,4 +1,5 @@
 import React from "react";
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { DashboardFilled, PlusOutlined } from "@ant-design/icons";
 import {
   Row,
@@ -15,6 +16,7 @@ import {
 import { useState, useEffect } from "react";
 import { suffixSelector, beforeUpload, getBase64 } from "@/utils";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { FormLabel } from "react-bootstrap";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -26,6 +28,8 @@ const getBase64Url = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
+const SITE_KEY_HCAPTCHA = "63ab0739-ef17-4588-96f7-9d7d30fe3c68"
 
 
 function AddListingComponent({ listing, setListing, user_id }) {
@@ -76,16 +80,10 @@ function AddListingComponent({ listing, setListing, user_id }) {
         setListing((prevListing) => ({
           ...prevListing, images: prevListing.images.concat([url])
         }))
-        // setLoading(false);
-        // userService.updateAvatar(supabase, data.publicUrl, user_id)      
-        // setImageUrl(data.publicUrl);
       });
     }
   };
 
-  // useEffect(() => {
-  //   setAddress(listing.address)
-  // }, [])
 
   const handleChange = (e, field, nestedField) => {
     const { value } = e.target;
@@ -307,6 +305,12 @@ function AddListingComponent({ listing, setListing, user_id }) {
             </Col>
           </Row>
         </Form.Item> */}
+          <Form.Item label="Human Verification">
+            <HCaptcha
+              sitekey={SITE_KEY_HCAPTCHA}
+              onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
+              />
+          </Form.Item>
         <Form.Item>
           <Button type='primary'  htmlType="submit" >Create listing</Button>
         </Form.Item>
