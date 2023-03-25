@@ -56,6 +56,7 @@ const emptyListing = {
   title: '',
   description: '',
   images: [],
+  owner: null,
   monthly_price: 0,
   deposit: 0,
   address: {

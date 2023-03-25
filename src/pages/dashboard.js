@@ -50,6 +50,7 @@ function FlatifyDashboard() {
       ]);
       user_profile.is_admin && router.push("/admin");
       setUser(user_profile);
+      setListing(prevListing => ({...prevListing, owner: user_profile.id}))
       setListings(allListings);
 
       const [new_favListings, new_tickets] = await Promise.all([
@@ -177,7 +178,7 @@ function FlatifyDashboard() {
             </div>
           )}
           {tabKey == "2" && <SearchResultPage listings={listings} />}
-          {tabKey == "3" && <AddListingComponent listing={listing} setListing={setListing} user_id={user.id} />}
+          {tabKey == "3" && <AddListingComponent listing={listing} setListing={setListing}/>}
         </Content>
         <Footer
           style={{

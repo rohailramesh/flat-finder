@@ -85,6 +85,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
       <Row style={{ overflow: "auto" }}>
         {tickets.map((ticket) => (
           <Card
+            id={ticket.id}
             title={ticket.title}
             size="20px"
             style={{ width: "200px", height: "200px" }}
