@@ -11,16 +11,18 @@ import {
   InputNumber,
   Upload,
   Checkbox,
-  Modal
+  Modal,
+  Progress, Typography
 } from "antd";
 import { useState, useEffect } from "react";
-import { suffixSelector, beforeUpload, getBase64 } from "@/utils";
+import { suffixSelector, beforeUpload, getBase64, emptyListing } from "@/utils";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import ListingService from "@/services/ListingService";
 import GoogleMapsService from "@/services/GoogleMapsService";
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
+const {Title, Text} = Typography
 
 
 
@@ -42,12 +44,17 @@ function AddListingComponent({ listing, setListing }) {
   const supabase = useSupabaseClient();
   const googleMapsService = new GoogleMapsService()
   const listingService = new ListingService()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [percent, setPercent] = useState(0)
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
 
 
   async function handleSubmit() {
-
+    setIsModalOpen(true)
+    const step = (100/(listing.temp_fileList.length * 2 + 2)) 
+    console.log({step})
     //Handle pictures updloaded
     for (const { originFileObj } of listing.temp_fileList){ 
 
@@ -59,15 +66,12 @@ function AddListingComponent({ listing, setListing }) {
         upsert: false
       })
       console.log({data, error}, "Uploaded picture to DB 🟢")
+      setPercent(prev => prev + step)
 
       //Step 2: get image url from db
       const { publicUrl } = supabase.storage.from('listing-images').getPublicUrl(imgName).data
       console.log('Url received', {publicUrl})
-
-      //Step 3: update listing obj
-      // setListing((prevListing) => ({
-      //   ...prevListing, images: prevListing.images.concat([publicUrl])
-      // }))
+      setPercent(prev => prev + step)
       listing.images.push(publicUrl)
     }
 
@@ -78,13 +82,17 @@ function AddListingComponent({ listing, setListing }) {
     const {first_line, second_line, postcode, country, city} = listing.address
     const coordinates = await googleMapsService.getCoordinates(`${first_line}, ${second_line}, ${postcode}, ${city}, ${country}`)
     listing.coordinates = coordinates
+    setPercent(prev => prev + step)
 
     //Add the listing
     const response = await listingService.addListing(listing);
     console.log('Here is the response: ', response)
-
-    //reset listing state
-    //to-do
+    setPercent(100)
+    setTimeout(() =>{
+      setIsModalOpen(false)
+      setPercent(0)
+      setListing(emptyListing)
+    }, 2500)
   }
 
   //Before adding the listing to db, make sure to delete temp_fileList prop.
@@ -122,6 +130,30 @@ function AddListingComponent({ listing, setListing }) {
 
   return (
     <div>
+      <Modal open={isModalOpen} style={{ width: 500 }} footer={[<div></div>]}>
+        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 300, gap: '1rem'}}>
+          <Progress
+          type="circle"
+          percent={percent}
+          strokeColor={{
+            '0%': '#108ee9',
+            '100%': '#87d068',
+          }}
+          />
+          <Title level={3}>{percent !== 100 ? "Adding listing..." : "Listing added successfully!"}</Title>
+          {/* <h2>
+            {percent !== 100 ? "Adding listing..." : "Listing added successfully!"}
+          </h2> */}
+          <Text type="secondary">{percent !== 100
+              ? "Sit back and relax while we do the magic"
+              : "You can find your listing in the homepage"}</Text>
+          {/* <p >
+            {percent !== 100
+              ? "Sit back and relax while we do the magic"
+              : "You can find your listing in the homepage"}
+          </p> */}
+        </div>
+      </Modal>
       <Form
         labelCol={{span: 5}}
         wrapperCol={{span: 10}}
