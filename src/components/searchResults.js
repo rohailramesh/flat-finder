@@ -16,7 +16,6 @@ import {
   Card,
   Text,
 } from "@chakra-ui/react";
-import ListingInfo from "./ListingInfo";
 const SearchResultPage = (props) => {
   const listings = props.listings;
   const displayListings = listings.map((listing) => listing);
@@ -28,6 +27,7 @@ const SearchResultPage = (props) => {
     <ChakraProvider>
       {displayListings.slice(0, 3).map((listing) => (
         <Card
+          className="card hover-bg hover-up"
           key={listing.id}
           direction={{ base: "column", sm: "row" }}
           overflow="hidden"
