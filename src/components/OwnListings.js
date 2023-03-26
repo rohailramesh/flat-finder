@@ -14,26 +14,10 @@ const contentStyle = {
   maxWidth: "max-content",
 };
 import { Divider, Space, Tag } from "antd";
-import {
-  ChakraProvider,
-  Stack,
-  CardBody,
-  CardFooter,
-  Heading,
-  Button,
-  Image,
-  Card,
-  Text,
-} from "@chakra-ui/react";
-import { items } from "@/utils";
+
 
 function OwnListings ({ ownListings }) {
-
-  const [dotPosition, setDotPosition] = useState("left");
   const [indexC1, setIndexC1] = useState(0);
-  const [indexC2, setIndexC2] = useState(0);
-  const [indexC3, setIndexC3] = useState(0);
-
   const handleSelect = (selectedIndex, e) => {
     setIndexC1(selectedIndex);
   };
@@ -60,42 +44,22 @@ function OwnListings ({ ownListings }) {
                 overflow: "scroll",
                 whiteSpace: "nowrap",
               }}>
-            
-            <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
+            {listing.images.map((image, index) => (
+              <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
               <img
                 className="d-block w-150"
-                src={listing.images[0]}
-                alt="First slide"
+                src={image}
+                alt="Carousel Slide"
                 style={{ width: "500px", height: "200px" }}
               />
               <Carousel.Caption>
-                <p>{listing.title}</p>
+              {index == 0 &&
+                <p>{listing.title}</p>}
+              { index == 1 && 
+               <p>{listing.monthly_price}</p>}
               </Carousel.Caption>
             </Carousel.Item>
-            <Carousel.Item activeIndex={indexC2} onSelect={handleSelect}>
-              <img
-                className="d-block w-100"
-                src={listing.images[1]}
-                alt="Second slide"
-                style={{ width: "500px", height: "200px" }}
-              />
-
-              <Carousel.Caption>
-                <p>£{listing.monthly_price}</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item activeIndex={indexC3} onSelect={handleSelect}>
-              <img
-                className="d-block w-100"
-                src={listing.images[2]}
-                alt="Third slide"
-                style={{ width: "500px", height: "200px" }}
-              />
-
-              <Carousel.Caption>
-                {/* <p>{listing.address.postcode}</p> */}
-              </Carousel.Caption>
-            </Carousel.Item>
+            ))}
           </Carousel>
         ))}
       </div>
