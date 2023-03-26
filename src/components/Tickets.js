@@ -14,6 +14,7 @@ import {
   Space,
   Tag,
   message,
+  Empty
 } from "antd";
 import { useState } from "react";
 import TicketService from "@/services/TicketService";
@@ -97,8 +98,10 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
       >
         My tickets
       </Divider>
-      <Row>
-        {tickets.map((ticket) => (
+      <Row style={{ display: "flex", marginLeft: "-8px", textAlign: "center", justifyContent: 'center' }}>
+        { !tickets.length ? 
+        <Empty description={<p style={{color: 'gray'}}>Ticket history will show here</p>} /> :
+        tickets.map((ticket) => (
           <Card
             title={
               <>
