@@ -160,6 +160,7 @@ function FlatifyDashboard() {
           </Breadcrumb>
           {tabKey == "1" && (
             <div
+              className="card"
               style={{
                 padding: 24,
                 minHeight: 570,

@@ -126,7 +126,7 @@ function AddListingComponent({ listing, setListing, setOwnListings}) {
   
 
   return (
-    <div>
+    <div className="card" style={{padding: '2.5rem'}}>
       <Modal open={isModalOpen} style={{ width: 500 }} footer={[<div></div>]}
         closable={false} maskClosable={false} /* keyboard={false} - close on esc press */
       >
@@ -153,7 +153,7 @@ function AddListingComponent({ listing, setListing, setOwnListings}) {
           </p> */}
         </div>
       </Modal>
-      <Form
+      <Form 
         labelCol={{span: 5}}
         wrapperCol={{span: 10}}
         layout="horizontal"
