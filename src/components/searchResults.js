@@ -2,7 +2,7 @@
 import Listing from "@/models/Listing";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { StarOutlined } from "@ant-design/icons";
+import { StarFilled, StarOutlined } from "@ant-design/icons";
 import { faBed } from "@fortawesome/free-solid-svg-icons";
 import { faBath } from "@fortawesome/free-solid-svg-icons";
 import FavListings from "./FavListings";
@@ -23,8 +23,7 @@ const SearchResultPage = (props) => {
   //TODO: find a way to check which listings are already favorited by the user logged in...
   const favIds = props.favListings.map(item => item.listing.id)
 
-  const listings = props.listings;
-  const user_id = props.user_id
+  const {listings, setFavListings, user_id, } = props
   const displayListings = listings.map((listing) => listing);
   const favListingSevice = new FavListingService()
   
@@ -32,15 +31,19 @@ const SearchResultPage = (props) => {
     console.log(listingId);
   };
 
-  async function handleFav(toFav, listingId) {
-    if (toFav) {
-      const result = await favListingSevice.addFavListing(user_id, listingId);
-      console.log({ result })
-    }
+  async function handleFav(listingId) {
+      if (favIds.includes(listingId)){
+        const result = await favListingSevice.removeFavListing(user_id, listingId)
+        console.log("Result of removal! ", result)
+        setFavListings((prev) => prev.filter(item => item.listing.id !== listingId))
+      } else {
+        const result = await favListingSevice.addFavListing(user_id, listingId);
+        setFavListings((prev) => prev.concat(result.data)) 
+      }
   }
 
   return (
-    <ChakraProvider>
+    <>
       {displayListings.slice(0, 3).map((listing) => (
         <Card
           className="card hover-bg hover-up"
@@ -103,14 +106,17 @@ const SearchResultPage = (props) => {
                   >
                   More info
                 </Button>
-                <StarOutlined className="custom-icon" onClick={() => handleFav(true, listing.id)}/>
+                {favIds.includes(listing.id) ? 
+                  <StarFilled className="custom-icon" onClick={() => handleFav(listing.id)} /> :
+                  <StarOutlined className="custom-icon" onClick={() => handleFav(listing.id)}/>
+                }
             {/* </div> */}
             </CardFooter>
           </Stack>
           <br></br>
         </Card>
       ))}
-    </ChakraProvider>
+    </>
   );
 };
 
