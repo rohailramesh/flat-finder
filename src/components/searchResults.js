@@ -107,8 +107,8 @@ const SearchResultPage = (props) => {
                   More info
                 </Button>
                 {favIds.includes(listing.id) ? 
-                  <StarFilled className="custom-icon" onClick={() => handleFav(listing.id)} /> :
-                  <StarOutlined className="custom-icon" onClick={() => handleFav(listing.id)}/>
+                  <StarFilled className="custom-icon spin-animation" onClick={() => handleFav(listing.id)} /> :
+                  <StarOutlined className="custom-icon spin-animation-rev" onClick={() => handleFav(listing.id)}/>
                 }
             {/* </div> */}
             </CardFooter>
