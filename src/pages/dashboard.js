@@ -191,7 +191,7 @@ function FlatifyDashboard() {
               </div>
             </div>
           )}
-          {tabKey == "2" && <SearchResultPage listings={listings} />}
+          {tabKey == "2" && <SearchResultPage listings={listings} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
           {tabKey == "3" && (
             <AddListingComponent listing={listing} setListing={setListing} setOwnListings={setOwnListings} />
           )}
