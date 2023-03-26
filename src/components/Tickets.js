@@ -14,6 +14,7 @@ import {
   Space,
   Tag,
   message,
+  Empty
 } from "antd";
 import { useState } from "react";
 import TicketService from "@/services/TicketService";
@@ -79,13 +80,6 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   return (
     <>
       {alert}
-      <div>
-        <Button type="primary" onClick={showModal}>
-          Add ticket
-        </Button>
-        <br />
-      </div>
-      <br />
       <Divider
         orientation="middle"
         style={{
@@ -97,8 +91,10 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
       >
         My tickets
       </Divider>
-      <Row>
-        {tickets.map((ticket) => (
+      <Row style={{ display: "flex", marginLeft: "-8px", textAlign: "center", justifyContent: 'center' }}>
+        { !tickets.length ? 
+        <Empty description={<p style={{color: 'gray'}}>Ticket history will show here</p>} /> :
+        tickets.map((ticket) => (
           <Card
             title={
               <>
@@ -155,8 +151,15 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
             </p>
           </Card>
         ))}
-        <br />
+        
       </Row>
+      <br />
+        <div>
+          <Button type="primary" onClick={showModal}>
+            Add ticket
+          </Button>
+          <br />
+        </div>
       <br />
       <br></br>
 

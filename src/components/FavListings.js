@@ -2,6 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
+import { Empty } from 'antd'
 const contentStyle = {
   height: "160px",
   //   width: "160px",
@@ -47,11 +48,13 @@ const FavListings = (props) => {
       >
         Saved listings
       </Divider>
-      <div style={{ display: "flex", marginLeft: "-8px", textAlign: "center" }}>
-        {FavouriteListings.slice(0, 3).map((listing) => (
+      <div style={{ display: "flex", marginLeft: "-8px", textAlign: "center", justifyContent: 'center' }}>
+        {!FavouriteListings.length ?
+          <Empty description={<p style={{color: 'gray'}}>Saved listings will show here</p>} /> :
+        FavouriteListings.slice(0, 3).map((listing) => (
           <Carousel
-            style={{
-              width: "350px",
+          style={{
+            width: "350px",
               padding: "5px",
               overflow: "scroll",
               whiteSpace: "nowrap",
