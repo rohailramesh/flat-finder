@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
+import Map from "@/components/Map";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -163,6 +164,9 @@ function FlatifyDashboard() {
             >
               <div>
                 <FavListings favListings={favListings} />
+              </div>
+              <div>
+                <Map coordinates={{lat: 51.5219142, lng: -0.0541331}}/>
               </div>
               <div
                 style={{
