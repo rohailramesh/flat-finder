@@ -1,4 +1,4 @@
-// import "../styles/globals.css";
+import "../styles/globals.css";
 // import "../styles/dashboard.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";

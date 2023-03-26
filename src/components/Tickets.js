@@ -27,6 +27,9 @@ import {
   MinusCircleOutlined,
   SyncOutlined,
   CloseOutlined,
+  DeleteFilled,
+  DeleteOutlined,
+  DeleteTwoTone
 } from "@ant-design/icons";
 
 function TicketsComponent({ user_id, setTickets, tickets }) {
@@ -96,8 +99,9 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
         <Empty description={<p style={{color: 'gray'}}>Ticket history will show here</p>} /> :
         tickets.map((ticket) => (
           <Card
+            className="card hover-bg"
             title={
-              <>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: "space-between"}}>
                 Status: &nbsp;
                 {ticket.status === "resolved" && (
                   <Tag icon={<CheckCircleOutlined />} color="success">
@@ -110,8 +114,8 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                   </Tag>
                 )}
                 {ticket.status === "unresolved" && (
-                  <Tag icon={<CloseCircleOutlined />} color="error">
-                    unresolved
+                  <Tag  style={{display: 'flex', alignItems: 'center', gap: '0.3rem'}} color="error">
+                    <CloseCircleOutlined />unresolved
                   </Tag>
                 )}
                 <Popconfirm
@@ -122,11 +126,11 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                   okText="Yes"
                   cancelText="No"
                 >
-                  <Button>
-                    <CloseOutlined />
-                  </Button>
+                  {/* <Button> */}
+                  <DeleteTwoTone />
+                  {/* </Button> */}
                 </Popconfirm>
-              </>
+              </div>
             }
             bordered={false}
             style={{

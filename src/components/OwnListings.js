@@ -38,6 +38,7 @@ function OwnListings ({ ownListings }) {
           <Empty description={<p style={{color: 'gray'}}>Personal listings will show here</p>} /> 
           : ownListings.slice(0, 3).map((listing) => (
             <Carousel
+            className="hover-scale"
             style={{
               width: "350px",
                 padding: "5px",
