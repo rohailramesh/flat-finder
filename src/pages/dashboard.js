@@ -18,6 +18,7 @@ import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
 import Map from "@/components/Map";
+import OwnListings from "@/components/OwnListings";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -169,6 +170,10 @@ function FlatifyDashboard() {
                 <FavListings favListings={favListings} />
               </div>
 
+              <div>
+                <OwnListings ownListings={ownListings} />
+              </div>
+
               {/* <div>
                 <Map coordinates={{lat: 51.5219142, lng: -0.0541331}}/>
               </div> */}
@@ -188,7 +193,7 @@ function FlatifyDashboard() {
           )}
           {tabKey == "2" && <SearchResultPage listings={listings} />}
           {tabKey == "3" && (
-            <AddListingComponent listing={listing} setListing={setListing} />
+            <AddListingComponent listing={listing} setListing={setListing} setOwnListings={setOwnListings} />
           )}
         </Content>
         <Footer

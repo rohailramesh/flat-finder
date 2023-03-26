@@ -45,7 +45,7 @@ export default class ListingService {
 
     if(response.ok){
       const listing = await response.json()
-      return listing
+      return listing.data
     }
 
     return response
