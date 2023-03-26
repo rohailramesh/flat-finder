@@ -24,10 +24,6 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const {Title, Text} = Typography
 
-
-
-
-
 const getBase64Url = (file) =>
 new Promise((resolve, reject) => {
   const reader = new FileReader();
