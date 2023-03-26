@@ -37,4 +37,15 @@ export default class ListingService {
     }
     return response
   }
+
+  async getOwnListing(){
+    const response = await fetch(`${this.url}/ownListing`)
+
+    if(response.ok){
+      const listing = await response.json()
+      return listing
+    }
+
+    return response
+  }
 }
