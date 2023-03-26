@@ -165,9 +165,9 @@ function FlatifyDashboard() {
               <div>
                 <FavListings favListings={favListings} />
               </div>
-              <div>
+              {/* <div>
                 <Map coordinates={{lat: 51.5219142, lng: -0.0541331}}/>
-              </div>
+              </div> */}
               <div
                 style={{
                   margin: 60,
