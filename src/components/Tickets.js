@@ -80,13 +80,6 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   return (
     <>
       {alert}
-      <div>
-        <Button type="primary" onClick={showModal}>
-          Add ticket
-        </Button>
-        <br />
-      </div>
-      <br />
       <Divider
         orientation="middle"
         style={{
@@ -158,8 +151,15 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
             </p>
           </Card>
         ))}
-        <br />
+        
       </Row>
+      <br />
+        <div>
+          <Button type="primary" onClick={showModal}>
+            Add ticket
+          </Button>
+          <br />
+        </div>
       <br />
       <br></br>
 
