@@ -1,9 +1,20 @@
-import React from "react";
-const ListingInfo = (props) => {
-  const listings = props.listing;
-  const displayListing = listings.map((listing) => listing);
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "@chakra-ui/react";
 
-  return;
+const ListingInfo = ({ listing, setSelectedListing }) => {
+  return (
+    <div>
+      <h1>{listing.title}</h1>
+      <Button onClick={() => setSelectedListing(false)}>Return</Button>
+    </div>
+  );
 };
 
 export default ListingInfo;
