@@ -27,6 +27,7 @@ function FlatifyDashboard() {
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [favListings, setFavListings] = useState([]);
+  const [ownListings, setOwnListings] = useState([])
   const [tickets, setTickets] = useState([]);
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
@@ -54,11 +55,13 @@ function FlatifyDashboard() {
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_tickets] = await Promise.all([
+      const [new_favListings, new_ownListings, new_tickets] = await Promise.all([
         favListingSevice.getFavListing(user_profile.id),
+        listingService.getOwnListing(user_profile.id),
         ticketService.getUserTicket(user_profile.id),
       ]);
       setFavListings(new_favListings);
+      setOwnListings(new_ownListings)
       setTickets(new_tickets);
     })();
   }, []);
@@ -165,6 +168,7 @@ function FlatifyDashboard() {
               <div>
                 <FavListings favListings={favListings} />
               </div>
+
               {/* <div>
                 <Map coordinates={{lat: 51.5219142, lng: -0.0541331}}/>
               </div> */}
