@@ -20,7 +20,7 @@ const Map = ({ coordinates }) => {
         zoom={15}
         >
         {coordinates.lat && coordinates.lng && (
-          <MarkerF position={coordinates} onClick={() => setInfoWindowVisible(true)}>
+          <MarkerF position={coordinates} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
             {infoWindowVisible && (
             <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
               <div>
