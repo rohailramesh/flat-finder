@@ -5,7 +5,7 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 import { faBed } from "@fortawesome/free-solid-svg-icons";
 import { faBath } from "@fortawesome/free-solid-svg-icons";
-import FavListings from "./FavListings";
+import {useState} from 'react'
 import {
   ChakraProvider,
   Stack,
@@ -17,6 +17,7 @@ import {
   Card,
   Text,
 } from "@chakra-ui/react";
+import { Pagination } from "antd";
 import FavListingService from "@/services/FavListingService";
 const SearchResultPage = (props) => {
 
@@ -24,6 +25,7 @@ const SearchResultPage = (props) => {
   const favIds = props.favListings.map(item => item.listing.id)
 
   const {listings, setFavListings, user_id, } = props
+  const [sliceIndex, setSliceIndex] = useState(3)
   const displayListings = listings.map((listing) => listing);
   const favListingSevice = new FavListingService()
   
@@ -42,16 +44,23 @@ const SearchResultPage = (props) => {
       }
   }
 
+  async function handlePagination(pageNumber, pageSize){
+    console.log({pageNumber, pageSize})
+    setSliceIndex(pageNumber * 3)
+  }
+
   return (
-    <>
-      {displayListings.slice(0, 3).map((listing) => (
+    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', height: '90%', gap: '1rem'}}>
+      <div style={{ /* flexGrow: 1, */ display: "flex", flexDirection: "column", marginBottom: '5rem'}}>
+
+      {displayListings.slice(sliceIndex-3, sliceIndex).map((listing) => (
         <Card
-          className="card hover-bg hover-up"
-          key={listing.id}
-          direction={{ base: "column", sm: "row" }}
-          overflow="hidden"
-          variant="outline"
-          style={{ marginTop: "20px", width: '100%' }}
+        className="card hover-bg hover-up"
+        key={listing.id}
+        direction={{ base: "column", sm: "row" }}
+        overflow="hidden"
+        variant="outline"
+        style={{ marginTop: "20px", width: '100%' }}
         >
           <Image
             objectFit="cover"
@@ -59,7 +68,7 @@ const SearchResultPage = (props) => {
             style={{ width: "300px" }}
             src={listing.images[2]}
             alt="Caffe Latte"
-          />
+            />
 
           <Stack style={{width: '100%'}}>
             <CardBody style={{paddingBottom: 0}}>
@@ -92,7 +101,6 @@ const SearchResultPage = (props) => {
             </CardBody>
 
             <CardFooter  style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-              {/* <div> */}
                 <Button
                   variant="solid"
                   //   colorScheme="blue"
@@ -110,13 +118,13 @@ const SearchResultPage = (props) => {
                   <StarFilled className="custom-icon spin-animation" onClick={() => handleFav(listing.id)} /> :
                   <StarOutlined className="custom-icon spin-animation-rev" onClick={() => handleFav(listing.id)}/>
                 }
-            {/* </div> */}
             </CardFooter>
           </Stack>
-          <br></br>
         </Card>
       ))}
-    </>
+      </div>
+      <Pagination /* style={{justifySelf: 'flex-end'}} */ style={{position: 'absolute', bottom: '5.5rem'}} defaultCurrent={1} defaultPageSize={3} total={displayListings.length} onChange={handlePagination}/>
+    </div>
   );
 };
 
