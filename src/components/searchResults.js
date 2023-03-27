@@ -20,8 +20,6 @@ import {
 import { Pagination } from "antd";
 import FavListingService from "@/services/FavListingService";
 const SearchResultPage = (props) => {
-
-  //TODO: find a way to check which listings are already favorited by the user logged in...
   const favIds = props.favListings.map(item => item.listing.id)
 
   const {listings, setFavListings, user_id, } = props
