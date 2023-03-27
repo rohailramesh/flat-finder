@@ -3,12 +3,13 @@ import React from "react";
 import Listing from "@/models/Listing";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { StarOutlined } from "@ant-design/icons";
+import { StarFilled, StarOutlined } from "@ant-design/icons";
 import { faBed } from "@fortawesome/free-solid-svg-icons";
 import { faBath } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import ListingInfo from "./ListingInfo";
 import FavListings from "./FavListings";
+
 import {
   ChakraProvider,
   Stack,
@@ -21,13 +22,16 @@ import {
   Text,
   Collapse,
 } from "@chakra-ui/react";
+import { Pagination } from "antd";
 import FavListingService from "@/services/FavListingService";
 const SearchResultPage = (props) => {
   //TODO: find a way to check which listings are already favorited by the user logged in...
+  
   const favIds = props.favListings.map((item) => item.listing.id);
   const [selectedListing, setSelectedListing] = useState(null);
-  const listings = props.listings;
-  const user_id = props.user_id;
+  const {listings, setFavListings, user_id, } = props
+  const [sliceIndex, setSliceIndex] = useState(3)
+
   const displayListings = listings.map((listing) => listing);
   const favListingSevice = new FavListingService();
 
@@ -35,13 +39,21 @@ const SearchResultPage = (props) => {
     console.log(listingId);
   };
 
-  async function handleFav(toFav, listingId) {
-    if (toFav) {
-      const result = await favListingSevice.addFavListing(user_id, listingId);
-      console.log({ result });
-    }
+ async function handleFav(listingId) {
+      if (favIds.includes(listingId)){
+        const result = await favListingSevice.removeFavListing(user_id, listingId)
+        console.log("Result of removal! ", result)
+        setFavListings((prev) => prev.filter(item => item.listing.id !== listingId))
+      } else {
+        const result = await favListingSevice.addFavListing(user_id, listingId);
+        setFavListings((prev) => prev.concat(result.data)) 
+      }
   }
 
+  async function handlePagination(pageNumber, pageSize){
+    console.log({pageNumber, pageSize})
+    setSliceIndex(pageNumber * 3)
+  }
   return (
     <>
       {selectedListing ? (
@@ -50,22 +62,24 @@ const SearchResultPage = (props) => {
           setSelectedListing={setSelectedListing}
         />
       ) : (
-        displayListings.slice(0, 10).map((listing) => (
-          <Card
-            className="card hover-bg hover-up"
-            key={listing.id}
-            direction={{ base: "column", sm: "row" }}
-            overflow="hidden"
-            variant="outline"
-            style={{ marginTop: "20px", width: "100%" }}
-          >
-            <Image
-              objectFit="cover"
-              // maxW={{ base: "100%", lg: "150px" }}
-              style={{ width: "300px" }}
-              src={listing.images[2]}
-              alt="Caffe Latte"
-            />
+        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', height: '90%', gap: '1rem'}}>
+          <div style={{ /* flexGrow: 1, */ display: "flex", flexDirection: "column", marginBottom: '5rem'}}>
+            {displayListings.slice(sliceIndex-3, sliceIndex).map((listing) => (
+              <Card
+              className="card hover-bg hover-up"
+              key={listing.id}
+              direction={{ base: "column", sm: "row" }}
+              overflow="hidden"
+              variant="outline"
+              style={{ marginTop: "20px", width: '100%' }}
+              >
+                <Image
+                  objectFit="cover"
+                  // maxW={{ base: "100%", lg: "150px" }}
+                  style={{ width: "300px" }}
+                  src={listing.images[2]}
+                  alt="Caffe Latte"
+               />
 
             <Stack style={{ width: "100%" }}>
               <CardBody style={{ paddingBottom: 0 }}>
@@ -97,14 +111,7 @@ const SearchResultPage = (props) => {
                 <p>Available now (L/S)</p>
               </CardBody>
 
-              <CardFooter
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                {/* <div> */}
+            <CardFooter  style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Button
                   variant="solid"
                   //   colorScheme="blue"
@@ -118,18 +125,17 @@ const SearchResultPage = (props) => {
                 >
                   More info
                 </Button>
-                <StarOutlined
-                  className="custom-icon"
-                  onClick={() => handleFav(true, listing.id)}
-                />
-                {/* </div> */}
-              </CardFooter>
-            </Stack>
-            <br></br>
-          </Card>
-        ))
-      )}
-    </>
+                {favIds.includes(listing.id) ? 
+                  <StarFilled className="custom-icon spin-animation" onClick={() => handleFav(listing.id)} /> :
+                  <StarOutlined className="custom-icon spin-animation-rev" onClick={() => handleFav(listing.id)}/>
+                }
+            </CardFooter>
+          </Stack>
+        </Card>
+      ))}
+      </div>
+      <Pagination /* style={{justifySelf: 'flex-end'}} */ style={{position: 'absolute', bottom: '5.5rem'}} defaultCurrent={1} defaultPageSize={3} total={displayListings.length} onChange={handlePagination}/>
+    </div>
   );
 };
 
