@@ -175,14 +175,7 @@ function FlatifyDashboard() {
               tickets={tickets}
             />
           )}
-          {tabKey == "2" && (
-            <SearchResultPage
-              listings={listings}
-              user_id={user.id}
-              setFavListings={setFavListings}
-              favListings={favListings}
-            />
-          )}
+  
 
           {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
           {tabKey == "3" && (

@@ -77,7 +77,7 @@ const FavListings = (props) => {
               }}
               onClick={() => setSelectedListing(listing)}
             >
-              {listing.images.map((image, index) => (
+              {listing && listing.images.map((image, index) => (
                 <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
                   <img
                     className="d-block w-150"
