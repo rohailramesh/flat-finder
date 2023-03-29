@@ -29,7 +29,7 @@ const SearchResultPage = (props) => {
 
   const favIds = props.favListings.map((item) => item.listing.id);
   const [selectedListing, setSelectedListing] = useState(null);
-  const { listings, setFavListings, user_id } = props;
+  const { listings, setFavListings, user_id, forum } = props;
   const [sliceIndex, setSliceIndex] = useState(3);
   
   const searchedListings = listings.filter((listing) => listing.address.city == props.searchValue)
@@ -66,6 +66,7 @@ const SearchResultPage = (props) => {
         <ListingInfo
           listing={selectedListing}
           setSelectedListing={setSelectedListing}
+          userId={user_id}
         />
       ) : (
         <div

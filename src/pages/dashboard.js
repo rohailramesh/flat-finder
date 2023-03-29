@@ -16,9 +16,9 @@ import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
-import Map from "@/components/Map";
 import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
+import ConsultantHomePage from "@/components/ConsultantHomePage";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -26,10 +26,11 @@ function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
-  
+  const [searchValue, setSearchValue] = useState("");
+
   const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
-  const [ownListings, setOwnListings] = useState([])
+  const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [searchValue, setSearchValue] = useState('')
 
@@ -59,13 +60,15 @@ function FlatifyDashboard() {
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_ownListings, new_tickets] = await Promise.all([
-        favListingSevice.getFavListing(user_profile.id),
-        listingService.getOwnListing(user_profile.id),
-        ticketService.getUserTicket(user_profile.id),
-      ]);
+      const [new_favListings, new_ownListings, new_tickets] = await Promise.all(
+        [
+          favListingSevice.getFavListing(user_profile.id),
+          listingService.getOwnListing(user_profile.id),
+          ticketService.getUserTicket(user_profile.id),
+        ]
+      );
       setFavListings(new_favListings);
-      setOwnListings(new_ownListings)
+      setOwnListings(new_ownListings);
       setTickets(new_tickets);
     })();
   }, []);
@@ -87,11 +90,20 @@ function FlatifyDashboard() {
     setOptions(res);
   };
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
 
-  const addListingRef = useRef();
+  const filterSearchResults = () => {
+    if (searchValue) {
+      const filteredListings = listings.filter(
+        (listing) => listing.city.toLowerCase() === searchValue.toLowerCase()
+      );
+      return filteredListings;
+    } else {
+      return listings;
+    }
+  };
 
   return (
     <Layout
@@ -165,38 +177,30 @@ function FlatifyDashboard() {
             <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
           </Breadcrumb>
           {tabKey == "1" && (
-            <div
-              className="card"
-              style={{
-                padding: 24,
-                minHeight: 570,
-                background: colorBgContainer,
-              }}
-            >
-              <div>
-                <FavListings favListings={favListings} />
-              </div>
-
-              <div>
-                <OwnListings ownListings={ownListings} />
-              </div>
-              <div
-                style={{
-                  margin: 60,
-                  textAlign: "center",
-                }}
-              >
-                <TicketsComponent
-                  user_id={user.id}
-                  setTickets={setTickets}
-                  tickets={tickets}
-                />
-              </div>
-            </div>
+            <ConsultantHomePage
+              favListings={favListings}
+              ownListings={ownListings}
+              user_id={user.id}
+              setTickets={setTickets}
+              tickets={tickets}
+            />
           )}
+          {tabKey == "2" && (
+            <SearchResultPage
+              listings={filterSearchResults()}
+              user_id={user.id}
+              setFavListings={setFavListings}
+              favListings={favListings}
+            />
+          )}
+
           {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
           {tabKey == "3" && (
-            <AddListingComponent listing={listing} setListing={setListing} setOwnListings={setOwnListings} />
+            <AddListingComponent
+              listing={listing}
+              setListing={setListing}
+              setOwnListings={setOwnListings}
+            />
           )}
         </Content>
         <Footer
