@@ -30,7 +30,8 @@ import { items } from "@/utils";
 
 const FavListings = (props) => {
   const FavouriteListings = props.favListings.map((item) => item.listing);
-  const [selectedListing, setSelectedListing] = useState(null);
+  const setSelectedListing = props.setSelectedListing;
+  // const [selectedListing, setSelectedListing] = useState(null);
   const [dotPosition, setDotPosition] = useState("left");
   const [indexC1, setIndexC1] = useState(0);
   const [indexC2, setIndexC2] = useState(0);
@@ -74,6 +75,7 @@ const FavListings = (props) => {
                 overflow: "scroll",
                 whiteSpace: "nowrap",
               }}
+              onClick={() => setSelectedListing(listing)}
             >
               {listing.images.map((image, index) => (
                 <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
