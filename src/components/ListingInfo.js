@@ -1,16 +1,47 @@
-import React, { useState } from "react";
-import { Descriptions, Button, Carousel } from "antd";
+import React, { useState, useEffect } from "react";
+import { Descriptions, Carousel } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDog } from "@fortawesome/free-solid-svg-icons";
 import { faCar } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
 import { faSmoking } from "@fortawesome/free-solid-svg-icons";
+import { Button, Form, Row, Col, Input } from "antd";
+
 import Map from "../components/Map.js";
+import ForumPostService from "@/services/ForumPostService.js";
+import ForumPost from "./ForumPost.js";
 
-const ListingInfo = ({ listing, setSelectedListing }) => {
-  console.log(listing.coordinates);
+const ListingInfo = ({ listing, setSelectedListing, userId }) => {
+  const [content, setContent] = useState("");
+  const [forumPosts, setForumPosts] = useState([]);
 
+  const forumPostService = new ForumPostService();
+
+  async function addPost() {
+    if (content.length > 0) {
+      const postToAdd = await forumPostService.addForumPost(
+        userId,
+        content,
+        listing.forum
+      );
+      console.log(postToAdd);
+      setForumPosts((prev) => prev.concat([postToAdd]));
+      setContent("");
+    }
+  }
+
+  async function fetchPosts() {
+    const fetchPostsResponse = await forumPostService.getForumPosts(
+      listing.forum
+    );
+    // console.log(fetchPostsResponse);
+    setForumPosts(fetchPostsResponse.data);
+  }
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   return (
     <>
       <Button onClick={() => setSelectedListing(false)}>
@@ -97,6 +128,37 @@ const ListingInfo = ({ listing, setSelectedListing }) => {
           <Map coordinates={listing.coordinates} />
         </Descriptions.Item>
       </Descriptions>
+      <div>
+        {forumPosts.map((forumPost) => (
+          <ForumPost forumPost={forumPost} />
+        ))}
+        <Form layout="vertical">
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="description"
+                rules={[
+                  {
+                    required: true,
+                    message: "Post message on forum",
+                  },
+                ]}
+              >
+                <Input.TextArea
+                  rows={4}
+                  placeholder="Post message..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Button type="primary" onClick={addPost}>
+            Add post
+          </Button>
+        </Form>
+      </div>
+      <div>{/* <ForumPost forumPost={forumPosts[0]} /> */}</div>
     </>
   );
 };
