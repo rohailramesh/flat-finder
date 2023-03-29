@@ -121,6 +121,7 @@ function FlatifyDashboard() {
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
+          selectedKeys={[String(tabKey)]}
           mode="inline"
           items={items}
           onClick={({ key }) => {
@@ -146,7 +147,10 @@ function FlatifyDashboard() {
         >
           <AutoComplete
             style={{ width: 800 }}
-            onSelect={(value) => setSearchValue(value.split(',')[0])}
+            onSelect={(value) => {
+              setSearchValue(value.split(',')[0])
+              setTabKey(2)
+            }}
             onSearch={handleSearch}
             placeholder="Search by city"
             options={options}
@@ -175,14 +179,7 @@ function FlatifyDashboard() {
               tickets={tickets}
             />
           )}
-          {tabKey == "2" && (
-            <SearchResultPage
-              listings={listings}
-              user_id={user.id}
-              setFavListings={setFavListings}
-              favListings={favListings}
-            />
-          )}
+  
 
           {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
           {tabKey == "3" && (
