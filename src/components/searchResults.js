@@ -181,7 +181,6 @@ const SearchResultPage = (props) => {
           />
         </div>
       )}
-      )
     </>
   );
 };

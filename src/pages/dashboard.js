@@ -8,7 +8,6 @@ import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
@@ -19,17 +18,20 @@ import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
 import Map from "@/components/Map";
 import OwnListings from "@/components/OwnListings";
+import ForumPost from "@/components/ForumPost";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
-  const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+  
+  const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([])
   const [tickets, setTickets] = useState([]);
+
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
 
@@ -174,10 +176,6 @@ function FlatifyDashboard() {
               <div>
                 <OwnListings ownListings={ownListings} />
               </div>
-
-              {/* <div>
-                <Map coordinates={{lat: 51.5219142, lng: -0.0541331}}/>
-              </div> */}
               <div
                 style={{
                   margin: 60,
