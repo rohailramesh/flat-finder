@@ -16,7 +16,6 @@ import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
-import Map from "@/components/Map";
 import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 
@@ -26,10 +25,10 @@ function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
-  
+
   const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
-  const [ownListings, setOwnListings] = useState([])
+  const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
 
   const [listing, setListing] = useState(emptyListing);
@@ -58,13 +57,15 @@ function FlatifyDashboard() {
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_ownListings, new_tickets] = await Promise.all([
-        favListingSevice.getFavListing(user_profile.id),
-        listingService.getOwnListing(user_profile.id),
-        ticketService.getUserTicket(user_profile.id),
-      ]);
+      const [new_favListings, new_ownListings, new_tickets] = await Promise.all(
+        [
+          favListingSevice.getFavListing(user_profile.id),
+          listingService.getOwnListing(user_profile.id),
+          ticketService.getUserTicket(user_profile.id),
+        ]
+      );
       setFavListings(new_favListings);
-      setOwnListings(new_ownListings)
+      setOwnListings(new_ownListings);
       setTickets(new_tickets);
     })();
   }, []);
@@ -190,9 +191,20 @@ function FlatifyDashboard() {
               </div>
             </div>
           )}
-          {tabKey == "2" && <SearchResultPage listings={listings} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
+          {tabKey == "2" && (
+            <SearchResultPage
+              listings={listings}
+              user_id={user.id}
+              setFavListings={setFavListings}
+              favListings={favListings}
+            />
+          )}
           {tabKey == "3" && (
-            <AddListingComponent listing={listing} setListing={setListing} setOwnListings={setOwnListings} />
+            <AddListingComponent
+              listing={listing}
+              setListing={setListing}
+              setOwnListings={setOwnListings}
+            />
           )}
         </Content>
         <Footer
