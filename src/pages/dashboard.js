@@ -26,7 +26,6 @@ function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
 
   const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
