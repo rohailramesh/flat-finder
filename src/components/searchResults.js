@@ -183,7 +183,6 @@ const SearchResultPage = (props) => {
           />
         </div>
       )}
-      )
     </>
   );
 };

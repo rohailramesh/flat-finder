@@ -7,6 +7,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
 import { faSmoking } from "@fortawesome/free-solid-svg-icons";
 import Map from "../components/Map.js";
+
 const ListingInfo = ({ listing, setSelectedListing }) => {
   console.log(listing.coordinates);
 

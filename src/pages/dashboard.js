@@ -17,19 +17,20 @@ import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
 import OwnListings from "@/components/OwnListings";
-import ForumPostService from "@/services/ForumPostService";
-import ForumPost from "@/models/ForumPost";
+import ForumPost from "@/components/ForumPost";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
-  const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+
+  const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
+
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
 
@@ -176,10 +177,6 @@ function FlatifyDashboard() {
               <div>
                 <OwnListings ownListings={ownListings} />
               </div>
-
-              {/* <div>
-                <Map coordinates={{lat: 51.5219142, lng: -0.0541331}}/>
-              </div> */}
               <div
                 style={{
                   margin: 60,
