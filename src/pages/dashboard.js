@@ -19,6 +19,7 @@ import { items, emptyListing } from "@/utils";
 import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
+import Inbox from "@/components/Inbox";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -197,6 +198,7 @@ function FlatifyDashboard() {
               setOwnListings={setOwnListings}
             />
           )}
+          {tabKey == "4" && <Inbox />}
         </Content>
         <Footer
           style={{
