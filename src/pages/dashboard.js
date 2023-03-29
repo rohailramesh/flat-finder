@@ -18,6 +18,7 @@ import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
 import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
+import ConsultantHomePage from "@/components/ConsultantHomePage";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -87,9 +88,9 @@ function FlatifyDashboard() {
     }
     setOptions(res);
   };
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
 
   const filterSearchResults = () => {
     if (searchValue) {
@@ -173,34 +174,13 @@ function FlatifyDashboard() {
             <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
           </Breadcrumb>
           {tabKey == "1" && (
-            <div
-              className="card"
-              style={{
-                padding: 24,
-                minHeight: 570,
-                background: colorBgContainer,
-              }}
-            >
-              <div>
-                <FavListings favListings={favListings} />
-              </div>
-
-              <div>
-                <OwnListings ownListings={ownListings} />
-              </div>
-              <div
-                style={{
-                  margin: 60,
-                  textAlign: "center",
-                }}
-              >
-                <TicketsComponent
-                  user_id={user.id}
-                  setTickets={setTickets}
-                  tickets={tickets}
-                />
-              </div>
-            </div>
+            <ConsultantHomePage
+              favListings={favListings}
+              ownListings={ownListings}
+              user_id={user.id}
+              setTickets={setTickets}
+              tickets={tickets}
+            />
           )}
           {tabKey == "2" && (
             <SearchResultPage

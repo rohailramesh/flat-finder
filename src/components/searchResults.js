@@ -66,7 +66,6 @@ const SearchResultPage = (props) => {
           listing={selectedListing}
           setSelectedListing={setSelectedListing}
           userId={user_id}
-          forum={forum}
         />
       ) : (
         <div
