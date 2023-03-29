@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Descriptions, Button, Carousel } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDog } from "@fortawesome/free-solid-svg-icons";
@@ -7,9 +7,9 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
 import { faSmoking } from "@fortawesome/free-solid-svg-icons";
 import Map from "../components/Map.js";
-
 const ListingInfo = ({ listing, setSelectedListing }) => {
   console.log(listing.coordinates);
+
   return (
     <>
       <Button onClick={() => setSelectedListing(false)}>
@@ -38,7 +38,6 @@ const ListingInfo = ({ listing, setSelectedListing }) => {
             <img src={listing.images[2]} />
           </div>
         </Carousel>
-        <Map coordinates={listing.coordinates} />
 
         <br />
         <h3 style={{ fontFamily: "IBM_Plex_Serif" }}>Extra information</h3>

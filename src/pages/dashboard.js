@@ -8,7 +8,6 @@ import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import RecentListingsComponent from "@/components/RecentListings";
 import TicketsComponent from "@/components/Tickets";
 import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
@@ -17,8 +16,9 @@ import { useRouter } from "next/router";
 import FavListingService from "@/services/FavListingService";
 import TicketService from "@/services/TicketService";
 import { items, emptyListing } from "@/utils";
-import Map from "@/components/Map";
 import OwnListings from "@/components/OwnListings";
+import ForumPostService from "@/services/ForumPostService";
+import ForumPost from "@/models/ForumPost";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -28,7 +28,7 @@ function FlatifyDashboard() {
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [favListings, setFavListings] = useState([]);
-  const [ownListings, setOwnListings] = useState([])
+  const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
@@ -56,13 +56,15 @@ function FlatifyDashboard() {
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_ownListings, new_tickets] = await Promise.all([
-        favListingSevice.getFavListing(user_profile.id),
-        listingService.getOwnListing(user_profile.id),
-        ticketService.getUserTicket(user_profile.id),
-      ]);
+      const [new_favListings, new_ownListings, new_tickets] = await Promise.all(
+        [
+          favListingSevice.getFavListing(user_profile.id),
+          listingService.getOwnListing(user_profile.id),
+          ticketService.getUserTicket(user_profile.id),
+        ]
+      );
       setFavListings(new_favListings);
-      setOwnListings(new_ownListings)
+      setOwnListings(new_ownListings);
       setTickets(new_tickets);
     })();
   }, []);
@@ -192,9 +194,20 @@ function FlatifyDashboard() {
               </div>
             </div>
           )}
-          {tabKey == "2" && <SearchResultPage listings={listings} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
+          {tabKey == "2" && (
+            <SearchResultPage
+              listings={listings}
+              user_id={user.id}
+              setFavListings={setFavListings}
+              favListings={favListings}
+            />
+          )}
           {tabKey == "3" && (
-            <AddListingComponent listing={listing} setListing={setListing} setOwnListings={setOwnListings} />
+            <AddListingComponent
+              listing={listing}
+              setListing={setListing}
+              setOwnListings={setOwnListings}
+            />
           )}
         </Content>
         <Footer
