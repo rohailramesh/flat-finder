@@ -25,6 +25,7 @@ function FlatifyDashboard() {
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
@@ -71,6 +72,7 @@ function FlatifyDashboard() {
   }, []);
 
   const handleSearch = (value) => {
+    setSearchValue(value);
     let res = [];
     if (!value) {
       res = [];
@@ -89,7 +91,16 @@ function FlatifyDashboard() {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const addListingRef = useRef();
+  const filterSearchResults = () => {
+    if (searchValue) {
+      const filteredListings = listings.filter(
+        (listing) => listing.city.toLowerCase() === searchValue.toLowerCase()
+      );
+      return filteredListings;
+    } else {
+      return listings;
+    }
+  };
 
   return (
     <Layout
@@ -193,7 +204,7 @@ function FlatifyDashboard() {
           )}
           {tabKey == "2" && (
             <SearchResultPage
-              listings={listings}
+              listings={filterSearchResults()}
               user_id={user.id}
               setFavListings={setFavListings}
               favListings={favListings}
