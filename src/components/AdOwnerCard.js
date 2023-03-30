@@ -1,5 +1,6 @@
 import {useState} from 'react'
-import {Modal, Form, Row, Col, Avatar, Button, Input} from 'antd'
+import {Modal, Form, Row, Col, Button, Input} from 'antd'
+import { Avatar } from '@chakra-ui/react';
 import { MessageOutlined } from '@ant-design/icons';
 import { successOptions } from '@/utils'
 import MessageService from '@/services/messageService';
@@ -17,10 +18,22 @@ function AdOwnerCard({owner, user_id}) {
   const messageService = new MessageService()
 
   async function handleOk(){
-    setConfirmLoading(true);
-    //send message api call
-    // const response = messageService.addMessage(content)
-    setConfirmLoading(false)
+    if (content) {
+      setConfirmLoading(true);
+      //send message api call
+      // const response = messageService.addMessage(content)
+      const response = await messageService.addMessage(user_id, content, owner.id)
+      console.log(response)
+      setConfirmLoading(false)
+      setSuccess(true)
+      setTimeout(()=>{
+        setOpen(false);
+        setSuccess(false);
+      }, 2000)
+
+    } else{
+      alert('no content!')
+    }
   }
 
   function handleCancel(){
