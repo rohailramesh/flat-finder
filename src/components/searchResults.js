@@ -178,6 +178,7 @@ const SearchResultPage = (props) => {
               bottom: "5.5rem",
             }}
             defaultCurrent={1}
+            current={sliceIndex/3}
             defaultPageSize={3}
             total={displayListings.length}
             onChange={handlePagination}
