@@ -94,16 +94,7 @@ function FlatifyDashboard() {
   //   token: { colorBgContainer },
   // } = theme.useToken();
 
-  const filterSearchResults = () => {
-    if (searchValue) {
-      const filteredListings = listings.filter(
-        (listing) => listing.city.toLowerCase() === searchValue.toLowerCase()
-      );
-      return filteredListings;
-    } else {
-      return listings;
-    }
-  };
+
 
   return (
     <Layout
@@ -187,7 +178,7 @@ function FlatifyDashboard() {
           )}
           {tabKey == "2" && (
             <SearchResultPage
-              listings={filterSearchResults()}
+              listings={listings}
               user_id={user.id}
               setFavListings={setFavListings}
               favListings={favListings}
