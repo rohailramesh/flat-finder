@@ -77,20 +77,21 @@ const FavListings = (props) => {
               }}
               onClick={() => setSelectedListing(listing)}
             >
-              {listing.images.map((image, index) => (
-                <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
-                  <img
-                    className="d-block w-150"
-                    src={image}
-                    alt="Carousel Slide"
-                    style={{ width: "500px", height: "200px" }}
-                  />
-                  <Carousel.Caption>
-                    {index == 0 && <p>{listing.title}</p>}
-                    {index == 1 && <p>{listing.monthly_price}</p>}
-                  </Carousel.Caption>
-                </Carousel.Item>
-              ))}
+              {listing &&
+                listing.images.map((image, index) => (
+                  <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
+                    <img
+                      className="d-block w-150"
+                      src={image}
+                      alt="Carousel Slide"
+                      style={{ width: "500px", height: "200px" }}
+                    />
+                    <Carousel.Caption>
+                      {index == 0 && <p>{listing.title}</p>}
+                      {index == 1 && <p>{listing.monthly_price}</p>}
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                ))}
             </Carousel>
           ))
         )}

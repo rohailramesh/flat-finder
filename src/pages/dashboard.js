@@ -32,7 +32,7 @@ function FlatifyDashboard() {
   const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
@@ -74,7 +74,7 @@ function FlatifyDashboard() {
   }, []);
 
   const handleSearch = (value) => {
-    console.log(value)
+    console.log(value);
     let res = [];
     if (!value) {
       res = [];
@@ -93,8 +93,6 @@ function FlatifyDashboard() {
   // const {
   //   token: { colorBgContainer },
   // } = theme.useToken();
-
-
 
   return (
     <Layout
@@ -147,7 +145,7 @@ function FlatifyDashboard() {
         >
           <AutoComplete
             style={{ width: 800 }}
-            onSelect={(value) => setSearchValue(value.split(',')[0])}
+            onSelect={(value) => setSearchValue(value.split(",")[0])}
             onSearch={handleSearch}
             placeholder="Search by city"
             options={options}
@@ -176,16 +174,16 @@ function FlatifyDashboard() {
               tickets={tickets}
             />
           )}
+
           {tabKey == "2" && (
             <SearchResultPage
               listings={listings}
+              searchValue={searchValue}
               user_id={user.id}
               setFavListings={setFavListings}
               favListings={favListings}
             />
           )}
-
-          {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
           {tabKey == "3" && (
             <AddListingComponent
               listing={listing}
