@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Avatar } from "antd";
+// import { Avatar } from "antd";
+import { Avatar } from "@chakra-ui/react";
 
 function ForumPost({ forumPost }) {
   const { author } = forumPost;
@@ -15,7 +16,7 @@ function ForumPost({ forumPost }) {
           padding: "0.5rem",
         }}
       >
-        <Avatar size={45} src={author.avatar_url} />
+        <Avatar size='md' name={author.name} src={author.avatar_url} />
         <div
           style={{
             height: "100%",

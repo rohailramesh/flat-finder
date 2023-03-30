@@ -20,6 +20,7 @@ import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import Inbox from "@/components/Inbox";
+import AdminDashboard from "./admin";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -95,130 +96,136 @@ function FlatifyDashboard() {
   // } = theme.useToken();
 
   return (
-    <Layout
-      style={{
-        minHeight: "100vh",
-      }}
-    >
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-      >
-        <div
-          style={{
-            height: 38,
-            margin: 12,
-            background: "rgba(255, 255, 255, 0.2)",
-            color: "white",
-            textAlign: "center",
-          }}
-        >
-          FDM
-        </div>
-
-        <Menu
-          theme="dark"
-          defaultSelectedKeys={["1"]}
-          mode="inline"
-          items={items}
-          onClick={({ key }) => {
-            if (key === "5") {
-              handleLogout();
-            } else {
-              setTabKey(key);
-            }
-          }}
-        />
-      </Sider>
-      <Layout className="site-layout">
-        <Header
-          style={{
-            textAlign: "center",
-            color: "#fff",
-            height: 64,
-            paddingInline: 10,
-            lineHeight: "64px",
-            backgroundColor: "#001628",
-            // maxWidth: 800,
-          }}
-        >
-          <AutoComplete
-            style={{ width: 800 }}
-            onSelect={(value) => setSearchValue(value.split(",")[0])}
-            onSearch={handleSearch}
-            placeholder="Search by city"
-            options={options}
-          />
-        </Header>
-        <Content
-          style={{
-            margin: "0 20px",
-            // marginLeft: "10px",
-          }}
-        >
-          <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
-            <Breadcrumb.Item>Consultant</Breadcrumb.Item>
-            <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
-          </Breadcrumb>
-          {tabKey == "1" && (
-            <ConsultantHomePage
-              favListings={favListings}
-              ownListings={ownListings}
-              user_id={user.id}
-              setTickets={setTickets}
-              tickets={tickets}
-            />
-          )}
-
-          {tabKey == "2" && (
-            <SearchResultPage
-              listings={listings}
-              searchValue={searchValue}
-              user_id={user.id}
-              setFavListings={setFavListings}
-              favListings={favListings}
-            />
-          )}
-          {tabKey == "3" && (
-            <AddListingComponent
-              listing={listing}
-              setListing={setListing}
-              setOwnListings={setOwnListings}
-            />
-          )}
-          {tabKey == "4" && <Inbox />}
-        </Content>
-        <Footer
-          style={{
-            textAlign: "center",
-            backgroundColor: "white",
-            color: "black",
-          }}
-        >
-          FDM | FLATIFY
-        </Footer>
-      </Layout>
-      <Sider
+    <>
+      <Layout
         style={{
-          textAlign: "center",
-          lineHeight: "120px",
-          // color: "#fff",
-          // width: 200,
-          padding: "80px",
-          overflow: "auto",
-          marginRight: "-10px",
+          minHeight: "100vh",
         }}
       >
-        <Space size={26} wrap>
-          <RightDashboard user={user} />
-        </Space>
-      </Sider>
-    </Layout>
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={(value) => setCollapsed(value)}
+        >
+          <div
+            style={{
+              height: 38,
+              margin: 12,
+              background: "rgba(255, 255, 255, 0.2)",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            FDM
+          </div>
+
+          <Menu
+            theme="dark"
+            defaultSelectedKeys={["1"]}
+            selectedKeys={[String(tabKey)]}
+            mode="inline"
+            items={items}
+            onClick={({ key }) => {
+              if (key === "5") {
+                handleLogout();
+              } else {
+                setTabKey(key);
+              }
+            }}
+          />
+        </Sider>
+        <Layout className="site-layout">
+          <Header
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              height: 64,
+              paddingInline: 10,
+              lineHeight: "64px",
+              backgroundColor: "#001628",
+              // maxWidth: 800,
+            }}
+          >
+            <AutoComplete
+              style={{ width: 800 }}
+              onSelect={(value) => {
+                setSearchValue(value.split(",")[0]);
+                setTabKey(2);
+              }}
+              onSearch={handleSearch}
+              placeholder="Search by city"
+              options={options}
+            />
+          </Header>
+          <Content
+            style={{
+              margin: "0 20px",
+              // marginLeft: "10px",
+            }}
+          >
+            <Breadcrumb
+              style={{
+                margin: "16px 0",
+              }}
+            >
+              <Breadcrumb.Item>Consultant</Breadcrumb.Item>
+              <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
+            </Breadcrumb>
+            {tabKey == "1" && (
+              <ConsultantHomePage
+                favListings={favListings}
+                ownListings={ownListings}
+                user_id={user.id}
+                setTickets={setTickets}
+                tickets={tickets}
+              />
+            )}
+
+            {tabKey == "2" && (
+              <SearchResultPage
+                listings={listings}
+                searchValue={searchValue}
+                user_id={user.id}
+                setFavListings={setFavListings}
+                favListings={favListings}
+              />
+            )}
+            {tabKey == "3" && (
+              <AddListingComponent
+                listing={listing}
+                setListing={setListing}
+                setOwnListings={setOwnListings}
+              />
+            )}
+            {tabKey == "4" && <Inbox />}
+          </Content>
+          <Footer
+            style={{
+              textAlign: "center",
+              backgroundColor: "white",
+              color: "black",
+            }}
+          >
+            FDM | FLATIFY
+          </Footer>
+        </Layout>
+        <Sider
+          style={{
+            textAlign: "center",
+            lineHeight: "120px",
+            // color: "#fff",
+            // width: 200,
+            padding: "80px",
+            overflow: "auto",
+            marginRight: "-10px",
+          }}
+        >
+          <Space size={26} wrap>
+            <RightDashboard user={user} />
+          </Space>
+        </Sider>
+      </Layout>
+    </>
   );
 }
 export default FlatifyDashboard;

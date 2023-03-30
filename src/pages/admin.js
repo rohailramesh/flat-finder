@@ -2,6 +2,8 @@ import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
 import AdminResultPage from "@/components/adminResults";
+import Lottie from "@amelix/react-lottie";
+import { moderationOption } from "@/utils";
 import {
   SearchOutlined,
   AppstoreAddOutlined,
@@ -14,12 +16,11 @@ import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import RecentListingsComponent from "@/components/RecentListings";
-import TicketsComponent from "@/components/Tickets";
-import Listing from "@/models/Listing";
-import ListingService from "@/services/ListingService";
 import RightDashboard from "@/components/rightdashboard";
 import AddListingComponent from "@/components/AddListings";
+import ListingService from "@/services/ListingService";
+import ListingInfo from "@/components/ListingInfo";
+import { useRouter } from "next/router";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -39,7 +40,7 @@ const items = [
   getItem("Logout", "5", <LogoutOutlined />),
 ];
 
-const FlatifyDashboard = () => {
+const AdminDashboard = () => {
   const [user, setUser] = useState(new User(emptyUser));
   const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
@@ -49,9 +50,12 @@ const FlatifyDashboard = () => {
   const userService = new UserService();
   const listingService = new ListingService();
   const supabase = useSupabaseClient();
+  const router = useRouter();
 
   async function handleLogout() {
-    const result = await userService.logout(supabase);
+    console.log("clicked on logout");
+    await userService.logout(supabase);
+    router.push("/");
   }
 
   useEffect(() => {
@@ -65,26 +69,9 @@ const FlatifyDashboard = () => {
     })();
   }, []);
 
-  const handleSearch = (value) => {
-    let res = [];
-    if (!value) {
-      res = [];
-    } else {
-      const filteredCities = citiesData.cities.filter((city) =>
-        city.name.toLowerCase().includes(value.toLowerCase())
-      );
-      res = filteredCities.map((city) => ({
-        value: `${city.name}, ${city.country}`,
-        label: `${city.name}, ${city.country}`,
-      }));
-    }
-    setOptions(res);
-  };
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
-  const addListingRef = useRef();
 
   return (
     <Layout
@@ -134,14 +121,7 @@ const FlatifyDashboard = () => {
             backgroundColor: "#001628",
             // maxWidth: 800,
           }}
-        >
-          <AutoComplete
-            style={{ width: 800 }}
-            onSearch={handleSearch}
-            placeholder="Search by city"
-            options={options}
-          />
-        </Header>
+        ></Header>
         <Content
           style={{
             margin: "0 16px",
@@ -163,8 +143,8 @@ const FlatifyDashboard = () => {
                 background: colorBgContainer,
               }}
             >
-              <div>
-                <RecentListingsComponent />
+              <div style={{ marginTop: "-200px" }}>
+                <Lottie options={moderationOption} height={800} width={800} />
               </div>
               {/* <div
                 style={{
@@ -176,7 +156,7 @@ const FlatifyDashboard = () => {
               </div> */}
             </div>
           )}
-          {tabKey == "2" && <AdminResultPage />}
+          {tabKey == "2" && <AdminResultPage listings={listings} />}
           {tabKey == "3" && <AddListingComponent />}
         </Content>
         <Footer
@@ -204,4 +184,4 @@ const FlatifyDashboard = () => {
     </Layout>
   );
 };
-export default FlatifyDashboard;
+export default AdminDashboard;
