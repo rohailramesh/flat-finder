@@ -17,10 +17,22 @@ function AdOwnerCard({owner, user_id}) {
   const messageService = new MessageService()
 
   async function handleOk(){
-    setConfirmLoading(true);
-    //send message api call
-    // const response = messageService.addMessage(content)
-    setConfirmLoading(false)
+    if (content) {
+      setConfirmLoading(true);
+      //send message api call
+      // const response = messageService.addMessage(content)
+      const response = await messageService.addMessage(user_id, content, owner.id)
+      console.log(response)
+      setConfirmLoading(false)
+      setSuccess(true)
+      setTimeout(()=>{
+        setOpen(false);
+        setSuccess(false);
+      }, 2000)
+
+    } else{
+      alert('no content!')
+    }
   }
 
   function handleCancel(){
