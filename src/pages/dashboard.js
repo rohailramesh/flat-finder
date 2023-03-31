@@ -195,6 +195,8 @@ function FlatifyDashboard() {
                 listing={listing}
                 setListing={setListing}
                 setOwnListings={setOwnListings}
+                listings={listings}
+                setListings={setListings}
               />
             )}
             {tabKey == "4" && <Inbox />}

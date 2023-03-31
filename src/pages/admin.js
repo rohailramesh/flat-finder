@@ -11,6 +11,7 @@ import {
   HomeOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
+import AdminTicketResolver from "@/components/AdminTicketResolver";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
@@ -19,6 +20,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RightDashboard from "@/components/rightdashboard";
 import AddListingComponent from "@/components/AddListings";
 import ListingService from "@/services/ListingService";
+import TicketService from "@/services/TicketService";
 import ListingInfo from "@/components/ListingInfo";
 import { useRouter } from "next/router";
 const { Header, Content, Footer, Sider } = Layout;
@@ -35,9 +37,8 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Delete listings", "2", <SearchOutlined />),
-  getItem("Delete forum post", "3", <AppstoreAddOutlined />),
-  getItem("Tickets", "4", <InboxOutlined />),
-  getItem("Logout", "5", <LogoutOutlined />),
+  getItem("Tickets", "3", <InboxOutlined />),
+  getItem("Logout", "4", <LogoutOutlined />),
 ];
 
 const AdminDashboard = () => {
@@ -45,10 +46,12 @@ const AdminDashboard = () => {
   const [listings, setListings] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+  const [tickets, setTickets] = useState([]);
   const [tabKey, setTabKey] = useState("1");
 
   const userService = new UserService();
   const listingService = new ListingService();
+  const ticketService = new TicketService();
   const supabase = useSupabaseClient();
   const router = useRouter();
 
@@ -60,12 +63,14 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     (async () => {
-      const [user_profile, allListings] = await Promise.all([
+      const [user_profile, allListings, allTickets] = await Promise.all([
         userService.getAuthUserProfile(supabase),
         listingService.getListings(),
+        ticketService.getTickets(),
       ]);
       setUser(user_profile);
       setListings(allListings);
+      setTickets(allTickets);
     })();
   }, []);
 
@@ -102,7 +107,7 @@ const AdminDashboard = () => {
           mode="inline"
           items={items}
           onClick={({ key }) => {
-            if (key === "5") {
+            if (key === "4") {
               handleLogout();
             } else {
               setTabKey(key);
@@ -157,7 +162,7 @@ const AdminDashboard = () => {
             </div>
           )}
           {tabKey == "2" && <AdminResultPage listings={listings} />}
-          {tabKey == "3" && <AddListingComponent />}
+          {tabKey == "3" && <AdminTicketResolver tickets={tickets} />}
         </Content>
         <Footer
           style={{
