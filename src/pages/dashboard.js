@@ -20,13 +20,17 @@ import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
+import {notification} from 'antd'
+import ForumPostService from "@/services/ForumPostService";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
+
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
+  const [api, contextHolder] = notification.useNotification();
 
   const [listings, setListings] = useState([]);
   const [favListings, setFavListings] = useState([]);
@@ -41,6 +45,7 @@ function FlatifyDashboard() {
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
   const ticketService = new TicketService();
+  const forumPostService = new ForumPostService();
 
   const supabase = useSupabaseClient();
   const router = useRouter();
@@ -48,6 +53,89 @@ function FlatifyDashboard() {
   async function handleLogout() {
     await userService.logout(supabase);
   }
+  
+  function handleMessageEvent(payload){
+    const new_record = payload.new
+  }
+
+  function handleForumEvent(payload){
+    const new_record = payload.new;
+    console.log({new_record})
+    for (const listing of ownListings){
+      console.log({listing})
+      if (listing.forum == new_record.forum){
+        //get user
+        console.log("Inside if statement of handleForumEvent")
+        forumPost(new_record.id, listing.address.city)
+        // alert('You received a comment on one of your listings: ' + new_record.content )
+      }
+    }
+  }
+
+  const forumPost = async (post_id, city) => {
+
+    const fullPost = await forumPostService.getPostById(post_id)
+
+    api.info({
+      style: {
+        padding: '0.5rem'
+      },
+      message: <p style={{margin: 0, color: 'gray', fontWeight: '500', fontSize: 10}}>New comment under listing in <span style={{color: 'darkblue'}}>{city}</span></p>,
+      description: <ForumPost forumPost={fullPost}/>,
+      placement: 'topRight',
+      duration: 4
+    });
+  };
+  
+  const forumPostChannel = supabase
+    .channel('table-db-changes')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'forum_post',
+      },
+      (payload) => {
+        console.log(payload)
+        handleForumEvent(payload)
+      }
+    ).subscribe()
+
+    // const messagesChannel = supabase
+    // .channel('table-db-changes')
+    // .on(
+    //   'postgres_changes',
+    //   {
+    //     event: '*',
+    //     schema: 'public',
+    //     table: 'message',
+    //   },
+    //   (payload) => console.log(payload)
+    // ).subscribe()
+
+
+
+  function handleRealtimeEvents(event, data){
+    console.log({event, data})
+  }
+
+  useEffect(() => {
+    // Supabase client setup
+    const channel = supabase
+    .channel('table-db-changes')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'message',
+      },
+      (payload) => console.log(payload)
+    )
+    .subscribe()
+  }, [supabase]);
+  
 
   useEffect(() => {
     (async () => {
@@ -102,6 +190,7 @@ function FlatifyDashboard() {
         minHeight: "100vh",
       }}
     >
+      {contextHolder}
       <Sider
         collapsible
         collapsed={collapsed}
