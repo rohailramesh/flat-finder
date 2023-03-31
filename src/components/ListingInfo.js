@@ -156,7 +156,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
       </Descriptions>
       <div>
         {forumPosts.map((forumPost) => (
-          <ForumPost forumPost={forumPost} />
+          <ForumPost key={forumPost.id} forumPost={forumPost} user_id={userId} setForumPosts={setForumPosts}/>
         ))}
         <Form layout="vertical">
           <Row gutter={16}>

@@ -1,17 +1,32 @@
 import React, { useState } from "react";
 // import { Avatar } from "antd";
 import { Avatar } from "@chakra-ui/react";
+import { Popconfirm } from "antd";
+import { DeleteTwoTone } from "@ant-design/icons";
+import ForumPostService from "@/services/ForumPostService";
 
-function ForumPost({ forumPost }) {
+function ForumPost({ forumPost, user_id, setForumPosts}) {
   const { author } = forumPost;
+
+  const [showDelete, setShowDelete] = useState(false)
+  const forumPostService = new ForumPostService()
+
+  async function handleDelete() {
+    const {error} = await forumPostService.removeForumPost(forumPost.id)
+    if (!error) setForumPosts((prev) => prev.filter(post => post.id !== forumPost.id))
+  }
 
   return (
     <>
       <div
+        className={author.id === user_id && 'hover-up'}
+        onMouseEnter={() => setShowDelete(true)}
+        onMouseLeave={() => setShowDelete(false)}
         style={{
+          borderTop: '1px solid #c7c7c7',
           display: "flex",
           height: 75,
-          alignItems: "flex-start",
+          alignItems: "center",
           gap: "1rem",
           padding: "0.5rem",
         }}
@@ -28,6 +43,18 @@ function ForumPost({ forumPost }) {
           </p>
           <p style={{ margin: 0 }}>{forumPost.content}</p>
         </div>
+          {user_id === author.id && showDelete && 
+          <Popconfirm
+          title="Delete post"
+          description="Do you wish to delete this forum post?"
+          onConfirm={handleDelete}
+          // onCancel={handleCancel}
+          okText="Yes"
+          cancelText="No"
+        >
+          <DeleteTwoTone twoToneColor="#eb2f96" className="fade-in" style={{fontSize: 14}} />
+        </Popconfirm>  
+        }
       </div>
     </>
   );
