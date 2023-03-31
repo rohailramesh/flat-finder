@@ -50,14 +50,13 @@ export default function Home() {
   }
 
   return (
+      <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} loadingElement={<Loading/>}>
     <div className="main-div">
       {popUp}
       {session ? (
-         <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} loadingElement={<Loading/>}>
            <FlatifyDashboard />
-         </LoadScript>
-      ) : (
-        <Container className="main-container">
+           ) : (
+             <Container className="main-container">
           <Row>
             <Col sm={12} md={6} className="text-light p-5">
               <div className={styles.logo}>
@@ -71,7 +70,7 @@ export default function Home() {
                     password={password}
                     setPassword={setPassword}
                     handleLogin={handleLogin}
-                  />
+                    />
                 </Col>
                 <Col>
                   <Register
@@ -82,7 +81,7 @@ export default function Home() {
                     password={password}
                     setPassword={setPassword}
                     handleRegister={handleRegister}
-                  />
+                    />
                 </Col>
               </Row>
             </Col>
@@ -97,5 +96,6 @@ export default function Home() {
         </Container>
       )}
     </div>
+  </LoadScript>
   );
 }
