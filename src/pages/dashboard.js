@@ -21,6 +21,7 @@ import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
 import {notification} from 'antd'
+import ForumPostService from "@/services/ForumPostService";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -44,6 +45,7 @@ function FlatifyDashboard() {
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
   const ticketService = new TicketService();
+  const forumPostService = new ForumPostService();
 
   const supabase = useSupabaseClient();
   const router = useRouter();
@@ -64,16 +66,24 @@ function FlatifyDashboard() {
       if (listing.forum == new_record.forum){
         //get user
         console.log("Inside if statement of handleForumEvent")
-        alert('You received a comment on one of your listings: ' + new_record.content )
+        forumPost(new_record.id, listing.address.city)
+        // alert('You received a comment on one of your listings: ' + new_record.content )
       }
     }
   }
 
-  const openNotification = (placement) => {
+  const forumPost = async (post_id, city) => {
+
+    const fullPost = await forumPostService.getPostById(post_id)
+
     api.info({
-      message: `Notification ${placement}`,
-      description: <ForumPost />,
-      placement,
+      style: {
+        padding: '0.5rem'
+      },
+      message: <p style={{margin: 0, color: 'gray', fontWeight: '500', fontSize: 10}}>New comment under listing in <span style={{color: 'darkblue'}}>{city}</span></p>,
+      description: <ForumPost forumPost={fullPost}/>,
+      placement: 'topRight',
+      duration: 4
     });
   };
   
