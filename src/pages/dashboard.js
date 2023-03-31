@@ -21,6 +21,7 @@ import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import Inbox from "@/components/Inbox";
 import AdminDashboard from "./admin";
+import GlobalView from "@/components/GlobalView";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -68,9 +69,11 @@ function FlatifyDashboard() {
           ticketService.getUserTicket(user_profile.id),
         ]
       );
+      console.log({new_favListings})
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
+      console.log({favListings})
     })();
   }, []);
 
@@ -96,8 +99,115 @@ function FlatifyDashboard() {
   // } = theme.useToken();
 
   return (
-    <>
-      <Layout
+    <Layout
+      style={{
+        minHeight: "100vh",
+      }}
+    >
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div
+          style={{
+            height: 38,
+            margin: 12,
+            background: "rgba(255, 255, 255, 0.2)",
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          FDM
+        </div>
+
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          selectedKeys={[String(tabKey)]}
+          mode="inline"
+          items={items}
+          onClick={({ key }) => {
+            if (key === "6") {
+              handleLogout();
+            } else {
+              setTabKey(key);
+            }
+          }}
+        />
+      </Sider>
+      <Layout className="site-layout">
+        <Header
+          style={{
+            textAlign: "center",
+            color: "#fff",
+            height: 64,
+            paddingInline: 10,
+            lineHeight: "64px",
+            backgroundColor: "#001628",
+            // maxWidth: 800,
+          }}
+        >
+          <AutoComplete
+            style={{ width: 800 }}
+            onSelect={(value) => {
+              setSearchValue(value.split(',')[0])
+              setTabKey(2)
+            }}
+            onSearch={handleSearch}
+            placeholder="Search by city"
+            options={options}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: "0 20px",
+            // marginLeft: "10px",
+          }}
+        >
+          <Breadcrumb
+            style={{
+              margin: "16px 0",
+            }}
+          >
+            <Breadcrumb.Item>Consultant</Breadcrumb.Item>
+            <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
+          </Breadcrumb>
+          {tabKey == "1" && (
+            <ConsultantHomePage
+              favListings={favListings}
+              ownListings={ownListings}
+              user_id={user.id}
+              setTickets={setTickets}
+              tickets={tickets}
+            />
+          )}
+  
+
+          {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
+          {tabKey == '3' && <GlobalView listings={listings}/>}
+          {tabKey == "4" && (
+            <AddListingComponent
+            listing={listing}
+            setListing={setListing}
+            setOwnListings={setOwnListings}
+            listings={listings}
+            setListings={setListings}
+          />
+          )}
+          {tabKey == '5' && <div>Inbox</div>}
+        </Content>
+        <Footer
+          style={{
+            textAlign: "center",
+            backgroundColor: "white",
+            color: "black",
+          }}
+        >
+          FDM | FLATIFY
+        </Footer>
+      </Layout>
+      <Sider
         style={{
           minHeight: "100vh",
         }}
@@ -191,13 +301,7 @@ function FlatifyDashboard() {
               />
             )}
             {tabKey == "3" && (
-              <AddListingComponent
-                listing={listing}
-                setListing={setListing}
-                setOwnListings={setOwnListings}
-                listings={listings}
-                setListings={setListings}
-              />
+              
             )}
             {tabKey == "4" && <Inbox />}
           </Content>

@@ -8,6 +8,7 @@ import {
   InboxOutlined,
   HomeOutlined,
   LogoutOutlined,
+  GlobalOutlined
 } from "@ant-design/icons";
 
 function getItem(label, key, icon, children) {
@@ -22,9 +23,10 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Search", "2", <SearchOutlined />),
-  getItem("Add listings", "3", <AppstoreAddOutlined />),
-  getItem("Inbox", "4", <InboxOutlined />),
-  getItem("Logout", "5", <LogoutOutlined />),
+  getItem('Global View', "3", <GlobalOutlined />),
+  getItem("Add listings", "4", <AppstoreAddOutlined />),
+  getItem("Inbox", "5", <InboxOutlined />),
+  getItem("Logout", "6", <LogoutOutlined />),
 ];
 
 const { Option } = Select;
