@@ -11,6 +11,10 @@ function ForumPost({ forumPost, user_id, setForumPosts}) {
   const [showDelete, setShowDelete] = useState(false)
   const forumPostService = new ForumPostService()
 
+  async function handleDelete() {
+    const {error} = await forumPostService.removeForumPost(forumPost.id)
+    if (!error) setForumPosts((prev) => prev.filter(post => post.id !== forumPost.id))
+  }
 
   return (
     <>
@@ -43,10 +47,7 @@ function ForumPost({ forumPost, user_id, setForumPosts}) {
           <Popconfirm
           title="Delete post"
           description="Do you wish to delete this forum post?"
-          onConfirm={async () => {
-            const {error} = await forumPostService.removeForumPost(forumPost.id)
-            if (!error) setForumPosts((prev) => prev.filter(post => post.id !== forumPost.id))
-          }}
+          onConfirm={handleDelete}
           // onCancel={handleCancel}
           okText="Yes"
           cancelText="No"
