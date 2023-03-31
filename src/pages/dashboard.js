@@ -19,6 +19,7 @@ import { items, emptyListing } from "@/utils";
 import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
+import GlobalView from "@/components/GlobalView";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -66,9 +67,11 @@ function FlatifyDashboard() {
           ticketService.getUserTicket(user_profile.id),
         ]
       );
+      console.log({new_favListings})
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
+      console.log({favListings})
     })();
   }, []);
 
@@ -125,7 +128,7 @@ function FlatifyDashboard() {
           mode="inline"
           items={items}
           onClick={({ key }) => {
-            if (key === "5") {
+            if (key === "6") {
               handleLogout();
             } else {
               setTabKey(key);
@@ -182,13 +185,15 @@ function FlatifyDashboard() {
   
 
           {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
-          {tabKey == "3" && (
+          {tabKey == '3' && <GlobalView listings={listings}/>}
+          {tabKey == "4" && (
             <AddListingComponent
               listing={listing}
               setListing={setListing}
               setOwnListings={setOwnListings}
             />
           )}
+          {tabKey == '5' && <div>Inbox</div>}
         </Content>
         <Footer
           style={{
