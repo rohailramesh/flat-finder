@@ -66,6 +66,7 @@ function FlatifyDashboard() {
           ticketService.getUserTicket(user_profile.id),
         ]
       );
+      console.log({new_favListings})
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
