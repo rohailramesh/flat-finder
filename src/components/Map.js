@@ -11,7 +11,13 @@ const containerStyle = {
 const Map = ({ coordinates }) => {
 
   const [infoWindowVisible, setInfoWindowVisible] = useState(false);
+  const [markerIndex, setMarkerIndex] = useState(0)
   const zoom = coordinates.length > 1 ? 5 : 15
+
+  function toggleMarker(index) {
+    setMarkerIndex(index)
+    setInfoWindowVisible(!infoWindowVisible)
+  }
 
   return (
     <>
@@ -20,9 +26,9 @@ const Map = ({ coordinates }) => {
         center={coordinates[0]}
         zoom={zoom}
         >
-        {coordinates.length > 1 ? coordinates.map(coordinate => 
-         <MarkerF position={coordinate} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
-         {infoWindowVisible && (
+        {coordinates.length > 1 ? coordinates.map((coordinate, index) => 
+         <MarkerF position={coordinate} onClick={() => toggleMarker(index)}>
+         {infoWindowVisible && markerIndex === index && (
          <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
            <div>
              <h4>Flatify rocksssss</h4>
@@ -32,7 +38,7 @@ const Map = ({ coordinates }) => {
          )}
 
        </MarkerF>) :  
-       (<MarkerF position={coordinates[0]} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
+       (<MarkerF position={coordinates[0]} onClick={() => toggleMarker(0)}>
             {infoWindowVisible && (
             <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
               <div>
@@ -43,6 +49,21 @@ const Map = ({ coordinates }) => {
             )}
          </MarkerF>)
         }
+
+        {coordinates.map((coordinate, index) => 
+         <MarkerF position={coordinate} onClick={() => toggleMarker(index)}>
+         {infoWindowVisible && markerIndex === index && (
+         <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
+           <div>
+             <h4>Flatify rocksssss</h4>
+             <p>project of the year</p>
+           </div>
+         </InfoWindowF>
+         )}
+
+       </MarkerF>)
+        }
+
         {/* {coordinates[0].lat && coordinates[0].lng && (
           <MarkerF position={coordinates[0]} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
             {infoWindowVisible && (

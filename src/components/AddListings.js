@@ -62,12 +62,12 @@ function AddListingComponent({ listing, setListing, setOwnListings}) {
         upsert: false
       })
       console.log({data, error}, "Uploaded picture to DB 🟢")
-      setPercent(prev => prev + step)
-
+      setPercent(prev => Math.floor(prev + step))
+      
       //Step 2: get image url from db
       const { publicUrl } = supabase.storage.from('listing-images').getPublicUrl(imgName).data
       console.log('Url received', {publicUrl})
-      setPercent(prev => prev + step)
+      setPercent(prev =>  Math.floor(prev + step))
       listing.images.push(publicUrl)
     }
 
@@ -78,7 +78,7 @@ function AddListingComponent({ listing, setListing, setOwnListings}) {
     const {first_line, second_line, postcode, country, city} = listing.address
     const coordinates = await googleMapsService.getCoordinates(`${first_line}, ${second_line}, ${postcode}, ${city}, ${country}`)
     listing.coordinates = coordinates
-    setPercent(prev => prev + step)
+    setPercent(prev => Math.floor(prev + step))
 
     //Add the listing
     const response = await listingService.addListing(listing);
