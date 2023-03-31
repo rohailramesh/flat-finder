@@ -162,7 +162,9 @@ const AdminDashboard = () => {
             </div>
           )}
           {tabKey == "2" && <AdminResultPage listings={listings} />}
-          {tabKey == "3" && <AdminTicketResolver tickets={tickets} />}
+          {tabKey == "3" && (
+            <AdminTicketResolver tickets={tickets} user={user} />
+          )}
         </Content>
         <Footer
           style={{
