@@ -42,6 +42,25 @@ export default class TicketService{
         return response
     }
 
+
+    async removeListing(listing_id){
+        const response = await fetch(`${this.url}/listing`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                listing_id
+            })
+        })
+        if (response.ok){
+            const result = await response.json()
+            return result
+        }
+
+        return response
+    }
+
     async getUserTicket(user_id){
         const response = await fetch(`${this.url}/ticket?user_id=${user_id}`)
 
