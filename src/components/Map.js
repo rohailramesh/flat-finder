@@ -11,16 +11,40 @@ const containerStyle = {
 const Map = ({ coordinates }) => {
 
   const [infoWindowVisible, setInfoWindowVisible] = useState(false);
+  const zoom = coordinates.length > 1 ? 5 : 15
 
   return (
     <>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={coordinates}
-        zoom={15}
+        center={coordinates[0]}
+        zoom={zoom}
         >
-        {coordinates.lat && coordinates.lng && (
-          <MarkerF position={coordinates} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
+        {coordinates.length > 1 ? coordinates.map(coordinate => 
+         <MarkerF position={coordinate} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
+         {infoWindowVisible && (
+         <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
+           <div>
+             <h4>Flatify rocksssss</h4>
+             <p>project of the year</p>
+           </div>
+         </InfoWindowF>
+         )}
+
+       </MarkerF>) :  
+       (<MarkerF position={coordinates[0]} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
+            {infoWindowVisible && (
+            <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
+              <div>
+                <h4>Flatify rocksssss</h4>
+                <p>project of the year</p>
+              </div>
+            </InfoWindowF>
+            )}
+         </MarkerF>)
+        }
+        {/* {coordinates[0].lat && coordinates[0].lng && (
+          <MarkerF position={coordinates[0]} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
             {infoWindowVisible && (
             <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
               <div>
@@ -30,7 +54,7 @@ const Map = ({ coordinates }) => {
             </InfoWindowF>
             )}
           </MarkerF>
-          )}       
+          )}        */}
       </GoogleMap>
     </>
   );

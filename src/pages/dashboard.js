@@ -19,6 +19,7 @@ import { items, emptyListing } from "@/utils";
 import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
+import GlobalView from "@/components/GlobalView";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -184,7 +185,7 @@ function FlatifyDashboard() {
   
 
           {tabKey == "2" && <SearchResultPage listings={listings} searchValue={searchValue} user_id={user.id} setFavListings={setFavListings} favListings={favListings} />}
-          {tabKey == '3' && <div>Map view</div>}
+          {tabKey == '3' && <GlobalView listings={listings}/>}
           {tabKey == "4" && (
             <AddListingComponent
               listing={listing}
