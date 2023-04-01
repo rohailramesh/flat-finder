@@ -39,6 +39,7 @@ function FlatifyDashboard() {
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [conversations, setConversations] = useState([]);
+  const [messages, setMessages] = useState([])
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
@@ -152,9 +153,14 @@ function FlatifyDashboard() {
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
-      console.log({new_conversations})
       setConversations(new_conversations);
-      // console.log({ favListings });
+
+      const twoDMessageArray = await Promise.all(new_conversations.map(conversation => {
+        return messageService.getConversationMessages(conversation.id)
+      }))
+      console.log({twoDMessageArray})
+      setMessages(twoDMessageArray)
+
     })();
   }, []);
 
