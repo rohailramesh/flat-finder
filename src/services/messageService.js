@@ -1,3 +1,5 @@
+
+//This is a service class for tables: conversation, message
 export default class MessageService {
 
     url = "https://flat-finder-server.onrender.com";
@@ -45,11 +47,12 @@ export default class MessageService {
     }
 
 
-    async getMessage() {
-        const response = await fetch(`${this.url}/message`)
-
+    async getConversationMessages(conversation_id) {
+        const response = await fetch(`${this.url}/message?conversation_id=${conversation_id}`)
+        console.log("Messages response: ", response)
         if(response.ok){
             const message = await response.json()
+            console.log("Actual messages: ", message)
             return message
         }
 
