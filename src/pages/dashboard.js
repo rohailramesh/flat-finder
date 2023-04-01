@@ -30,10 +30,6 @@ const { Header, Content, Footer, Sider } = Layout;
 function FlatifyDashboard() {
 
   const [user, setUser] = useState(new User(emptyUser));
-
-  const userRef = useRef(user);
-
-
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [api, contextHolder] = notification.useNotification();
@@ -46,6 +42,9 @@ function FlatifyDashboard() {
 
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
+
+  const userRef = useRef(user);
+  const ownListingsRef = useRef(ownListings)
 
   const userService = new UserService();
   const listingService = new ListingService();
@@ -76,7 +75,7 @@ function FlatifyDashboard() {
     }
   }
 
-  async function handleForumEvent(new_record){
+  async function handleForumEvent(new_record, ownListings){
     console.log("Inside handleForumEvent: ", new_record)
     // const new_record = payload.new;
     console.log({new_record})
@@ -93,11 +92,11 @@ function FlatifyDashboard() {
   }
 
 
-  function handleRealtimeEvents(payload, user){
+  function handleRealtimeEvents(payload, user, ownListings){
     const [new_record, table] = [payload.new, payload.table];
     switch (table){
       case 'forum_post':
-        handleForumEvent(new_record)
+        handleForumEvent(new_record,ownListings)
         break;
       case 'message':
         handleMessageEvent(new_record,user);
@@ -117,7 +116,7 @@ function FlatifyDashboard() {
         event: '*',
         schema: 'public',
       },
-      (payload) => handleRealtimeEvents(payload, userRef.current)
+      (payload) => handleRealtimeEvents(payload, userRef.current, ownListingsRef.current)
     )
     .subscribe()
   }, [supabase]);
@@ -125,7 +124,8 @@ function FlatifyDashboard() {
 
   useEffect(() => {
     userRef.current = user;
-  }, [user]);
+    ownListingsRef.current = ownListings
+  }, [user, ownListings]);
   
 
   useEffect(() => {
