@@ -3,7 +3,7 @@ export default class MessageService {
     url = "https://flat-finder-server.onrender.com";
 
     async addMessage(sender_id, content, recipient_id){
-        const data = await fetch(`${this.url}/conversation?user1=${sender_id}&user2=${recipient_id}`)
+        const data = await fetch(`${this.url}/conversation/${sender_id}/${recipient_id}`)
         const conversation = await data.json()
         console.log({conversation})
         const response = await fetch(`${this.url}/message`, {
@@ -21,6 +21,12 @@ export default class MessageService {
         }
 
         return response
+    }
+
+    async getConversationById(conversation_id){
+        const data = await fetch(`${this.url}/conversation?conversation_id=${conversation_id}`) 
+        const conversation = await data.json()
+        return conversation
     }
 
     async getMessage() {
