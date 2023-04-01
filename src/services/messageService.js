@@ -33,6 +33,18 @@ export default class MessageService {
         }
     }
 
+
+    async getUserConversations(user_id){
+        try{
+            const data = await fetch(`${this.url}/conversations?user_id=${user_id}`) 
+            const conversations = await data.json()
+            return conversations
+        } catch (error){
+            console.log("Error getting conversations 🔴🔴: ", error)
+        }
+    }
+
+
     async getMessage() {
         const response = await fetch(`${this.url}/message`)
 
