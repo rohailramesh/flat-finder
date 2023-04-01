@@ -38,6 +38,7 @@ function FlatifyDashboard() {
   const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
+  const [conversations, setConversations] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
@@ -139,17 +140,20 @@ function FlatifyDashboard() {
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_ownListings, new_tickets] = await Promise.all(
+      const [new_favListings, new_ownListings, new_tickets, new_conversations] = await Promise.all(
         [
           favListingSevice.getFavListing(user_profile.id),
           listingService.getOwnListing(user_profile.id),
           ticketService.getUserTicket(user_profile.id),
+          messageService.getUserConversations(user_profile.id)
         ]
       );
       // console.log({ new_favListings });
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
+      console.log({new_conversations})
+      setConversations(new_conversations);
       // console.log({ favListings });
     })();
   }, []);
