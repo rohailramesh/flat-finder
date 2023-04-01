@@ -24,9 +24,13 @@ export default class MessageService {
     }
 
     async getConversationById(conversation_id){
-        const data = await fetch(`${this.url}/conversation?conversation_id=${conversation_id}`) 
-        const conversation = await data.json()
-        return conversation
+        try{
+            const data = await fetch(`${this.url}/conversation?conversation_id=${conversation_id}`) 
+            const conversation = await data.json()
+            return conversation
+        } catch (error){
+            console.log("Error getting conversation 🔴🔴: ", error)
+        }
     }
 
     async getMessage() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoComplete } from "antd";
+import { AutoComplete, message } from "antd";
 import citiesData from "../data/cities.json";
 import SearchResultPage from "@/components/searchResults";
 import FavListings from "@/components/FavListings";
@@ -22,12 +22,18 @@ import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
 import {notification} from 'antd'
 import ForumPostService from "@/services/ForumPostService";
+import NotificationService from "@/services/NotificationService";
+import MessageService from "@/services/messageService";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
 
   const [user, setUser] = useState(new User(emptyUser));
+
+  const userRef = useRef(user);
+
+
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [api, contextHolder] = notification.useNotification();
@@ -45,7 +51,9 @@ function FlatifyDashboard() {
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
   const ticketService = new TicketService();
-  const forumPostService = new ForumPostService();
+  const messageService = new MessageService()
+  const forumPostService = new ForumPostService()
+  const notificationService = new NotificationService(api);
 
   const supabase = useSupabaseClient();
   const router = useRouter();
@@ -54,87 +62,70 @@ function FlatifyDashboard() {
     await userService.logout(supabase);
   }
   
-  function handleMessageEvent(payload){
-    const new_record = payload.new
+  async function handleMessageEvent(new_record, user){
+    // console.log("Inside handleMessageEvent: ", new_record)
+    const conversation = await messageService.getConversationById(new_record.conversation_id)
+    // console.log("Conversation populated inside messageEvent:" , conversation)
+    console.log("Here is the user state var: " , {user})
+    if (conversation.user1.id === user.id){
+      notificationService.privateMessage(new_record, conversation.user2)
+    } else if (conversation.user2.id === user.id) {
+      notificationService.privateMessage(new_record, conversation.user1) 
+    } else {
+      console.log('The message was not sent to you: ', user.id, " the conversation is between:", conversation.user1.id, " and ", conversation.user2.id)
+    }
   }
 
-  function handleForumEvent(payload){
-    const new_record = payload.new;
+  async function handleForumEvent(new_record){
+    console.log("Inside handleForumEvent: ", new_record)
+    // const new_record = payload.new;
     console.log({new_record})
+    console.log({ownListings})
     for (const listing of ownListings){
       console.log({listing})
       if (listing.forum == new_record.forum){
         //get user
         console.log("Inside if statement of handleForumEvent")
-        forumPost(new_record.id, listing.address.city)
-        // alert('You received a comment on one of your listings: ' + new_record.content )
+        const fullPost = await forumPostService.getPostById(new_record.id)
+        notificationService.forumPost(fullPost, listing.address.city)
       }
     }
   }
 
-  const forumPost = async (post_id, city) => {
 
-    const fullPost = await forumPostService.getPostById(post_id)
-
-    api.info({
-      style: {
-        padding: '0.5rem'
-      },
-      message: <p style={{margin: 0, color: 'gray', fontWeight: '500', fontSize: 10}}>New comment under listing in <span style={{color: 'darkblue'}}>{city}</span></p>,
-      description: <ForumPost forumPost={fullPost}/>,
-      placement: 'topRight',
-      duration: 4
-    });
-  };
-  
-  const forumPostChannel = supabase
-    .channel('table-db-changes')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'forum_post',
-      },
-      (payload) => {
+  function handleRealtimeEvents(payload, user){
+    const [new_record, table] = [payload.new, payload.table];
+    switch (table){
+      case 'forum_post':
+        handleForumEvent(new_record)
+        break;
+      case 'message':
+        handleMessageEvent(new_record,user);
+        break;
+      default:
         console.log(payload)
-        handleForumEvent(payload)
-      }
-    ).subscribe()
-
-    // const messagesChannel = supabase
-    // .channel('table-db-changes')
-    // .on(
-    //   'postgres_changes',
-    //   {
-    //     event: '*',
-    //     schema: 'public',
-    //     table: 'message',
-    //   },
-    //   (payload) => console.log(payload)
-    // ).subscribe()
-
-
-
-  function handleRealtimeEvents(event, data){
-    console.log({event, data})
+    }
   }
 
   useEffect(() => {
     // Supabase client setup
     const channel = supabase
-    .channel('table-db-changes')
+    .channel('schema-db-changes')
     .on(
       'postgres_changes',
       {
         event: '*',
         schema: 'public',
-        table: 'message',
       },
-      (payload) => console.log(payload)
+      (payload) => handleRealtimeEvents(payload, userRef.current)
     )
     .subscribe()
   }, [supabase]);
+  
+
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
   
 
   useEffect(() => {
@@ -155,11 +146,11 @@ function FlatifyDashboard() {
           ticketService.getUserTicket(user_profile.id),
         ]
       );
-      console.log({ new_favListings });
+      // console.log({ new_favListings });
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
-      console.log({ favListings });
+      // console.log({ favListings });
     })();
   }, []);
 

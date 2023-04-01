@@ -19,11 +19,11 @@ function ForumPost({ forumPost, user_id, setForumPosts}) {
   return (
     <>
       <div
-        className={author.id === user_id && 'hover-up'}
+        className={author.id === user_id ? 'hover-up' : undefined}
         onMouseEnter={() => setShowDelete(true)}
         onMouseLeave={() => setShowDelete(false)}
         style={{
-          borderTop: '1px solid #c7c7c7',
+          // borderTop: '1px solid #c7c7c7',
           display: "flex",
           height: 75,
           alignItems: "center",
