@@ -1,15 +1,51 @@
 import React, { useState } from "react";
-// import { Avatar } from "antd";
 import { Avatar } from "@chakra-ui/react";
+import {Modal, Form, Row, Col, Button, Input} from 'antd'
+import Lottie from '@amelix/react-lottie'
+import { successOptions } from '@/utils'
 import { Popconfirm } from "antd";
-import { DeleteTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, MessageTwoTone } from "@ant-design/icons";
 import ForumPostService from "@/services/ForumPostService";
+import MessageService from "@/services/messageService";
 
 function ForumPost({ forumPost, user_id, setForumPosts}) {
   const { author } = forumPost;
 
-  const [showDelete, setShowDelete] = useState(false)
+  const [showIcon, setShowIcon] = useState(false)
   const forumPostService = new ForumPostService()
+
+
+  const [success, setSuccess] = useState(false);
+  const [content, setContent] = useState('');
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const messageService = new MessageService()
+
+  async function handleOk(){
+    if (content) {
+      setConfirmLoading(true);
+      //send message api call
+      // const response = messageService.addMessage(content)
+      const response = await messageService.addMessage(user_id, content, author.id)
+      console.log(response)
+      setConfirmLoading(false)
+      setSuccess(true)
+      setTimeout(()=>{
+        setOpen(false);
+        setSuccess(false);
+      }, 2000)
+
+    } else{
+      alert('no content!')
+    }
+  }
+
+  function handleCancel(){
+    setContent('')
+    setOpen(false)
+  }
+  
 
   async function handleDelete() {
     const {error} = await forumPostService.removeForumPost(forumPost.id)
@@ -20,8 +56,8 @@ function ForumPost({ forumPost, user_id, setForumPosts}) {
     <>
       <div
         className={author.id === user_id ? 'hover-up' : undefined}
-        onMouseEnter={() => setShowDelete(true)}
-        onMouseLeave={() => setShowDelete(false)}
+        onMouseEnter={() => setShowIcon(true)}
+        onMouseLeave={() => setShowIcon(false)}
         style={{
           // borderTop: '1px solid #c7c7c7',
           display: "flex",
@@ -29,6 +65,7 @@ function ForumPost({ forumPost, user_id, setForumPosts}) {
           alignItems: "center",
           gap: "1rem",
           padding: "0.5rem",
+          width: '80%'
         }}
       >
         <Avatar size='md' name={author.name} src={author.avatar_url} />
@@ -43,7 +80,7 @@ function ForumPost({ forumPost, user_id, setForumPosts}) {
           </p>
           <p style={{ margin: 0 }}>{forumPost.content}</p>
         </div>
-          {user_id === author.id && showDelete && 
+          {user_id === author.id ? showIcon && 
           <Popconfirm
           title="Delete post"
           description="Do you wish to delete this forum post?"
@@ -52,10 +89,43 @@ function ForumPost({ forumPost, user_id, setForumPosts}) {
           okText="Yes"
           cancelText="No"
         >
-          <DeleteTwoTone twoToneColor="#eb2f96" className="fade-in" style={{fontSize: 14}} />
-        </Popconfirm>  
+          <DeleteTwoTone twoToneColor="#eb2f96" className="fade-in" style={{fontSize: 20}} />
+        </Popconfirm> : 
+        showIcon && <MessageTwoTone className="fade-in" style={{fontSize: 20}} onClick={() => setOpen(true)} /> 
         }
       </div>
+      <Modal
+      // title="Message to ad owner"
+      open={open}
+      onOk={handleOk}
+      confirmLoading={confirmLoading}
+      onCancel={handleCancel}>
+    {success ? (
+      <div>
+        <Lottie options={successOptions} height={300} width={300} />
+      </div>
+    ) : (
+      <Form layout="vertical">
+            <Form.Item
+              name="Message"
+              label="Message"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter message",
+                },
+              ]}
+            >
+              <Input.TextArea
+                rows={4}
+                value={content}
+                placeholder="e.g. Would you like to buddy up?"
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </Form.Item>
+      </Form>
+    )}
+  </Modal>
     </>
   );
 }

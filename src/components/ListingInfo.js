@@ -163,6 +163,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
           <Row gutter={16}>
             <Col span={24}>
                 <TextArea
+                style={{width: '80%'}}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={4}
