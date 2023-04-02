@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "../styles/login_register.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -15,6 +15,7 @@ import { notification } from "antd";
 import UserService from "@/services/UserService";
 import { LoadScript } from "@react-google-maps/api";
 import Loading from '../components/Loading'
+import AdminDashboard from "./admin";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Home() {
@@ -22,6 +23,8 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState("");
+  const [isAdmin, setIsAdmin] = useState(null)
+
   const [api, popUp] = notification.useNotification();
 
   const userService = new UserService();
@@ -46,15 +49,24 @@ export default function Home() {
 
   async function handleLogin() {
     const user = await userService.login(supabase, email, password);
+    setIsAdmin(user.is_admin)
     setUser(user);
   }
+
+
+  useEffect(()=> {
+    (async () => {
+      const user_profile = await userService.getAuthUserProfile(supabase)
+      setIsAdmin(user_profile.is_admin)
+    })()
+  }, [session])
 
   return (
       <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} loadingElement={<Loading/>}>
     <div className="main-div">
       {popUp}
       {session ? (
-           <FlatifyDashboard />
+        isAdmin === null ? <Loading/> : isAdmin ? <AdminDashboard/> : isAdmin === false && <FlatifyDashboard />
            ) : (
              <Container className="main-container">
           <Row>
