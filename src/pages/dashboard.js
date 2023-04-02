@@ -20,13 +20,14 @@ import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
-import {notification} from 'antd'
+import { notification } from "antd";
+import Lottie from "@amelix/react-lottie";
+import { consultantHome } from "@/utils";
 import ForumPostService from "@/services/ForumPostService";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
-
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
@@ -49,93 +50,106 @@ function FlatifyDashboard() {
 
   const supabase = useSupabaseClient();
   const router = useRouter();
+  const [showLottie, setShowLottie] = useState(true);
+  // rest of the code
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowLottie(false);
+    }, 3000); // show the Lottie animation for 3 seconds
+    return () => clearTimeout(timeout);
+  }, []);
 
   async function handleLogout() {
     await userService.logout(supabase);
   }
-  
-  function handleMessageEvent(payload){
-    const new_record = payload.new
+
+  function handleMessageEvent(payload) {
+    const new_record = payload.new;
   }
 
-  function handleForumEvent(payload){
+  function handleForumEvent(payload) {
     const new_record = payload.new;
-    console.log({new_record})
-    for (const listing of ownListings){
-      console.log({listing})
-      if (listing.forum == new_record.forum){
+    console.log({ new_record });
+    for (const listing of ownListings) {
+      console.log({ listing });
+      if (listing.forum == new_record.forum) {
         //get user
-        console.log("Inside if statement of handleForumEvent")
-        forumPost(new_record.id, listing.address.city)
+        console.log("Inside if statement of handleForumEvent");
+        forumPost(new_record.id, listing.address.city);
         // alert('You received a comment on one of your listings: ' + new_record.content )
       }
     }
   }
 
   const forumPost = async (post_id, city) => {
-
-    const fullPost = await forumPostService.getPostById(post_id)
+    const fullPost = await forumPostService.getPostById(post_id);
 
     api.info({
       style: {
-        padding: '0.5rem'
+        padding: "0.5rem",
       },
-      message: <p style={{margin: 0, color: 'gray', fontWeight: '500', fontSize: 10}}>New comment under listing in <span style={{color: 'darkblue'}}>{city}</span></p>,
-      description: <ForumPost forumPost={fullPost}/>,
-      placement: 'topRight',
-      duration: 4
+      message: (
+        <p
+          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}
+        >
+          New comment under listing in{" "}
+          <span style={{ color: "darkblue" }}>{city}</span>
+        </p>
+      ),
+      description: <ForumPost forumPost={fullPost} />,
+      placement: "topRight",
+      duration: 4,
     });
   };
-  
+
   const forumPostChannel = supabase
-    .channel('table-db-changes')
+    .channel("table-db-changes")
     .on(
-      'postgres_changes',
+      "postgres_changes",
       {
-        event: '*',
-        schema: 'public',
-        table: 'forum_post',
+        event: "*",
+        schema: "public",
+        table: "forum_post",
       },
       (payload) => {
-        console.log(payload)
-        handleForumEvent(payload)
+        console.log(payload);
+        handleForumEvent(payload);
       }
-    ).subscribe()
+    )
+    .subscribe();
 
-    // const messagesChannel = supabase
-    // .channel('table-db-changes')
-    // .on(
-    //   'postgres_changes',
-    //   {
-    //     event: '*',
-    //     schema: 'public',
-    //     table: 'message',
-    //   },
-    //   (payload) => console.log(payload)
-    // ).subscribe()
+  // const messagesChannel = supabase
+  // .channel('table-db-changes')
+  // .on(
+  //   'postgres_changes',
+  //   {
+  //     event: '*',
+  //     schema: 'public',
+  //     table: 'message',
+  //   },
+  //   (payload) => console.log(payload)
+  // ).subscribe()
 
-
-
-  function handleRealtimeEvents(event, data){
-    console.log({event, data})
+  function handleRealtimeEvents(event, data) {
+    console.log({ event, data });
   }
 
   useEffect(() => {
     // Supabase client setup
     const channel = supabase
-    .channel('table-db-changes')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'message',
-      },
-      (payload) => console.log(payload)
-    )
-    .subscribe()
+      .channel("table-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "message",
+        },
+        (payload) => console.log(payload)
+      )
+      .subscribe();
   }, [supabase]);
-  
 
   useEffect(() => {
     (async () => {
@@ -185,138 +199,146 @@ function FlatifyDashboard() {
   // } = theme.useToken();
 
   return (
-    <Layout
-      style={{
-        minHeight: "100vh",
-      }}
-    >
-      {contextHolder}
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-      >
-        <div
-          style={{
-            height: 38,
-            margin: 12,
-            background: "rgba(255, 255, 255, 0.2)",
-            color: "white",
-            textAlign: "center",
-          }}
-        >
-          FDM
-        </div>
-
-        <Menu
-          theme="dark"
-          defaultSelectedKeys={["1"]}
-          selectedKeys={[String(tabKey)]}
-          mode="inline"
-          items={items}
-          onClick={({ key }) => {
-            if (key === "6") {
-              handleLogout();
-            } else {
-              setTabKey(key);
-            }
-          }}
-        />
-      </Sider>
-      <Layout className="site-layout">
-        <Header
-          style={{
-            textAlign: "center",
-            color: "#fff",
-            height: 64,
-            paddingInline: 10,
-            lineHeight: "64px",
-            backgroundColor: "#001628",
-            // maxWidth: 800,
-          }}
-        >
-          <AutoComplete
-            style={{ width: 800 }}
-            onSelect={(value) => {
-              setSearchValue(value.split(",")[0]);
-              setTabKey(2);
-            }}
-            onSearch={handleSearch}
-            placeholder="Search by city"
-            options={options}
-          />
-        </Header>
-        <Content
-          style={{
-            margin: "0 20px",
-            // marginLeft: "10px",
-          }}
-        >
-          <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
-            <Breadcrumb.Item>Consultant</Breadcrumb.Item>
-            <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
-          </Breadcrumb>
-          {tabKey == "1" && (
-            <ConsultantHomePage
-              favListings={favListings}
-              ownListings={ownListings}
-              user_id={user.id}
-              setTickets={setTickets}
-              tickets={tickets}
-            />
-          )}
-
-          {tabKey == "2" && (
-            <SearchResultPage
-              listings={listings}
-              searchValue={searchValue}
-              user_id={user.id}
-              setFavListings={setFavListings}
-              favListings={favListings}
-            />
-          )}
-          {tabKey == "3" && <GlobalView listings={listings} />}
-          {tabKey == "4" && (
-            <AddListingComponent
-              listing={listing}
-              setListing={setListing}
-              setOwnListings={setOwnListings}
-              listings={listings}
-              setListings={setListings}
-            />
-          )}
-          {tabKey == "5" && <div>Inbox</div>}
-        </Content>
-        <Footer
-          style={{
-            textAlign: "center",
-            backgroundColor: "white",
-            color: "black",
-          }}
-        >
-          FDM | FLATIFY
-        </Footer>
-      </Layout>
-      <Sider
+    <>
+      <Layout
         style={{
-          textAlign: "center",
-          lineHeight: "120px",
-          // color: "#fff",
-          // width: 200,
-          padding: "80px",
-          overflow: "auto",
-          marginRight: "-10px",
+          minHeight: "100vh",
         }}
       >
-        <Space size={26} wrap>
-          <RightDashboard user={user} />
-        </Space>
-      </Sider>
-    </Layout>
+        {contextHolder}
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={(value) => setCollapsed(value)}
+        >
+          <div
+            style={{
+              height: 38,
+              margin: 12,
+              background: "rgba(255, 255, 255, 0.2)",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            FDM
+          </div>
+
+          <Menu
+            theme="dark"
+            defaultSelectedKeys={["1"]}
+            selectedKeys={[String(tabKey)]}
+            mode="inline"
+            items={items}
+            onClick={({ key }) => {
+              if (key === "6") {
+                handleLogout();
+              } else {
+                setTabKey(key);
+              }
+            }}
+          />
+        </Sider>
+        <Layout className="site-layout">
+          <Header
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              height: 64,
+              paddingInline: 10,
+              lineHeight: "64px",
+              backgroundColor: "#001628",
+              // maxWidth: 800,
+            }}
+          >
+            <AutoComplete
+              style={{ width: 800 }}
+              onSelect={(value) => {
+                setSearchValue(value.split(",")[0]);
+                setTabKey(2);
+              }}
+              onSearch={handleSearch}
+              placeholder="Search by city"
+              options={options}
+            />
+          </Header>
+          {showLottie ? (
+            <Lottie options={consultantHome} height={800} width={800} />
+          ) : (
+            <>
+              <Content
+                style={{
+                  margin: "0 20px",
+                  // marginLeft: "10px",
+                }}
+              >
+                <Breadcrumb
+                  style={{
+                    margin: "16px 0",
+                  }}
+                >
+                  <Breadcrumb.Item>Consultant</Breadcrumb.Item>
+                  <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
+                </Breadcrumb>
+                {tabKey == "1" && (
+                  <ConsultantHomePage
+                    favListings={favListings}
+                    ownListings={ownListings}
+                    user_id={user.id}
+                    setTickets={setTickets}
+                    tickets={tickets}
+                  />
+                )}
+
+                {tabKey == "2" && (
+                  <SearchResultPage
+                    listings={listings}
+                    searchValue={searchValue}
+                    user_id={user.id}
+                    setFavListings={setFavListings}
+                    favListings={favListings}
+                  />
+                )}
+                {tabKey == "3" && <GlobalView listings={listings} />}
+                {tabKey == "4" && (
+                  <AddListingComponent
+                    listing={listing}
+                    setListing={setListing}
+                    setOwnListings={setOwnListings}
+                    listings={listings}
+                    setListings={setListings}
+                  />
+                )}
+                {tabKey == "5" && <div>Inbox</div>}
+              </Content>
+              <Footer
+                style={{
+                  textAlign: "center",
+                  backgroundColor: "white",
+                  color: "black",
+                }}
+              >
+                FDM | FLATIFY
+              </Footer>
+            </>
+          )}
+        </Layout>
+        <Sider
+          style={{
+            textAlign: "center",
+            lineHeight: "120px",
+            // color: "#fff",
+            // width: 200,
+            padding: "80px",
+            overflow: "auto",
+            marginRight: "-10px",
+          }}
+        >
+          <Space size={26} wrap>
+            <RightDashboard user={user} />
+          </Space>
+        </Sider>
+      </Layout>
+    </>
   );
 }
 export default FlatifyDashboard;
