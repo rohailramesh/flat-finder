@@ -136,7 +136,7 @@ function FlatifyDashboard() {
         userService.getAuthUserProfile(supabase),
         listingService.getListings(),
       ]);
-      user_profile.is_admin && router.push("/admin");
+      // user_profile.is_admin && router.push("/admin");
       setUser(user_profile);
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
