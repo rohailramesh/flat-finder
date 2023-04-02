@@ -61,7 +61,7 @@ export default class TicketService {
     return response;
   }
 
-  async changeStatus(ticketID, newStatus, comment) {
+  async changeStatus(ticketID, newStatus, admin_comment) {
     const response = await fetch(`${this.url}/ticket`, {
       method: "PUT",
       headers: {
@@ -70,7 +70,7 @@ export default class TicketService {
       body: JSON.stringify({
         ticketID,
         newStatus,
-        comment,
+        admin_comment,
       }),
     });
 
