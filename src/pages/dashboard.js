@@ -64,16 +64,17 @@ function FlatifyDashboard() {
   }
   
   async function handleMessageEvent(new_record, user){
-    // console.log("Inside handleMessageEvent: ", new_record)
-    const conversation = await messageService.getConversationById(new_record.conversation_id)
-    // console.log("Conversation populated inside messageEvent:" , conversation)
-    console.log("Here is the user state var: " , {user})
-    if (conversation.user1.id === user.id){
-      notificationService.privateMessage(new_record, conversation.user2)
-    } else if (conversation.user2.id === user.id) {
-      notificationService.privateMessage(new_record, conversation.user1) 
-    } else {
-      console.log('The message was not sent to you: ', user.id, " the conversation is between:", conversation.user1.id, " and ", conversation.user2.id)
+    //if we sent the message, don't notify!
+    if (new_record.sender_id !== user.id){
+      const conversation = await messageService.getConversationById(new_record.conversation_id)
+      console.log("Here is the user state var: " , {user})
+      if (conversation.user1.id === user.id){
+        notificationService.privateMessage(new_record, conversation.user2)
+      } else if (conversation.user2.id === user.id) {
+        notificationService.privateMessage(new_record, conversation.user1) 
+      } else {
+        console.log('The message was not sent to you: ', user.id, " the conversation is between:", conversation.user1.id, " and ", conversation.user2.id)
+      }
     }
   }
 

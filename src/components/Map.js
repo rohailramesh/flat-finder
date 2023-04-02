@@ -12,7 +12,7 @@ const Map = ({ coordinates }) => {
 
   const [infoWindowVisible, setInfoWindowVisible] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0)
-  const zoom = coordinates.length > 1 ? 5 : 15
+  const zoom = coordinates.length > 1 ? 2 : 15
 
   function toggleMarker(index) {
     setMarkerIndex(index)
