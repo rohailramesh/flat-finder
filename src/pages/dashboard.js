@@ -94,9 +94,31 @@ function FlatifyDashboard() {
     }
   }
 
+  async function handleTicketEvent(new_record, eventType, user) {
+    if (new_record.creator === user.id){
+      if (eventType === 'UPDATE'){
+        setTickets(prev => {
+          const index = prev.findIndex((ticket) => ticket.id === new_record.id)
+          if (index !== -1){
+            const new_tickets = [...prev];
+            new_tickets[index] = new_record;
+            return new_tickets
+          }
+        })
+        notificationService.ticketUpdate(new_record)
+      } else if (eventType === 'DELETE'){
+        //to implement
+      }
+      
+    }
+
+
+  }
+
 
   function handleRealtimeEvents(payload, user, ownListings){
-    const [new_record, table] = [payload.new, payload.table];
+    console.log(payload)
+    const [new_record, table, eventType] = [payload.new, payload.table, payload.eventType];
     switch (table){
       case 'forum_post':
         handleForumEvent(new_record,ownListings)
@@ -104,6 +126,8 @@ function FlatifyDashboard() {
       case 'message':
         handleMessageEvent(new_record,user);
         break;
+      case 'ticket':
+        handleTicketEvent(new_record, eventType, user)
       default:
         console.log(payload)
     }
