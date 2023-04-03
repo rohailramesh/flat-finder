@@ -21,14 +21,8 @@ import TicketService from "@/services/TicketService";
 
 import {
   CheckCircleOutlined,
-  ClockCircleOutlined,
   CloseCircleOutlined,
-  ExclamationCircleOutlined,
-  MinusCircleOutlined,
   SyncOutlined,
-  CloseOutlined,
-  DeleteFilled,
-  DeleteOutlined,
   DeleteTwoTone,
 } from "@ant-design/icons";
 
@@ -122,14 +116,36 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                 >
                   Status: &nbsp;
                   {ticket.status === "resolved" && (
-                    <Tag icon={<CheckCircleOutlined />} color="success">
-                      resolved
-                    </Tag>
+                     <div style={{width: 90}}>
+                     <Tag 
+                     style={{
+                       display: "flex",
+                       alignItems: "center",
+                       gap: "0.3rem",
+                       flexGrow: 0,
+                       flexShrink: 0,
+                     }} 
+                     color="success">
+                       <CheckCircleOutlined />
+                       resolved
+                     </Tag>
+                     </div>
                   )}
                   {ticket.status === "in-progress" && (
-                    <Tag icon={<SyncOutlined spin />} color="processing">
+                    <div style={{width: 110}}>
+                    <Tag 
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.3rem",
+                      flexGrow: 0,
+                      flexShrink: 0,
+                    }} 
+                    color="processing">
+                      <SyncOutlined spin/>
                       in progress
                     </Tag>
+                  </div>
                   )}
                   {ticket.status === "unresolved" && (
                     <Tag
