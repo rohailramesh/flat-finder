@@ -14,7 +14,7 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { notification } from "antd";
 import UserService from "@/services/UserService";
 import { LoadScript } from "@react-google-maps/api";
-import Loading from '../components/Loading'
+import Loading from "../components/Loading";
 import AdminDashboard from "./admin";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -23,7 +23,7 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState("");
-  const [isAdmin, setIsAdmin] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(null);
 
   const [api, popUp] = notification.useNotification();
 
@@ -49,65 +49,78 @@ export default function Home() {
 
   async function handleLogin() {
     const user = await userService.login(supabase, email, password);
-    setIsAdmin(user.is_admin)
+    setIsAdmin(user.is_admin);
     setUser(user);
   }
 
-
-  useEffect(()=> {
+  useEffect(() => {
     (async () => {
-      const user_profile = await userService.getAuthUserProfile(supabase)
-      setIsAdmin(user_profile.is_admin)
-    })()
-  }, [session])
+      const user_profile = await userService.getAuthUserProfile(supabase);
+      setIsAdmin(user_profile.is_admin);
+    })();
+  }, [session]);
 
   return (
-      <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} loadingElement={<Loading/>}>
-    <div className="main-div">
-      {popUp}
-      {session ? (
-        isAdmin === null ? <Loading/> : isAdmin ? <AdminDashboard/> : isAdmin === false && <FlatifyDashboard />
-           ) : (
-             <Container className="main-container">
-          <Row>
-            <Col sm={12} md={6} className="text-light p-5">
-              <div className={styles.logo}>
-                <Image src="/fdmlogo.png" width={200} height={200} alt="logo" />
-              </div>
-              <Row>
-                <Col>
-                  <Login
-                    email={email}
-                    setEmail={setEmail}
-                    password={password}
-                    setPassword={setPassword}
-                    handleLogin={handleLogin}
+    <LoadScript
+      googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+      loadingElement={<Loading />}
+    >
+      <div className="main-div">
+        {popUp}
+        {session ? (
+          isAdmin === null ? (
+            <Loading />
+          ) : isAdmin ? (
+            <AdminDashboard />
+          ) : (
+            isAdmin === false && <FlatifyDashboard />
+          )
+        ) : (
+          <Container className="main-container">
+            <Row>
+              <Col sm={12} md={6} className="text-light p-5">
+                <div className={styles.logo}>
+                  <Image
+                    src="/fdmlogo.png"
+                    width={200}
+                    height={200}
+                    alt="logo"
+                  />
+                </div>
+                <Row>
+                  <Col>
+                    <Login
+                      email={email}
+                      setEmail={setEmail}
+                      password={password}
+                      setPassword={setPassword}
+                      handleLogin={handleLogin}
                     />
-                </Col>
-                <Col>
-                  <Register
-                    email={email}
-                    setEmail={setEmail}
-                    name={name}
-                    setName={setName}
-                    password={password}
-                    setPassword={setPassword}
-                    handleRegister={handleRegister}
+                  </Col>
+                  <Col>
+                    <Register
+                      email={email}
+                      setEmail={setEmail}
+                      name={name}
+                      setName={setName}
+                      password={password}
+                      setPassword={setPassword}
+                      handleRegister={handleRegister}
                     />
-                </Col>
-              </Row>
-            </Col>
+                  </Col>
+                </Row>
+              </Col>
 
-            <Col sm={12} md={6} className="p-5">
-              <div></div>
-              <div className="container">
-                <Spline scene="https://prod.spline.design/G9WRoRn2ZkIOLcxr/scene.splinecode" />
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      )}
-    </div>
-  </LoadScript>
+              <Col sm={12} md={6} className="p-5">
+                <div></div>
+                <div className="container">
+                  <Spline scene="https://prod.spline.design/G9WRoRn2ZkIOLcxr/scene.splinecode" />
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        )}
+      </div>
+    </LoadScript>
   );
 }

@@ -21,11 +21,10 @@ import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
 import { notification } from "antd";
-import Lottie from "@amelix/react-lottie";
-import { consultantHome } from "@/utils";
 import ForumPostService from "@/services/ForumPostService";
 import NotificationService from "@/services/NotificationService";
 import MessageService from "@/services/messageService";
+import Inbox from "@/components/Inbox";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -59,15 +58,6 @@ function FlatifyDashboard() {
 
   const supabase = useSupabaseClient();
   const router = useRouter();
-  const [showLottie, setShowLottie] = useState(true);
-  // rest of the code
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowLottie(false);
-    }, 3000); // show the Lottie animation for 3 seconds
-    return () => clearTimeout(timeout);
-  }, []);
 
   async function handleLogout() {
     await userService.logout(supabase);
@@ -113,301 +103,237 @@ function FlatifyDashboard() {
     }
   }
 
-  const forumPost = async (post_id, city) => {
-    const fullPost = await forumPostService.getPostById(post_id);
-
-    api.info({
-      style: {
-        padding: "0.5rem",
-      },
-      message: (
-        <p
-          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}
-        >
-          New comment under listing in{" "}
-          <span style={{ color: "darkblue" }}>{city}</span>
-        </p>
-      ),
-      description: <ForumPost forumPost={fullPost} />,
-      placement: "topRight",
-      duration: 4,
-    });
-  };
-
-  const forumPostChannel = supabase
-    .channel("table-db-changes")
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "forum_post",
-      },
-      (payload) => {
+  function handleRealtimeEvents(payload, user, ownListings) {
+    const [new_record, table] = [payload.new, payload.table];
+    switch (table) {
+      case "forum_post":
+        handleForumEvent(new_record, ownListings);
+        break;
+      case "message":
+        handleMessageEvent(new_record, user);
+        break;
+      default:
         console.log(payload);
-        handleForumEvent(payload);
-      }
-    )
-    .subscribe();
-
-  // const messagesChannel = supabase
-  // .channel('table-db-changes')
-  // .on(
-  //   'postgres_changes',
-  //   {
-  //     event: '*',
-  //     schema: 'public',
-  //     table: 'message',
-  //   },
-  //   (payload) => console.log(payload)
-  // ).subscribe()
-
-  function handleRealtimeEvents(event, data) {
-    console.log({ event, data });
-
-    function handleRealtimeEvents(payload, user, ownListings) {
-      const [new_record, table] = [payload.new, payload.table];
-      switch (table) {
-        case "forum_post":
-          handleForumEvent(new_record, ownListings);
-          break;
-        case "message":
-          handleMessageEvent(new_record, user);
-          break;
-        default:
-          console.log(payload);
-      }
     }
+  }
 
-    useEffect(() => {
-      // Supabase client setup
-      const channel = supabase
-        .channel("schema-db-changes")
-        .on(
-          "postgres_changes",
-          {
-            event: "*",
-            schema: "public",
-          },
-          (payload) =>
-            handleRealtimeEvents(
-              payload,
-              userRef.current,
-              ownListingsRef.current
-            )
-        )
-        .subscribe();
-    }, [supabase]);
+  useEffect(() => {
+    // Supabase client setup
+    const channel = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+        },
+        (payload) =>
+          handleRealtimeEvents(payload, userRef.current, ownListingsRef.current)
+      )
+      .subscribe();
+  }, [supabase]);
 
-    useEffect(() => {
-      userRef.current = user;
-      ownListingsRef.current = ownListings;
-    }, [user, ownListings]);
+  useEffect(() => {
+    userRef.current = user;
+    ownListingsRef.current = ownListings;
+  }, [user, ownListings]);
 
-    useEffect(() => {
-      (async () => {
-        const [user_profile, allListings] = await Promise.all([
-          userService.getAuthUserProfile(supabase),
-          listingService.getListings(),
-        ]);
-        // user_profile.is_admin && router.push("/admin");
-        setUser(user_profile);
-        setListing((prevListing) => ({
-          ...prevListing,
-          owner: user_profile.id,
-        }));
-        setListings(allListings);
+  useEffect(() => {
+    (async () => {
+      const [user_profile, allListings] = await Promise.all([
+        userService.getAuthUserProfile(supabase),
+        listingService.getListings(),
+      ]);
+      // user_profile.is_admin && router.push("/admin");
+      setUser(user_profile);
+      setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
+      setListings(allListings);
 
-        const [
-          new_favListings,
-          new_ownListings,
-          new_tickets,
-          new_conversations,
-        ] = await Promise.all([
+      const [new_favListings, new_ownListings, new_tickets, new_conversations] =
+        await Promise.all([
           favListingSevice.getFavListing(user_profile.id),
           listingService.getOwnListing(user_profile.id),
           ticketService.getUserTicket(user_profile.id),
           messageService.getUserConversations(user_profile.id),
         ]);
-        // console.log({ new_favListings });
-        setFavListings(new_favListings);
-        setOwnListings(new_ownListings);
-        setTickets(new_tickets);
-        setConversations(new_conversations);
+      // console.log({ new_favListings });
+      setFavListings(new_favListings);
+      setOwnListings(new_ownListings);
+      setTickets(new_tickets);
+      setConversations(new_conversations);
 
-        const twoDMessageArray = await Promise.all(
-          new_conversations.map((conversation) => {
-            return messageService.getConversationMessages(conversation.id);
-          })
-        );
-        console.log({ twoDMessageArray });
-        setMessages(twoDMessageArray);
-      })();
-    }, []);
+      const twoDMessageArray = await Promise.all(
+        new_conversations.map((conversation) => {
+          return messageService.getConversationMessages(conversation.id);
+        })
+      );
+      console.log({ twoDMessageArray });
+      setMessages(twoDMessageArray);
+    })();
+  }, []);
 
-    const handleSearch = (value) => {
-      console.log(value);
-      let res = [];
-      if (!value) {
-        res = [];
-      } else {
-        const filteredCities = citiesData.cities.filter((city) =>
-          city.name.toLowerCase().includes(value.toLowerCase())
-        );
-        res = filteredCities.map((city) => ({
-          value: `${city.name}, ${city.country}`,
-          label: `${city.name}, ${city.country}`,
-        }));
-      }
-      setOptions(res);
-    };
+  const handleSearch = (value) => {
+    console.log(value);
+    let res = [];
+    if (!value) {
+      res = [];
+    } else {
+      const filteredCities = citiesData.cities.filter((city) =>
+        city.name.toLowerCase().includes(value.toLowerCase())
+      );
+      res = filteredCities.map((city) => ({
+        value: `${city.name}, ${city.country}`,
+        label: `${city.name}, ${city.country}`,
+      }));
+    }
+    setOptions(res);
+  };
 
-    // const {
-    //   token: { colorBgContainer },
-    // } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
 
-    return (
-      <>
-        <Layout
+  return (
+    <Layout
+      style={{
+        minHeight: "100vh",
+      }}
+    >
+      {contextHolder}
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div
           style={{
-            minHeight: "100vh",
+            height: 38,
+            margin: 12,
+            background: "rgba(255, 255, 255, 0.2)",
+            color: "white",
+            textAlign: "center",
           }}
         >
-          {contextHolder}
-          <Sider
-            collapsible
-            collapsed={collapsed}
-            onCollapse={(value) => setCollapsed(value)}
-          >
-            <div
-              style={{
-                height: 38,
-                margin: 12,
-                background: "rgba(255, 255, 255, 0.2)",
-                color: "white",
-                textAlign: "center",
-              }}
-            >
-              FDM
-            </div>
+          FDM
+        </div>
 
-            <Menu
-              theme="dark"
-              defaultSelectedKeys={["1"]}
-              selectedKeys={[String(tabKey)]}
-              mode="inline"
-              items={items}
-              onClick={({ key }) => {
-                if (key === "6") {
-                  handleLogout();
-                } else {
-                  setTabKey(key);
-                }
-              }}
-            />
-          </Sider>
-          <Layout className="site-layout">
-            <Header
-              style={{
-                textAlign: "center",
-                color: "#fff",
-                height: 64,
-                paddingInline: 10,
-                lineHeight: "64px",
-                backgroundColor: "#001628",
-                // maxWidth: 800,
-              }}
-            >
-              <AutoComplete
-                style={{ width: 800 }}
-                onSelect={(value) => {
-                  setSearchValue(value.split(",")[0]);
-                  setTabKey(2);
-                }}
-                onSearch={handleSearch}
-                placeholder="Search by city"
-                options={options}
-              />
-            </Header>
-            {showLottie ? (
-              <Lottie options={consultantHome} height={800} width={800} />
-            ) : (
-              <>
-                <Content
-                  style={{
-                    margin: "0 20px",
-                    // marginLeft: "10px",
-                  }}
-                >
-                  <Breadcrumb
-                    style={{
-                      margin: "16px 0",
-                    }}
-                  >
-                    <Breadcrumb.Item>Consultant</Breadcrumb.Item>
-                    <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
-                  </Breadcrumb>
-                  {tabKey == "1" && (
-                    <ConsultantHomePage
-                      favListings={favListings}
-                      ownListings={ownListings}
-                      user_id={user.id}
-                      setTickets={setTickets}
-                      tickets={tickets}
-                    />
-                  )}
-
-                  {tabKey == "2" && (
-                    <SearchResultPage
-                      listings={listings}
-                      searchValue={searchValue}
-                      user_id={user.id}
-                      setFavListings={setFavListings}
-                      favListings={favListings}
-                    />
-                  )}
-                  {tabKey == "3" && <GlobalView listings={listings} />}
-                  {tabKey == "4" && (
-                    <AddListingComponent
-                      listing={listing}
-                      setListing={setListing}
-                      setOwnListings={setOwnListings}
-                      listings={listings}
-                      setListings={setListings}
-                    />
-                  )}
-                  {tabKey == "5" && <div>Inbox</div>}
-                </Content>
-                <Footer
-                  style={{
-                    textAlign: "center",
-                    backgroundColor: "white",
-                    color: "black",
-                  }}
-                >
-                  FDM | FLATIFY
-                </Footer>
-              </>
-            )}
-          </Layout>
-          <Sider
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          selectedKeys={[String(tabKey)]}
+          mode="inline"
+          items={items}
+          onClick={({ key }) => {
+            if (key === "6") {
+              handleLogout();
+            } else {
+              setTabKey(key);
+            }
+          }}
+        />
+      </Sider>
+      <Layout className="site-layout">
+        <Header
+          style={{
+            textAlign: "center",
+            color: "#fff",
+            height: 64,
+            paddingInline: 10,
+            lineHeight: "64px",
+            backgroundColor: "#001628",
+            // maxWidth: 800,
+          }}
+        >
+          <AutoComplete
+            style={{ width: 800 }}
+            onSelect={(value) => {
+              setSearchValue(value.split(",")[0]);
+              setTabKey(2);
+            }}
+            onSearch={handleSearch}
+            placeholder="Search by city"
+            options={options}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: "0 20px",
+            // marginLeft: "10px",
+          }}
+        >
+          <Breadcrumb
             style={{
-              textAlign: "center",
-              lineHeight: "120px",
-              // color: "#fff",
-              // width: 200,
-              padding: "80px",
-              overflow: "auto",
-              marginRight: "-10px",
+              margin: "16px 0",
             }}
           >
-            <Space size={26} wrap>
-              <RightDashboard user={user} />
-            </Space>
-          </Sider>
-        </Layout>
-      </>
-    );
-  }
+            <Breadcrumb.Item>Consultant</Breadcrumb.Item>
+            <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
+          </Breadcrumb>
+          {tabKey == "1" && (
+            <ConsultantHomePage
+              favListings={favListings}
+              ownListings={ownListings}
+              user_id={user.id}
+              setTickets={setTickets}
+              tickets={tickets}
+            />
+          )}
+
+          {tabKey == "2" && (
+            <SearchResultPage
+              listings={listings}
+              searchValue={searchValue}
+              user_id={user.id}
+              setFavListings={setFavListings}
+              favListings={favListings}
+            />
+          )}
+          {tabKey == "3" && <GlobalView listings={listings} />}
+          {tabKey == "4" && (
+            <AddListingComponent
+              listing={listing}
+              setListing={setListing}
+              setOwnListings={setOwnListings}
+              listings={listings}
+              setListings={setListings}
+            />
+          )}
+          {tabKey == "5" && (
+            <Inbox
+              setConversation={setConversations}
+              messages={messages}
+              setMessages={setMessages}
+              conversation={conversations}
+              user={user}
+            />
+          )}
+        </Content>
+        <Footer
+          style={{
+            textAlign: "center",
+            backgroundColor: "white",
+            color: "black",
+          }}
+        >
+          FDM | FLATIFY
+        </Footer>
+      </Layout>
+      <Sider
+        style={{
+          textAlign: "center",
+          lineHeight: "120px",
+          // color: "#fff",
+          // width: 200,
+          padding: "80px",
+          overflow: "auto",
+          marginRight: "-10px",
+        }}
+      >
+        <Space size={26} wrap>
+          <RightDashboard user={user} />
+        </Space>
+      </Sider>
+    </Layout>
+  );
 }
 export default FlatifyDashboard;
