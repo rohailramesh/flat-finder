@@ -16,9 +16,18 @@ const AdminTicketResolver = (props) => {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [comment, setComment] = useState("");
 
-  const onFinish = (values) => {
-    console.log("Comment submitted:", comment);
-    setComment("");
+  const onFinish = () => {
+    console.log("Submitting comment:", comment);
+    ticketService
+      .changeStatus(selectedTicket.id, newStatus, comment)
+      .then(() => {
+        console.log("Ticket status and comment updated successfully");
+        setSelectedTicket({ ...selectedTicket, status: newStatus });
+        setComment("");
+      })
+      .catch((error) => {
+        console.log("Error updating ticket status:", error);
+      });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -64,10 +73,11 @@ const AdminTicketResolver = (props) => {
     const ticketId = selectedTicket.id;
 
     ticketService
-      .changeStatus(ticketId, newStatus)
+      .changeStatus(ticketId, newStatus, comment)
       .then(() => {
-        console.log("Ticket status updated successfully");
+        console.log("Ticket status and comment updated successfully");
         setSelectedTicket({ ...selectedTicket, status: newStatus });
+        setComment("");
       })
       .catch((error) => {
         console.log("Error updating ticket status:", error);
@@ -133,6 +143,24 @@ const AdminTicketResolver = (props) => {
               )}
             </div>
             <div>
+              <Form
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                style={{ marginTop: "1rem" }}
+              >
+                <Form.Item>
+                  <TextArea
+                    value={comment}
+                    onChange={handleCommentChange}
+                    placeholder="Enter comment here..."
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Add Comment
+                  </Button>
+                </Form.Item>
+              </Form>
               <Dropdown
                 overlay={
                   <Menu

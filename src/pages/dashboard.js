@@ -20,15 +20,15 @@ import OwnListings from "@/components/OwnListings";
 import ForumPost from "@/components/ForumPost";
 import ConsultantHomePage from "@/components/ConsultantHomePage";
 import GlobalView from "@/components/GlobalView";
-import {notification} from 'antd'
+import { notification } from "antd";
 import ForumPostService from "@/services/ForumPostService";
 import NotificationService from "@/services/NotificationService";
 import MessageService from "@/services/messageService";
+import Inbox from "@/components/Inbox";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
-
   const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
@@ -39,21 +39,21 @@ function FlatifyDashboard() {
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [conversations, setConversations] = useState([]);
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
 
   const userRef = useRef(user);
-  const ownListingsRef = useRef(ownListings)
+  const ownListingsRef = useRef(ownListings);
 
   const userService = new UserService();
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
   const ticketService = new TicketService();
-  const messageService = new MessageService()
-  const forumPostService = new ForumPostService()
+  const messageService = new MessageService();
+  const forumPostService = new ForumPostService();
   const notificationService = new NotificationService(api);
 
   const supabase = useSupabaseClient();
@@ -62,38 +62,47 @@ function FlatifyDashboard() {
   async function handleLogout() {
     await userService.logout(supabase);
   }
-  
-  async function handleMessageEvent(new_record, user){
+
+  async function handleMessageEvent(new_record, user) {
     //if we sent the message, don't notify!
-    if (new_record.sender_id !== user.id){
-      const conversation = await messageService.getConversationById(new_record.conversation_id)
-      console.log("Here is the user state var: " , {user})
-      if (conversation.user1.id === user.id){
-        notificationService.privateMessage(new_record, conversation.user2)
+    if (new_record.sender_id !== user.id) {
+      const conversation = await messageService.getConversationById(
+        new_record.conversation_id
+      );
+      console.log("Here is the user state var: ", { user });
+      if (conversation.user1.id === user.id) {
+        notificationService.privateMessage(new_record, conversation.user2);
       } else if (conversation.user2.id === user.id) {
-        notificationService.privateMessage(new_record, conversation.user1) 
+        notificationService.privateMessage(new_record, conversation.user1);
       } else {
-        console.log('The message was not sent to you: ', user.id, " the conversation is between:", conversation.user1.id, " and ", conversation.user2.id)
+        console.log(
+          "The message was not sent to you: ",
+          user.id,
+          " the conversation is between:",
+          conversation.user1.id,
+          " and ",
+          conversation.user2.id
+        );
       }
     }
   }
 
-  async function handleForumEvent(new_record, ownListings){
-    console.log("Inside handleForumEvent: ", new_record)
+  async function handleForumEvent(new_record, ownListings) {
+    console.log("Inside handleForumEvent: ", new_record);
     // const new_record = payload.new;
-    console.log({new_record})
-    console.log({ownListings})
-    for (const listing of ownListings){
-      console.log({listing})
-      if (listing.forum == new_record.forum){
+    console.log({ new_record });
+    console.log({ ownListings });
+    for (const listing of ownListings) {
+      console.log({ listing });
+      if (listing.forum == new_record.forum) {
         //get user
-        console.log("Inside if statement of handleForumEvent")
-        const fullPost = await forumPostService.getPostById(new_record.id)
-        notificationService.forumPost(fullPost, listing.address.city)
+        console.log("Inside if statement of handleForumEvent");
+        const fullPost = await forumPostService.getPostById(new_record.id);
+        notificationService.forumPost(fullPost, listing.address.city);
       }
     }
   }
-
+  
   async function handleTicketEvent(new_record, eventType, user) {
     if (new_record.creator === user.id){
       if (eventType === 'UPDATE'){
@@ -111,9 +120,7 @@ function FlatifyDashboard() {
       }
       
     }
-
-
-  }
+}
 
 
   function handleRealtimeEvents(payload, user, ownListings){
@@ -123,37 +130,36 @@ function FlatifyDashboard() {
       case 'forum_post':
         handleForumEvent(new_record,ownListings)
         break;
-      case 'message':
-        handleMessageEvent(new_record,user);
+      case "message":
+        handleMessageEvent(new_record, user);
         break;
       case 'ticket':
         handleTicketEvent(new_record, eventType, user)
       default:
-        console.log(payload)
+        console.log(payload);
     }
   }
 
   useEffect(() => {
     // Supabase client setup
     const channel = supabase
-    .channel('schema-db-changes')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-      },
-      (payload) => handleRealtimeEvents(payload, userRef.current, ownListingsRef.current)
-    )
-    .subscribe()
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+        },
+        (payload) =>
+          handleRealtimeEvents(payload, userRef.current, ownListingsRef.current)
+      )
+      .subscribe();
   }, [supabase]);
-  
 
   useEffect(() => {
     userRef.current = user;
-    ownListingsRef.current = ownListings
+    ownListingsRef.current = ownListings;
   }, [user, ownListings]);
-  
 
   useEffect(() => {
     (async () => {
@@ -166,26 +172,26 @@ function FlatifyDashboard() {
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
-      const [new_favListings, new_ownListings, new_tickets, new_conversations] = await Promise.all(
-        [
+      const [new_favListings, new_ownListings, new_tickets, new_conversations] =
+        await Promise.all([
           favListingSevice.getFavListing(user_profile.id),
           listingService.getOwnListing(user_profile.id),
           ticketService.getUserTicket(user_profile.id),
-          messageService.getUserConversations(user_profile.id)
-        ]
-      );
+          messageService.getUserConversations(user_profile.id),
+        ]);
       // console.log({ new_favListings });
       setFavListings(new_favListings);
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
       setConversations(new_conversations);
 
-      const twoDMessageArray = await Promise.all(new_conversations.map(conversation => {
-        return messageService.getConversationMessages(conversation.id)
-      }))
-      console.log({twoDMessageArray})
-      setMessages(twoDMessageArray)
-
+      const twoDMessageArray = await Promise.all(
+        new_conversations.map((conversation) => {
+          return messageService.getConversationMessages(conversation.id);
+        })
+      );
+      console.log({ twoDMessageArray });
+      setMessages(twoDMessageArray);
     })();
   }, []);
 
@@ -315,7 +321,15 @@ function FlatifyDashboard() {
               setListings={setListings}
             />
           )}
-          {tabKey == "5" && <div>Inbox</div>}
+          {tabKey == "5" && (
+            <Inbox
+              setConversation={setConversations}
+              messages={messages}
+              setMessages={setMessages}
+              conversation={conversations}
+              user={user}
+            />
+          )}
         </Content>
         <Footer
           style={{

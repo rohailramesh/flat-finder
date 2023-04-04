@@ -76,6 +76,7 @@ export default class TicketService {
 
     if (response.ok) {
       const result = await response.json();
+      console.log(result);
       return result;
     }
     return response;
