@@ -2,6 +2,7 @@ import React from "react";
 import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
 import { useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
+import SearchListingCard from "./SearchListingCard";
 
 const containerStyle = {
   width: "100%",
@@ -29,14 +30,11 @@ const Map = ({ listings }) => {
         center={coordinates[0]}
         zoom={zoom}
         >
-        {coordinates.map((coordinate, index) => 
-         <MarkerF position={coordinate} onClick={() => toggleMarker(index)}>
+        {listings.map((listing, index) => 
+         <MarkerF position={listing.coordinates} onClick={() => toggleMarker(index)}>
           {infoWindowVisible && markerIndex === index && (
           <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
-            {/* <div>
-              <h4>Flatify rocksssss</h4>
-              <p>project of the year</p>
-            </div> */}
+              <SearchListingCard listing={listing} />
           </InfoWindowF>
           )}
        </MarkerF>)}

@@ -36,19 +36,20 @@ export default function SearchListingCard({listing}) {
 
   const favListings = useSelector(state => state.favListings)
   const favIds = favListings.map(item => item.listing.id)
+  const user = useSelector(state => state.user)
 
   const dispatch = useDispatch();
 
   async function handleFav(listingId) {
     if (favIds.includes(listingId)) {
       const result = await favListingSevice.removeFavListing(
-        user_id,
+        user.id,
         listingId
       );
       console.log("Result of removal! ", result);
       dispatch(unfavListing(listingId))
     } else {
-      const result = await favListingSevice.addFavListing(user_id, listingId);
+      const result = await favListingSevice.addFavListing(user.id, listingId);
       dispatch(addFavListing(result.data[0]))
 
     }
