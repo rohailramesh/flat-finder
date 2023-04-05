@@ -8,8 +8,9 @@ const containerStyle = {
 };
 
 //Pass in the coordinates array so that the marker(s) are displayed
-const Map = ({ coordinates }) => {
+const Map = ({ listings }) => {
 
+  const coordinates = listings.map(listing => listing.coordinates)
   const [infoWindowVisible, setInfoWindowVisible] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0)
   const zoom = coordinates.length > 1 ? 2 : 15
@@ -30,10 +31,10 @@ const Map = ({ coordinates }) => {
          <MarkerF position={coordinate} onClick={() => toggleMarker(index)}>
           {infoWindowVisible && markerIndex === index && (
           <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
-            <div>
+            {/* <div>
               <h4>Flatify rocksssss</h4>
               <p>project of the year</p>
-            </div>
+            </div> */}
           </InfoWindowF>
           )}
        </MarkerF>)}

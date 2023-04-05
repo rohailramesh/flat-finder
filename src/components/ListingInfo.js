@@ -153,7 +153,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
       </Descriptions>
       <Descriptions>
         <Descriptions.Item label="View it on a map">
-          <Map coordinates={[listing.coordinates]} />
+          <Map listings={[listing]} />
         </Descriptions.Item>
       </Descriptions>
       <div>

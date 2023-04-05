@@ -24,12 +24,16 @@ import {
 } from "@chakra-ui/react";
 import { Empty, Pagination } from "antd";
 import FavListingService from "@/services/FavListingService";
+import { useDispatch } from "react-redux";
+import { addFavListing, unfavListing } from "@/redux/favListingSlice";
 const SearchResultPage = (props) => {
   //TODO: find a way to check which listings are already favorited by the user logged in...
 
   const favIds =
     // props.favListings.length &&
     props.favListings.map((item) => item.listing.id);
+
+  const dispatch = useDispatch()
 
   const [selectedListing, setSelectedListing] = useState(null);
   const { listings, setFavListings, user_id, forum } = props;
@@ -52,12 +56,14 @@ const SearchResultPage = (props) => {
         listingId
       );
       console.log("Result of removal! ", result);
-      setFavListings((prev) =>
-        prev.filter((item) => item.listing.id !== listingId)
-      );
+      // setFavListings((prev) =>
+      //   prev.filter((item) => item.listing.id !== listingId));
+      dispatch(unfavListing(listingId))
     } else {
       const result = await favListingSevice.addFavListing(user_id, listingId);
-      setFavListings((prev) => prev.concat(result.data));
+      // setFavListings((prev) => prev.concat(result.data));
+      dispatch(addFavListing(result.data[0]))
+
     }
   }
 
