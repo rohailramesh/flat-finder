@@ -1,6 +1,7 @@
 import React from "react";
 import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
 import { useState } from 'react'
+import { useSelector, useDispatch } from "react-redux";
 
 const containerStyle = {
   width: "100%",
@@ -11,6 +12,7 @@ const containerStyle = {
 const Map = ({ listings }) => {
 
   const coordinates = listings.map(listing => listing.coordinates)
+  const favListings = useSelector(state => state.favListings)
   const [infoWindowVisible, setInfoWindowVisible] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0)
   const zoom = coordinates.length > 1 ? 2 : 15

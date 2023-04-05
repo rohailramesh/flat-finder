@@ -14,9 +14,15 @@ const contentStyle = {
   maxWidth: "max-content",
 };
 import { Divider, Space, Tag } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedListing } from "@/redux/selectedListingSlice";
 
-function OwnListings({ ownListings, setSelectedListing }) {
+function OwnListings({ ownListings  }) {
   const [indexC1, setIndexC1] = useState(0);
+
+  const dispatch = useDispatch();
+
+
   const handleSelect = (selectedIndex, e) => {
     setIndexC1(selectedIndex);
   };
@@ -56,7 +62,7 @@ function OwnListings({ ownListings, setSelectedListing }) {
                 overflow: "scroll",
                 whiteSpace: "nowrap",
               }}
-              onClick={() => setSelectedListing(listing)}
+              onClick={() => dispatch(setSelectedListing(listing))}
             >
               {listing.images.map((image, index) => (
                 <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
