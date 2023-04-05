@@ -39,6 +39,26 @@
     {
       "name": "Cape Town",
       "country": "South Africa"
+    },
+    {
+      "name": "Sutton",
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Northamptonshire",
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Madrid",
+      "country": "Spain"
+    },
+    {
+      "name": "Berlin",
+      "country": "Germany"
+    },
+    {
+      "name": "Barcelona",
+      "country": "Spain"
     }
   ]
 }

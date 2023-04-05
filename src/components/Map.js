@@ -7,30 +7,36 @@ const containerStyle = {
   height: "400px",
 };
 
-//Pass in the coordinates so that the marker is displayed
+//Pass in the coordinates array so that the marker(s) are displayed
 const Map = ({ coordinates }) => {
 
   const [infoWindowVisible, setInfoWindowVisible] = useState(false);
+  const [markerIndex, setMarkerIndex] = useState(0)
+  const zoom = coordinates.length > 1 ? 2 : 15
 
+  function toggleMarker(index) {
+    setMarkerIndex(index)
+    setInfoWindowVisible(!infoWindowVisible)
+  }
+    
   return (
     <>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={coordinates}
-        zoom={15}
+        center={coordinates[0]}
+        zoom={zoom}
         >
-        {coordinates.lat && coordinates.lng && (
-          <MarkerF position={coordinates} onClick={() => setInfoWindowVisible(!infoWindowVisible)}>
-            {infoWindowVisible && (
-            <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
-              <div>
-                <h4>Flatify rocksssss</h4>
-                <p>project of the year</p>
-              </div>
-            </InfoWindowF>
-            )}
-          </MarkerF>
-          )}       
+        {coordinates.map((coordinate, index) => 
+         <MarkerF position={coordinate} onClick={() => toggleMarker(index)}>
+          {infoWindowVisible && markerIndex === index && (
+          <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
+            <div>
+              <h4>Flatify rocksssss</h4>
+              <p>project of the year</p>
+            </div>
+          </InfoWindowF>
+          )}
+       </MarkerF>)}
       </GoogleMap>
     </>
   );

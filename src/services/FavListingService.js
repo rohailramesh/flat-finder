@@ -7,6 +7,7 @@ export default class FavListingService {
 
         if (response.ok) {
             const listings = await response.json()
+            console.log("FavListings in service:", listings) 
             return listings.data
         }
         return response
@@ -32,7 +33,7 @@ export default class FavListingService {
       return response
     }
 
-    async removeFavListing() {
+    async removeFavListing(user_id, listing_id) {
         const response = await fetch(`${this.url}/favlisting`, {
             method: "DELETE",
             headers: {

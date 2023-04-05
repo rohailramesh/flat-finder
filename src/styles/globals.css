@@ -1,4 +1,4 @@
-.main-div {
+/* .main-div {
   padding: 0;
   margin: 0;
   width: max-content;
@@ -7,4 +7,132 @@
   margin-left: 3em;
   margin-top: 2em;
 }
+ */
 
+* {
+  /* outline: red 1px solid; */
+}
+
+.send-message-btn {
+  border-style: none;
+  border-radius: 5px;
+  background-color: orange;
+  color: black;
+  padding: 0.3rem;
+}
+
+.hover-up,
+.hover-bg,
+.hover-scale {
+  transition: all 0.3s ease;
+}
+
+.hover-bg:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hover-up:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.hover-scale:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: card-entrance 0.6s forwards ease-out;
+  /* border: 1px solid rgba(0, 0, 0, 0.175) !important; */
+  /* border: 1px solid rgba(173, 173, 173, 0.1); */
+}
+
+.custom-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: rgb(35, 87, 220);
+}
+
+.spin-animation {
+  animation: spin 0.5s linear;
+}
+
+.spin-animation-rev {
+  animation: spin-rev 0.5s linear;
+}
+
+.fade-in {
+  animation: fade-in 0.7s linear;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    /* transform: scale(1); */
+  }
+
+  100% {
+    /* transform: scale(1); */
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes spin-rev {
+  0% {
+    transform: rotate(0deg);
+    /* transform: scale(1); */
+  }
+
+  100% {
+    /* transform: scale(1); */
+    transform: rotate(-180deg);
+  }
+}
+
+@keyframes card-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(0);
+  }
+}
+
+.senderBubble,
+.receiverBubble {
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  /* align-content: center; */
+  /* align-self: center; */
+  /* align-items: center; */
+  justify-content: center;
+}
+
+.senderBubble {
+  background-color: #2196f3;
+  justify-content: center;
+  color: white;
+}
+
+.receiverBubble {
+  background-color: #e0e0e0;
+  justify-content: center;
+}
