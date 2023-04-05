@@ -16,19 +16,21 @@ import UserService from "@/services/UserService";
 import { LoadScript } from "@react-google-maps/api";
 import Loading from "../components/Loading";
 import AdminDashboard from "./admin";
+import { useDispatch } from "react-redux";
+import { setCurrentUser, setUser } from "@/redux/userSlice";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState("");
+  const [user, setCurrentUser] = useState("");
   const [isAdmin, setIsAdmin] = useState(null);
 
   const [api, popUp] = notification.useNotification();
 
   const userService = new UserService();
-
+  const dispatch = useDispatch();
   const session = useSession();
   const supabase = useSupabaseClient();
 
@@ -44,13 +46,14 @@ export default function Home() {
   async function handleRegister() {
     const user = await userService.register(supabase, name, email, password);
     openNotificationWithIcon("success");
-    setUser(user);
+    setCurrentUser(user);
   }
 
   async function handleLogin() {
     const user = await userService.login(supabase, email, password);
     setIsAdmin(user.is_admin);
-    setUser(user);
+    dispatch(setUser(user));
+    setCurrentUser(user);
   }
 
   useEffect(() => {
