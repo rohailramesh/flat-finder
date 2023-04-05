@@ -51,6 +51,14 @@
     {
       "name": "Madrid",
       "country": "Spain"
+    },
+    {
+      "name": "Berlin",
+      "country": "Germany"
+    },
+    {
+      "name": "Barcelona",
+      "country": "Spain"
     }
   ]
 }

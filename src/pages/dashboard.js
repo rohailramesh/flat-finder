@@ -25,11 +25,13 @@ import ForumPostService from "@/services/ForumPostService";
 import NotificationService from "@/services/NotificationService";
 import MessageService from "@/services/messageService";
 import Inbox from "@/components/Inbox";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/redux/userSlice";
+import { setAllMessages } from "@/redux/messagesSlice";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
-  const [user, setUser] = useState(new User(emptyUser));
+  // const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [api, contextHolder] = notification.useNotification();
@@ -44,6 +46,8 @@ function FlatifyDashboard() {
 
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const userRef = useRef(user);
   const ownListingsRef = useRef(ownListings);
@@ -102,39 +106,41 @@ function FlatifyDashboard() {
       }
     }
   }
-  
+
   async function handleTicketEvent(new_record, eventType, user) {
-    if (new_record.creator === user.id){
-      if (eventType === 'UPDATE'){
-        setTickets(prev => {
-          const index = prev.findIndex((ticket) => ticket.id === new_record.id)
-          if (index !== -1){
+    if (new_record.creator === user.id) {
+      if (eventType === "UPDATE") {
+        setTickets((prev) => {
+          const index = prev.findIndex((ticket) => ticket.id === new_record.id);
+          if (index !== -1) {
             const new_tickets = [...prev];
             new_tickets[index] = new_record;
-            return new_tickets
+            return new_tickets;
           }
-        })
-        notificationService.ticketUpdate(new_record)
-      } else if (eventType === 'DELETE'){
+        });
+        notificationService.ticketUpdate(new_record);
+      } else if (eventType === "DELETE") {
         //to implement
       }
-      
     }
-}
+  }
 
-
-  function handleRealtimeEvents(payload, user, ownListings){
-    console.log(payload)
-    const [new_record, table, eventType] = [payload.new, payload.table, payload.eventType];
-    switch (table){
-      case 'forum_post':
-        handleForumEvent(new_record,ownListings)
+  function handleRealtimeEvents(payload, user, ownListings) {
+    console.log(payload);
+    const [new_record, table, eventType] = [
+      payload.new,
+      payload.table,
+      payload.eventType,
+    ];
+    switch (table) {
+      case "forum_post":
+        handleForumEvent(new_record, ownListings);
         break;
       case "message":
         handleMessageEvent(new_record, user);
         break;
-      case 'ticket':
-        handleTicketEvent(new_record, eventType, user)
+      case "ticket":
+        handleTicketEvent(new_record, eventType, user);
       default:
         console.log(payload);
     }
@@ -157,6 +163,7 @@ function FlatifyDashboard() {
   }, [supabase]);
 
   useEffect(() => {
+    console.log("User from redux", user);
     userRef.current = user;
     ownListingsRef.current = ownListings;
   }, [user, ownListings]);
@@ -168,7 +175,8 @@ function FlatifyDashboard() {
         listingService.getListings(),
       ]);
       // user_profile.is_admin && router.push("/admin");
-      setUser(user_profile);
+      // setUser(user_profile);
+      dispatch(setUser(user_profile));
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
 
@@ -191,7 +199,8 @@ function FlatifyDashboard() {
         })
       );
       console.log({ twoDMessageArray });
-      setMessages(twoDMessageArray);
+      // setMessages(twoDMessageArray);
+      dispatch(setAllMessages(twoDMessageArray));
     })();
   }, []);
 
@@ -326,7 +335,7 @@ function FlatifyDashboard() {
               setConversation={setConversations}
               messages={messages}
               setMessages={setMessages}
-              conversation={conversations}
+              conversations={conversations}
               user={user}
             />
           )}

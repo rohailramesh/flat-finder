@@ -114,3 +114,25 @@
     transform: translateY(0);
   }
 }
+
+.senderBubble,
+.receiverBubble {
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  /* align-content: center; */
+  /* align-self: center; */
+  /* align-items: center; */
+  justify-content: center;
+}
+
+.senderBubble {
+  background-color: #2196f3;
+  justify-content: center;
+  color: white;
+}
+
+.receiverBubble {
+  background-color: #e0e0e0;
+  justify-content: center;
+}
