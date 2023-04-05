@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const selectedConvoSlice = createSlice({
-  name: "selectedListing",
+  name: "selectedConvo",
   initialState: [],
   reducers: {
     setSelectedConvo(state, action) {
