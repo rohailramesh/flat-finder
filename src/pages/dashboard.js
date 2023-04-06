@@ -31,6 +31,7 @@ import { addMessage, setAllMessages } from "@/redux/messagesSlice";
 import { setFavListings } from "@/redux/favListingSlice";
 import { userService } from "@/services/Instances";
 import { addMessageToSelectedChatHistory } from "@/redux/selectedChatHistory";
+import { setSelectedListing } from "@/redux/selectedListingSlice";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
@@ -273,6 +274,7 @@ function FlatifyDashboard() {
               handleLogout();
             } else {
               setTabKey(key);
+              dispatch(setSelectedListing({}));
             }
           }}
         />

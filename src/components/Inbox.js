@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, Avatar, Badge } from "antd";
 import {
   MessageOutlined,
@@ -30,6 +30,13 @@ const Inbox = ({ conversations }) => {
       handleSendMessage();
     }
   };
+
+  const messagesBoxRef = useRef(null);
+  useEffect(() => {
+    if (messagesBoxRef.current) {
+      messagesBoxRef.current.scrollTop = messagesBoxRef.current.scrollHeight;
+    }
+  }, [selectedChatHistory]);
 
   const handleChange = (event) => {
     setContent(event.target.value);
@@ -76,10 +83,10 @@ const Inbox = ({ conversations }) => {
                 marginBottom: "10px",
                 marginLeft: "-400px",
                 width: "700px",
-                height: "790px",
+                height: "800px",
               }}
             >
-              <div style={{ marginTop: 10 }}>
+              <div style={{ marginTop: 5 }}>
                 <a href="#message" style={{ float: "right" }}>
                   <MessageOutlined />
                 </a>
@@ -89,20 +96,29 @@ const Inbox = ({ conversations }) => {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "630px",
+                    height: "650px",
                   }}
                 >
-                  <div style={{ flexGrow: 1, overflowY: "auto" }}>
+                  <div
+                    ref={messagesBoxRef}
+                    style={{
+                      flexGrow: 1,
+                      overflowY: "scroll",
+                      height: "680px",
+                      overflow: "auto",
+                    }}
+                  >
                     {selectedChatHistory.map((message, index) => (
-                      // <p key={index}>{message.content}</p>
                       <DirectMessage message={message} otherUser={otherUser} />
                     ))}
                   </div>
+
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
                       color: "blue",
+                      marginTop: "5rem",
                     }}
                   >
                     <input
