@@ -22,15 +22,20 @@ import ForumPostService from "@/services/ForumPostService.js";
 import ForumPost from "./ForumPost.js";
 import { Avatar, flexbox } from "@chakra-ui/react";
 import AdOwnerCard from "./AdOwnerCard.js";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedListing } from "@/redux/selectedListingSlice";
 
 const { TextArea } = Input;
 
-const ListingInfo = ({ listing, setSelectedListing, userId }) => {
+const ListingInfo = ({ userId }) => {
   const [content, setContent] = useState("");
   const [forumPosts, setForumPosts] = useState([]);
+  const listing = useSelector(state => state.selectedListing)
   const { owner } = listing;
 
   const forumPostService = new ForumPostService();
+  const dispatch = useDispatch();
+
 
   async function addPost() {
     if (content.length > 0) {
@@ -58,7 +63,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
   }, []);
   return (
     <>
-      <Button onClick={() => setSelectedListing(false)}>
+      <Button onClick={() => dispatch(setSelectedListing({}))}>
         <FontAwesomeIcon icon={faArrowLeft} />
       </Button>{" "}
       <br></br>
@@ -103,7 +108,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
         <h3 style={{ fontFamily: "IBM_Plex_Serif" }}>Extra information</h3>
         <br />
       </Descriptions.Item>
-      <Descriptions layout="vertical">
+      <Descriptions layout="vertical" style={{"white-space":"pre-line"}}>
         <Descriptions.Item label="Rent">
           £{listing.monthly_price} (pcm)
         </Descriptions.Item>
@@ -153,7 +158,7 @@ const ListingInfo = ({ listing, setSelectedListing, userId }) => {
       </Descriptions>
       <Descriptions>
         <Descriptions.Item label="View it on a map">
-          <Map coordinates={[listing.coordinates]} />
+          <Map listings={[listing]} />
         </Descriptions.Item>
       </Descriptions>
       <div>
