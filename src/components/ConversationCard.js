@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 const { Meta } = Card;
 import { useSelector, useDispatch } from "react-redux";
+import { setSelectedChatHistory } from "@/redux/selectedChatHistory";
 import { setSelectedConvo } from "@/redux/selectedConvoSlice";
 
 const ConversationCard = ({ data, setOtherUser }) => {
@@ -19,12 +20,12 @@ const ConversationCard = ({ data, setOtherUser }) => {
   const dispatch = useDispatch();
 
   const handleConversationPress = (item) => {
-    console.log("Here are the params to pass to FullChat component: ", item);
+    dispatch(setSelectedConvo(item));
     setOtherUser(otherUser);
     for (const exchanges of allMessages) {
       if (exchanges[0].conversation_id === item.id) {
         // setCurrentMessages(exchanges);
-        dispatch(setSelectedConvo(exchanges));
+        dispatch(setSelectedChatHistory(exchanges));
         break;
       }
     }
@@ -55,12 +56,12 @@ const ConversationCard = ({ data, setOtherUser }) => {
     console.log("Last MESSAGE: ⚡️⚡️⚡️⚡️⚡️🔴🔴", lastMessage);
   }, []);
 
-  function getBadgeCount() {
-    return (
-      convoIndex !== null &&
-      allMessages[convoIndex].filter((message) => !message.is_read).length
-    );
-  }
+  // function getBadgeCount() {
+  //   return (
+  //     convoIndex !== null &&
+  //     allMessages[convoIndex].filter((message) => !message.is_read).length
+  //   );
+  // }
 
   console.log("COnversation card all messages", allMessages.length);
   return (
