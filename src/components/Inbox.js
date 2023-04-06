@@ -6,33 +6,58 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import ConversationCard from "./ConversationCard";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { emptyUser } from "@/models/User";
 import DirectMessage from "./DirectMessage";
+import { messageService } from "@/services/Instances";
+import { addMessage } from "@/redux/messagesSlice";
+import { addMessageToSelectedChatHistory } from "@/redux/selectedChatHistory";
 const { Meta } = Card;
 
 const Inbox = ({ conversations }) => {
   // const [selectedContact, setSelectedContact] = useState(null);
-  const [message, setMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
+  const [content, setContent] = useState("");
+  // const [chatHistory, setChatHistory] = useState([]);
+  const selectedChatHistory = useSelector((state) => state.selectedChatHistory);
   const selectedConvo = useSelector((state) => state.selectedConvo);
   const [otherUser, setOtherUser] = useState(emptyUser);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      const newChatHistory = [...chatHistory, message];
-      setChatHistory(newChatHistory);
-      setMessage("");
+      handleSendMessage();
     }
   };
 
   const handleChange = (event) => {
-    setMessage(event.target.value);
+    setContent(event.target.value);
   };
   // const handleContactClick = (index) => {
   //   setSelectedContact(cardData[index]);
   // };
+  async function handleSendMessage() {
+    //async addMessage(sender_id, content, recipient_id){
+    if (content) {
+      const receiver =
+        selectedConvo.user1 === user.id
+          ? selectedConvo.user2.id
+          : selectedConvo.user1.id;
+      const result = await messageService.addMessage(
+        user.id,
+        content,
+        receiver
+      );
+      setContent("");
+      console.log(result);
+      const new_message = result.data[0];
+
+      console.log("Message we got back: ", new_message);
+      dispatch(addMessageToSelectedChatHistory(new_message));
+      dispatch(addMessage(new_message));
+    }
+  }
 
   return (
     <>
@@ -42,7 +67,7 @@ const Inbox = ({ conversations }) => {
             return <ConversationCard data={data} setOtherUser={setOtherUser} />;
           })}
         </div>
-        {selectedConvo && (
+        {selectedChatHistory && (
           <div style={{ width: "30%" }}>
             <Card
               style={{
@@ -68,7 +93,7 @@ const Inbox = ({ conversations }) => {
                   }}
                 >
                   <div style={{ flexGrow: 1, overflowY: "auto" }}>
-                    {selectedConvo.map((message, index) => (
+                    {selectedChatHistory.map((message, index) => (
                       // <p key={index}>{message.content}</p>
                       <DirectMessage message={message} otherUser={otherUser} />
                     ))}
@@ -82,15 +107,14 @@ const Inbox = ({ conversations }) => {
                   >
                     <input
                       type="text"
-                      value={message}
+                      value={content}
                       onKeyDown={handleKeyDown}
                       onChange={handleChange}
                       style={{ flexGrow: 1, color: "blue" }}
                     />
                     <button
                       onClick={() => {
-                        setChatHistory([...chatHistory, message]);
-                        setMessage("");
+                        handleSendMessage();
                       }}
                     >
                       &nbsp; Send

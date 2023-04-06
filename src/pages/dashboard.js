@@ -27,9 +27,10 @@ import MessageService from "@/services/messageService";
 import Inbox from "@/components/Inbox";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
-import { setAllMessages } from "@/redux/messagesSlice";
+import { addMessage, setAllMessages } from "@/redux/messagesSlice";
 import { setFavListings } from "@/redux/favListingSlice";
 import { userService } from "@/services/Instances";
+import { addMessageToSelectedChatHistory } from "@/redux/selectedChatHistory";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
@@ -51,10 +52,10 @@ function FlatifyDashboard() {
 
   const user = useSelector((state) => state.user);
   const favListings = useSelector((state) => state.favListings);
+  const selectedConvo = useSelector((state) => state.selectedConvo);
 
   const userRef = useRef(user);
   const ownListingsRef = useRef(ownListings);
-
 
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
@@ -79,8 +80,16 @@ function FlatifyDashboard() {
       console.log("Here is the user state var: ", { user });
       if (conversation.user1.id === user.id) {
         notificationService.privateMessage(new_record, conversation.user2);
+        dispatch(addMessage(new_record));
+        // if (new_record.conversation_id === selectedConvo.id) {
+        console.log("INSIDE IF TO ADD MESSAGE TO SELECTEDCHATHISTORY");
+        dispatch(addMessageToSelectedChatHistory(new_record));
       } else if (conversation.user2.id === user.id) {
         notificationService.privateMessage(new_record, conversation.user1);
+        dispatch(addMessage(new_record));
+        // if (new_record.conversation_id === selectedConvo.id) {
+        console.log("INSIDE IF TO ADD MESSAGE TO SELECTEDCHATHISTORY");
+        dispatch(addMessageToSelectedChatHistory(new_record));
       } else {
         console.log(
           "The message was not sent to you: ",
@@ -192,7 +201,7 @@ function FlatifyDashboard() {
         ]);
       // console.log({ new_favListings });
       // setFavListings(new_favListings);
-      dispatch(setFavListings(new_favListings))
+      dispatch(setFavListings(new_favListings));
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
       setConversations(new_conversations);
@@ -358,8 +367,8 @@ function FlatifyDashboard() {
         style={{
           textAlign: "center",
           lineHeight: "120px",
-          padding: '10px',
-          width: '15%'
+          padding: "10px",
+          width: "15%",
         }}
       >
         <Space size={26} wrap>
