@@ -1,5 +1,6 @@
 import React from "react";
 import { Divider, Radio, Typography } from "antd";
+import { LogoutOutlined } from "@ant-design/icons";
 
 const { Paragraph } = Typography;
 //import './index.css';
@@ -25,11 +26,8 @@ const RightDashboard = ({ user }) => (
     </div>
     <div className={styles.flexContainer}>
       <InboxOutlined color="black" />
-      <MessageFilled />
-      <QuestionCircleFilled />
-      <SettingFilled />
     </div>
-    <Button>Manage Profile</Button>
+    <Button style={{display: 'flex', alignItems: 'center'}}> <LogoutOutlined /> Logout</Button>
   </div>
 );
 export default RightDashboard;
