@@ -25,18 +25,14 @@ import {
 import { Empty, Pagination } from "antd";
 import FavListingService from "@/services/FavListingService";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavListing, unfavListing } from "@/redux/favListingSlice"
+import { addFavListing, unfavListing } from "@/redux/favListingSlice";
 import { favListingSevice } from "@/services/Instances";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
 
-
-
-export default function SearchListingCard({listing}) {
-
-
-  const favListings = useSelector(state => state.favListings)
-  const favIds = favListings.map(item => item.listing.id)
-  const user = useSelector(state => state.user)
+export default function SearchListingCard({ listing }) {
+  const favListings = useSelector((state) => state.favListings);
+  const favIds = favListings.map((item) => item.listing.id);
+  const user = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -47,11 +43,10 @@ export default function SearchListingCard({listing}) {
         listingId
       );
       console.log("Result of removal! ", result);
-      dispatch(unfavListing(listingId))
+      dispatch(unfavListing(listingId));
     } else {
       const result = await favListingSevice.addFavListing(user.id, listingId);
-      dispatch(addFavListing(result.data[0]))
-
+      dispatch(addFavListing(result.data[0]));
     }
   }
 
@@ -63,7 +58,8 @@ export default function SearchListingCard({listing}) {
         direction={{ base: "column", sm: "row" }}
         overflow="hidden"
         variant="outline"
-        style={{ marginTop: "20px", width: "100%" }}>
+        style={{ marginTop: "20px", width: "100%" }}
+      >
         <Image
           objectFit="cover"
           // maxW={{ base: "100%", lg: "150px" }}
@@ -107,7 +103,8 @@ export default function SearchListingCard({listing}) {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-            }}>
+            }}
+          >
             <Button
               variant="solid"
               //   colorScheme="blue"
@@ -117,7 +114,8 @@ export default function SearchListingCard({listing}) {
                 // marginBottom: "60px",
                 // marginTop: "-30px",
               }}
-              onClick={() => dispatch(setSelectedListing(listing))}>
+              onClick={() => dispatch(setSelectedListing(listing))}
+            >
               More info
             </Button>
             {favIds.includes(listing.id) ? (
@@ -134,7 +132,6 @@ export default function SearchListingCard({listing}) {
           </CardFooter>
         </Stack>
       </Card>
-      )
     </>
   );
 }
