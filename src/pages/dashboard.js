@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
 import { setAllMessages } from "@/redux/messagesSlice";
 import { setFavListings } from "@/redux/favListingSlice";
+import { userService } from "@/services/Instances";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
@@ -54,7 +55,7 @@ function FlatifyDashboard() {
   const userRef = useRef(user);
   const ownListingsRef = useRef(ownListings);
 
-  const userService = new UserService();
+
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
   const ticketService = new TicketService();
