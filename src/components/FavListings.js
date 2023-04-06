@@ -27,14 +27,17 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { items } from "@/utils";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedListing } from "@/redux/selectedListingSlice";
 
-const FavListings = ({favListings, setSelectedListing}) => {
+const FavListings = ({favListings}) => {
   const FavouriteListings =  favListings && favListings.map((item) => item.listing);
-  // const [selectedListing, setSelectedListing] = useState(null);
   const [dotPosition, setDotPosition] = useState("left");
   const [indexC1, setIndexC1] = useState(0);
   const [indexC2, setIndexC2] = useState(0);
   const [indexC3, setIndexC3] = useState(0);
+
+  const dispatch = useDispatch();
 
   const handleSelect = (selectedIndex, e) => {
     setIndexC1(selectedIndex);
@@ -75,8 +78,8 @@ const FavListings = ({favListings, setSelectedListing}) => {
                 overflow: "scroll",
                 whiteSpace: "nowrap",
               }}
-              onClick={() => setSelectedListing(listing)}
-            >
+              onClick={() => dispatch(setSelectedListing(listing))}
+              >
               {listing &&
                 listing.images.map((image, index) => (
                   <Carousel.Item activeIndex={indexC1} onSelect={handleSelect} key={image}>

@@ -28,16 +28,16 @@ import Inbox from "@/components/Inbox";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
 import { setAllMessages } from "@/redux/messagesSlice";
+import { setFavListings } from "@/redux/favListingSlice";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
-  // const [user, setUser] = useState(new User(emptyUser));
   const [collapsed, setCollapsed] = useState(false);
   const [options, setOptions] = useState([]);
   const [api, contextHolder] = notification.useNotification();
 
   const [listings, setListings] = useState([]);
-  const [favListings, setFavListings] = useState([]);
+  // const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -47,7 +47,9 @@ function FlatifyDashboard() {
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
   const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user);
+  const favListings = useSelector((state) => state.favListings);
 
   const userRef = useRef(user);
   const ownListingsRef = useRef(ownListings);
@@ -188,7 +190,8 @@ function FlatifyDashboard() {
           messageService.getUserConversations(user_profile.id),
         ]);
       // console.log({ new_favListings });
-      setFavListings(new_favListings);
+      // setFavListings(new_favListings);
+      dispatch(setFavListings(new_favListings))
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
       setConversations(new_conversations);
@@ -354,11 +357,8 @@ function FlatifyDashboard() {
         style={{
           textAlign: "center",
           lineHeight: "120px",
-          // color: "#fff",
-          // width: 200,
-          padding: "80px",
-          overflow: "auto",
-          marginRight: "-10px",
+          padding: '10px',
+          width: '15%'
         }}
       >
         <Space size={26} wrap>
