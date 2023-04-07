@@ -65,7 +65,7 @@ function FlatifyDashboard() {
   const ticketService = new TicketService();
   const messageService = new MessageService();
   const forumPostService = new ForumPostService();
-  const notificationService = new NotificationService(api);
+  const notificationService = new NotificationService(api, setTabKey);
 
   const supabase = useSupabaseClient();
   const router = useRouter();
@@ -111,13 +111,22 @@ function FlatifyDashboard() {
     // const new_record = payload.new;
     console.log({ new_record });
     console.log({ ownListings });
+
+    //notify for subbed listing
+    for (const {listing} of favListings){
+      if (listing.forum == new_record.forum && listing.owner.id !== user.id){
+        const fullPost = await forumPostService.getPostById(new_record.id);
+        notificationService.forumPost(fullPost, listing); 
+        return
+      }
+    }
     for (const listing of ownListings) {
-      console.log({ listing });
+      console.log({ listing }); 
       if (listing.forum == new_record.forum) {
-        //get user
         console.log("Inside if statement of handleForumEvent");
         const fullPost = await forumPostService.getPostById(new_record.id);
-        notificationService.forumPost(fullPost, listing.address.city);
+        notificationService.forumPost(fullPost, listing);
+        return 
       }
     }
   }

@@ -11,25 +11,35 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 import TicketNotification from "@/components/TicketNotification";
+import { useDispatch } from "react-redux";
+import { setSelectedListing } from "@/redux/selectedListingSlice";
 
 export default class NotificationService {
   api;
+  dispatch;
+  setTabKey;
 
-  constructor(api) {
+  constructor(api, setTabKey) {
     this.api = api;
+    this.dispatch = useDispatch()   
+    this.setTabKey = setTabKey
   }
 
-  async forumPost(fullPost, city) {
+  async forumPost(fullPost, listing) {
     this.api.info({
+      onClick: () => {
+        this.setTabKey(1)
+        this.dispatch(setSelectedListing(listing))
+      },
       icon: <SoundTwoTone twoToneColor="#52c41a" />,
       style: {
         padding: "0.5rem",
       },
       message: (
-        <p
+        <p 
           style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}>
           New comment under listing in{" "}
-          <span style={{ color: "darkblue" }}>{city}</span>
+          <span style={{ color: "darkblue" }}>{listing.address.city}</span>
         </p>
       ),
       description: <ForumPost forumPost={fullPost} />,
