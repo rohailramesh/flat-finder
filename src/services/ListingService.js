@@ -1,7 +1,7 @@
 import Listing from "@/models/Listing";
 
 export default class ListingService {
-  url = "https://flat-finder-server.onrender.com";
+  url = "https://flat-finder-server.onrender.com/";
 
   constructor() {}
 
