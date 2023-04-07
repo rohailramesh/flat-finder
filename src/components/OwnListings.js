@@ -13,6 +13,8 @@ const contentStyle = {
   display: "flex",
   maxWidth: "max-content",
 };
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquareUpRight } from "@fortawesome/free-solid-svg-icons";
 import { Divider, Space, Tag } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
@@ -39,11 +41,16 @@ function OwnListings({ ownListings }) {
       </Divider>
       <div
         style={{
+          // display: "flex",
+          // marginLeft: "-8px",
+          // textAlign: "center",
+          // justifyContent: "center",
+          // overflowX: "scroll",
           display: "flex",
+          overflowX: "scroll",
           marginLeft: "-8px",
           textAlign: "center",
           justifyContent: "center",
-          overflowX: "scroll",
         }}
       >
         {!ownListings.length ? (
@@ -54,32 +61,43 @@ function OwnListings({ ownListings }) {
           />
         ) : (
           ownListings.map((listing) => (
-            <Carousel
-              className="card hover-scale"
-              style={{
-                width: "350px",
-                padding: "5px",
-                overflow: "scroll",
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-              }}
-              onClick={() => dispatch(setSelectedListing(listing))}
-            >
-              {listing.images.map((image, index) => (
-                <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
-                  <img
-                    className="d-block w-150"
-                    src={image}
-                    alt="Carousel Slide"
-                    style={{ width: "500px", height: "200px" }}
-                  />
-                  <Carousel.Caption>
-                    {index == 0 && <p>{listing.title}</p>}
-                    {index == 1 && <p>{listing.monthly_price}</p>}
-                  </Carousel.Caption>
-                </Carousel.Item>
-              ))}
-            </Carousel>
+            <div style={{ position: "relative" }}>
+              <Carousel
+                className="card hover-scale"
+                style={{
+                  // width: "350px",
+                  // padding: "5px",
+                  // overflow: "scroll",
+                  // whiteSpace: "nowrap",
+                  // flexShrink: 0,
+                  width: "350px",
+                  padding: "5px",
+                  overflow: "scroll",
+                  whiteSpace: "nowrap",
+                  overflowX: "auto",
+                  flexShrink: 0,
+                }}
+                onClick={() => dispatch(setSelectedListing(listing))}
+              >
+                {listing.images.map((image, index) => (
+                  <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
+                    <img
+                      className="d-block w-150"
+                      src={image}
+                      alt="Carousel Slide"
+                      style={{ width: "500px", height: "200px" }}
+                    />
+                    <Carousel.Caption>
+                      {index == 0 && <p>{listing.title}</p>}
+                      {index == 1 && <p>{listing.monthly_price}</p>}
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+              <div className="glass-icon-container">
+                <FontAwesomeIcon icon={faSquareUpRight} beat className="icon" />
+              </div>
+            </div>
           ))
         )}
       </div>
