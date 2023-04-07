@@ -20,8 +20,10 @@ const Map = ({ listings }) => {
   const zoom = coordinates.length > 1 ? 2 : 15;
 
   function toggleMarker(index) {
+    if (index === markerIndex){
+      setInfoWindowVisible(!infoWindowVisible);
+    }
     setMarkerIndex(index);
-    setInfoWindowVisible(!infoWindowVisible);
   }
 
   return (
