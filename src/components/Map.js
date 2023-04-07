@@ -2,7 +2,6 @@ import React from "react";
 import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import SearchListingCard from "./SearchListingCard";
 import MapInfoCard from "./MarkerInfoCard";
 
 

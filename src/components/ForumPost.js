@@ -22,10 +22,8 @@ function ForumPost({ forumPost, user_id, setForumPosts }) {
   const messageService = new MessageService();
 
   async function handleOk() {
-    if (content) {
+    if (content && !success) {
       setConfirmLoading(true);
-      //send message api call
-      // const response = messageService.addMessage(content)
       const response = await messageService.addMessage(
         user_id,
         content,
@@ -39,7 +37,7 @@ function ForumPost({ forumPost, user_id, setForumPosts }) {
         setSuccess(false);
       }, 2000);
     } else {
-      alert("no content!");
+      // alert("no content!");
     }
   }
 
@@ -112,6 +110,7 @@ function ForumPost({ forumPost, user_id, setForumPosts }) {
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
+        footer={success ? <></> : undefined}
         onCancel={handleCancel}
       >
         {success ? (
