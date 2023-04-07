@@ -17,11 +17,10 @@ import { Divider, Space, Tag } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
 
-function OwnListings({ ownListings  }) {
+function OwnListings({ ownListings }) {
   const [indexC1, setIndexC1] = useState(0);
 
   const dispatch = useDispatch();
-
 
   const handleSelect = (selectedIndex, e) => {
     setIndexC1(selectedIndex);
@@ -44,6 +43,7 @@ function OwnListings({ ownListings  }) {
           marginLeft: "-8px",
           textAlign: "center",
           justifyContent: "center",
+          overflowX: "scroll",
         }}
       >
         {!ownListings.length ? (
@@ -53,7 +53,7 @@ function OwnListings({ ownListings  }) {
             }
           />
         ) : (
-          ownListings.slice(0, 3).map((listing) => (
+          ownListings.map((listing) => (
             <Carousel
               className="card hover-scale"
               style={{
@@ -61,6 +61,7 @@ function OwnListings({ ownListings  }) {
                 padding: "5px",
                 overflow: "scroll",
                 whiteSpace: "nowrap",
+                flexShrink: 0,
               }}
               onClick={() => dispatch(setSelectedListing(listing))}
             >

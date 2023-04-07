@@ -58,6 +58,7 @@ const FavListings = ({ favListings }) => {
       <div
         style={{
           display: "flex",
+          overflowX: "scroll",
           marginLeft: "-8px",
           textAlign: "center",
           justifyContent: "center",
@@ -71,7 +72,7 @@ const FavListings = ({ favListings }) => {
           />
         ) : (
           FavouriteListings &&
-          FavouriteListings.slice(0, 3).map((listing) => (
+          FavouriteListings.map((listing) => (
             <Carousel
               key={listing.id}
               style={{
@@ -80,6 +81,7 @@ const FavListings = ({ favListings }) => {
                 overflow: "scroll",
                 whiteSpace: "nowrap",
                 overflowX: "auto",
+                flexShrink: 0,
               }}
               onClick={() => dispatch(setSelectedListing(listing))}
             >
