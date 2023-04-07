@@ -3,6 +3,8 @@ import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SearchListingCard from "./SearchListingCard";
+import MapInfoCard from "./MarkerInfoCard";
+
 
 const containerStyle = {
   width: "100%",
@@ -37,7 +39,7 @@ const Map = ({ listings }) => {
             {infoWindowVisible && markerIndex === index && (
               <InfoWindowF onCloseClick={() => setInfoWindowVisible(false)}>
                 <div style={{ maxHeight: "300px" }}>
-                  <SearchListingCard listing={listing} />
+                <MapInfoCard listing={listing}/>
                 </div>
               </InfoWindowF>
             )}
