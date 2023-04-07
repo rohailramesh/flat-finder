@@ -2,7 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
-import { Empty } from "antd";
+import { Empty, Button } from "antd";
 const contentStyle = {
   height: "160px",
   //   width: "160px",
@@ -77,7 +77,7 @@ function OwnListings({ ownListings }) {
                   overflowX: "auto",
                   flexShrink: 0,
                 }}
-                onClick={() => dispatch(setSelectedListing(listing))}
+                // onClick={() => dispatch(setSelectedListing(listing))}
               >
                 {listing.images.map((image, index) => (
                   <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
@@ -94,7 +94,11 @@ function OwnListings({ ownListings }) {
                   </Carousel.Item>
                 ))}
               </Carousel>
-              <div className="glass-icon-container">
+              <div
+                className="glass-icon-container"
+                style={{ cursor: "pointer", zIndex: 2 }}
+                onClick={() => dispatch(setSelectedListing(listing))}
+              >
                 <FontAwesomeIcon icon={faSquareUpRight} beat className="icon" />
               </div>
             </div>

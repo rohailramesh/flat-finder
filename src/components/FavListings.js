@@ -31,11 +31,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareUpRight } from "@fortawesome/free-solid-svg-icons";
+
 const FavListings = ({ favListings }) => {
   const FavouriteListings =
     favListings && favListings.map((item) => item.listing);
-  const [dotPosition, setDotPosition] = useState("left");
-  const [shouldBeat, setShouldBeat] = useState(false);
+
   const [indexC1, setIndexC1] = useState(0);
   const [indexC2, setIndexC2] = useState(0);
   const [indexC3, setIndexC3] = useState(0);
@@ -86,7 +86,7 @@ const FavListings = ({ favListings }) => {
                   overflowX: "auto",
                   flexShrink: 0,
                 }}
-                onClick={() => dispatch(setSelectedListing(listing))}
+                // onClick={() => dispatch(setSelectedListing(listing))}
               >
                 {listing &&
                   listing.images.map((image, index) => (
@@ -108,8 +108,11 @@ const FavListings = ({ favListings }) => {
                     </Carousel.Item>
                   ))}
               </Carousel>
-
-              <div className="glass-icon-container">
+              <div
+                className="glass-icon-container"
+                style={{ cursor: "pointer", zIndex: 2 }}
+                onClick={() => dispatch(setSelectedListing(listing))}
+              >
                 <FontAwesomeIcon icon={faSquareUpRight} beat className="icon" />
               </div>
             </div>
