@@ -28,8 +28,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFavListing, unfavListing } from "@/redux/favListingSlice";
 import { favListingSevice } from "@/services/Instances";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
+import { faSquareUpRight } from "@fortawesome/free-solid-svg-icons";
 
-export default function SearchListingCard({ listing }) {
+export default function MapInfoCard({ listing }) {
   const favListings = useSelector((state) => state.favListings);
   const favIds = favListings.map((item) => item.listing.id);
   const user = useSelector((state) => state.user);
@@ -58,21 +59,32 @@ export default function SearchListingCard({ listing }) {
         direction={{ base: "column", sm: "row" }}
         overflow="hidden"
         variant="outline"
-        style={{ marginTop: "20px", width: "100%", height: "100%" }}
+        style={{/*  marginTop: "20px", */ width: "100%", height: "100%" }}
       >
-        <Image
-          objectFit="cover"
-          // maxW={{ base: "100%", lg: "150px" }}
-          style={{ width: "300px" }}
-          src={listing.images[2]}
-          alt="Caffe Latte"
-        />
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'}}>
 
-        <Stack style={{ width: "100%" }}>
+          <Image
+            objectFit="cover"
+            w="300px"
+            h="200px"
+            src={listing.images[2]}
+            alt="Caffe Latte"
+            />
+          <div
+            className="glass-icon-container top-right"
+            style={{ cursor: "pointer", zIndex: 2 }}
+            onClick={() => dispatch(setSelectedListing(listing))}
+            >
+                <FontAwesomeIcon icon={faSquareUpRight} beat className="icon" />
+            </div>
+        </div>
+
+
+        <Stack style={{ width: "100%", height: '100%' }}>
           <CardBody style={{ paddingBottom: 0 }}>
             <div>
               <p>
-                <Heading size="lg">{listing.title}</Heading>
+                <Heading size="md">{listing.title}</Heading>
                 <Heading size="md">£{listing.monthly_price}</Heading>
               </p>
             </div>
@@ -82,7 +94,6 @@ export default function SearchListingCard({ listing }) {
                 {listing.address.second_line}, {listing.address.city}
               </p>
             </div>
-            {/* <br /> */}
             <div>
               <p>
                 {listing.key_features.beds}
@@ -94,33 +105,11 @@ export default function SearchListingCard({ listing }) {
                 <FontAwesomeIcon icon={faBath} />
               </p>
             </div>
-            {/* <br /> */}
             <p>Available now (L/S)</p>
-          </CardBody>
-
-          <CardFooter
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              variant="solid"
-              //   colorScheme="blue"
-              style={{
-                color: "white",
-                backgroundColor: "#1677ff",
-                // marginBottom: "60px",
-                // marginTop: "-30px",
-              }}
-              onClick={() => dispatch(setSelectedListing(listing))}
-            >
-              More info
-            </Button>
             <div
-                className="glass-icon-container"
-                style={{ cursor: "pointer", zIndex: 2, bottom: '20px', right: '20px' }}
+                className="glass-icon-container bottom-right"
+                style={{ cursor: "pointer", zIndex: 2 }}
+                // onClick={() => dispatch(setSelectedListing(listing))}
                 onClick={() => handleFav(listing.id)}
               >
                 {favIds.includes(listing.id) ? (
@@ -130,10 +119,11 @@ export default function SearchListingCard({ listing }) {
             ) : (
               <StarOutlined
                 className="custom-icon spin-animation-rev"
+                // onClick={() => handleFav(listing.id)}
               />
             )}
             </div>
-          </CardFooter>
+          </CardBody>
         </Stack>
       </Card>
     </>

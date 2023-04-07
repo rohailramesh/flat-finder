@@ -95,7 +95,7 @@ function OwnListings({ ownListings }) {
                 ))}
               </Carousel>
               <div
-                className="glass-icon-container"
+                className="glass-icon-container top-right"
                 style={{ cursor: "pointer", zIndex: 2 }}
                 onClick={() => dispatch(setSelectedListing(listing))}
               >
