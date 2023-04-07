@@ -58,7 +58,7 @@ export default function SearchListingCard({ listing }) {
         direction={{ base: "column", sm: "row" }}
         overflow="hidden"
         variant="outline"
-        style={{ marginTop: "20px", width: "100%" }}
+        style={{ marginTop: "20px", width: "100%", height: "100%" }}
       >
         <Image
           objectFit="cover"
