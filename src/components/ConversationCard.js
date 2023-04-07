@@ -22,14 +22,37 @@ const ConversationCard = ({ data, setOtherUser }) => {
   const handleConversationPress = (item) => {
     dispatch(setSelectedConvo(item));
     setOtherUser(otherUser);
+
+    // Mark messages as read
+    allMessages[convoIndex].forEach((message) => {
+      if (message.sender_id === otherUser.id && !message.is_read) {
+        // Dispatch an action to mark the message as read in the store
+      }
+    });
+
+    setBadgeCount(0); // <-- Add this line to reset the badge count
+
     for (const exchanges of allMessages) {
       if (exchanges[0].conversation_id === item.id) {
-        // setCurrentMessages(exchanges);
         dispatch(setSelectedChatHistory(exchanges));
         break;
       }
     }
   };
+
+  useEffect(() => {
+    if (convoIndex !== null) {
+      setLastMessage(
+        allMessages[convoIndex][allMessages[convoIndex].length - 1]
+      );
+
+      const count = allMessages[convoIndex].filter(
+        (message) => message.sender_id === otherUser.id && !message.is_read
+      ).length;
+
+      setBadgeCount(count);
+    }
+  }, [allMessages, convoIndex]);
 
   useEffect(() => {
     const conversationIndex = allMessages.findIndex(
@@ -71,33 +94,48 @@ const ConversationCard = ({ data, setOtherUser }) => {
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
         transform: "translateY(-2px)",
         marginBottom: "10px",
-        width: "300px",
-        height: "150px",
+        flexShrink: 1,
+        flexGrow: 0,
+        // width: "300px",
+        // height: "150px",
       }}
       hoverable
       onClick={() => handleConversationPress(data)}
     >
+      <p>
+        {new Date(lastMessage.created_at).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </p>
       <Meta
         avatar={
           <Avatar size="md" name={otherUser.name} src={otherUser.avatar_url} />
         }
-        title={otherUser.name}
+        title={
+          <>
+            {otherUser.name}
+            {badgeCount > 0 && (
+              <Badge count={badgeCount} style={{ marginLeft: "5px" }} />
+            )}
+          </>
+        }
         description={
           <>
             <p>
               {lastMessage.sender_id === otherUser.id
                 ? otherUser.name.split(" ")[0]
                 : "You"}
-              : {lastMessage.content}
+              : {lastMessage.content.slice(0, 15)}...
             </p>
           </>
         }
       />
-      <div style={{ marginTop: 10 }}>
+      {/* <div style={{ marginTop: 10 }}>
         <a href="#message" style={{ float: "right" }}>
           <MessageOutlined />
         </a>
-      </div>
+      </div> */}
     </Card>
   );
 };

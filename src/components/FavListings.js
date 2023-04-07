@@ -30,8 +30,9 @@ import { items } from "@/utils";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
 
-const FavListings = ({favListings}) => {
-  const FavouriteListings =  favListings && favListings.map((item) => item.listing);
+const FavListings = ({ favListings }) => {
+  const FavouriteListings =
+    favListings && favListings.map((item) => item.listing);
   const [dotPosition, setDotPosition] = useState("left");
   const [indexC1, setIndexC1] = useState(0);
   const [indexC2, setIndexC2] = useState(0);
@@ -69,7 +70,8 @@ const FavListings = ({favListings}) => {
             }
           />
         ) : (
-         FavouriteListings && FavouriteListings.slice(0, 3).map((listing) => (
+          FavouriteListings &&
+          FavouriteListings.slice(0, 3).map((listing) => (
             <Carousel
               key={listing.id}
               style={{
@@ -77,12 +79,17 @@ const FavListings = ({favListings}) => {
                 padding: "5px",
                 overflow: "scroll",
                 whiteSpace: "nowrap",
+                overflowX: "auto",
               }}
               onClick={() => dispatch(setSelectedListing(listing))}
-              >
+            >
               {listing &&
                 listing.images.map((image, index) => (
-                  <Carousel.Item activeIndex={indexC1} onSelect={handleSelect} key={image}>
+                  <Carousel.Item
+                    activeIndex={indexC1}
+                    onSelect={handleSelect}
+                    key={image}
+                  >
                     <img
                       className="d-block w-150"
                       src={image}
