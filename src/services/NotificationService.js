@@ -37,12 +37,14 @@ export default class NotificationService {
       },
       message: (
         <p 
-          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}>
+          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10, cursor: 'pointer'}}>
           New comment under listing in{" "}
           <span style={{ color: "darkblue" }}>{listing.address.city}</span>
         </p>
       ),
-      description: <ForumPost forumPost={fullPost} />,
+      description: <div style={{cursor: 'pointer'}}>
+        <ForumPost forumPost={fullPost} />
+        </div>,
       placement: "topRight",
       duration: 4,
     });
