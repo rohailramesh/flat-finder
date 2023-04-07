@@ -43,6 +43,7 @@ const AdminResultPage = (props) => {
   function deleteListing() {
     if (selectedListing.id) {
       listingService.removeListing(selectedListing.id);
+      setSelectedListing(null);
       console.log("inside if statement");
     } else {
       console.log("Error. Listing could not be deleted.");
