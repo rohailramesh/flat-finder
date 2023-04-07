@@ -3,7 +3,7 @@ import { AutoComplete, message } from "antd";
 import citiesData from "../data/cities.json";
 import SearchResultPage from "@/components/searchResults";
 import FavListings from "@/components/FavListings";
-import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
+import { Avatar, Space, Breadcrumb, Layout, Menu, theme, Empty } from "antd";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
@@ -27,11 +27,12 @@ import MessageService from "@/services/messageService";
 import Inbox from "@/components/Inbox";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
-import { addMessage, setAllMessages } from "@/redux/messagesSlice";
+import { addMessage } from "@/redux/messagesSlice";
 import { setFavListings } from "@/redux/favListingSlice";
 import { userService } from "@/services/Instances";
 import { addMessageToSelectedChatHistory } from "@/redux/selectedChatHistory";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
+import { setAllMessages } from "@/redux/messagesSlice";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
@@ -44,7 +45,7 @@ function FlatifyDashboard() {
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [conversations, setConversations] = useState([]);
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
@@ -54,6 +55,7 @@ function FlatifyDashboard() {
   const user = useSelector((state) => state.user);
   const favListings = useSelector((state) => state.favListings);
   const selectedConvo = useSelector((state) => state.selectedConvo);
+  const allMessages = useSelector((state) => state.allMessages);
 
   const userRef = useRef(user);
   const ownListingsRef = useRef(ownListings);
@@ -369,15 +371,15 @@ function FlatifyDashboard() {
               setListings={setListings}
             />
           )}
-          {tabKey == "5" && (
-            <Inbox
-              setConversation={setConversations}
-              messages={messages}
-              setMessages={setMessages}
-              conversations={conversations}
-              user={user}
-            />
-          )}
+          {tabKey == "5" &&
+            (allMessages.length ? (
+              <Inbox
+                setConversation={setConversations}
+                conversations={conversations}
+              />
+            ) : (
+              <Empty description="Inbox is empty" />
+            ))}
         </Content>
         <Footer
           style={{
