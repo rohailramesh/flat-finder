@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Card, Avatar, Badge } from "antd";
+import { Card, Avatar, Badge, Empty } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   MessageOutlined,
@@ -82,7 +82,7 @@ const Inbox = ({ conversations }) => {
             return <ConversationCard data={data} setOtherUser={setOtherUser} />;
           })}
         </div>
-        {selectedChatHistory && (
+        {selectedChatHistory.length ? (
           <div style={{ flexGrow: 1 }}>
             <Card
               style={{
@@ -116,6 +116,7 @@ const Inbox = ({ conversations }) => {
                       overflow: "auto",
                     }}
                   >
+                    {/* <Empty description="Select a chat" /> */}
                     {selectedChatHistory.map((message, index) => (
                       <DirectMessage message={message} otherUser={otherUser} />
                     ))}
@@ -155,6 +156,8 @@ const Inbox = ({ conversations }) => {
               </Card>
             </Card>
           </div>
+        ) : (
+          <Empty description="Select a chat" />
         )}
       </div>
     </>
