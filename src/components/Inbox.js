@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Card, Avatar, Badge } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   MessageOutlined,
   PhoneOutlined,
@@ -12,6 +13,7 @@ import DirectMessage from "./DirectMessage";
 import { messageService } from "@/services/Instances";
 import { addMessage } from "@/redux/messagesSlice";
 import { addMessageToSelectedChatHistory } from "@/redux/selectedChatHistory";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 const { Meta } = Card;
 
 const Inbox = ({ conversations }) => {
@@ -68,22 +70,28 @@ const Inbox = ({ conversations }) => {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ width: "70%" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "1rem",
+        }}
+      >
+        <div>
           {conversations.map((data, index) => {
             return <ConversationCard data={data} setOtherUser={setOtherUser} />;
           })}
         </div>
         {selectedChatHistory && (
-          <div style={{ width: "30%" }}>
+          <div style={{ flexGrow: 1 }}>
             <Card
               style={{
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
                 transform: "translateY(-2px)",
                 marginBottom: "10px",
-                marginLeft: "-400px",
-                width: "700px",
-                height: "800px",
+                // marginLeft: "-400px",
+                // width: "700px",
+                // height: "800px",
               }}
             >
               <div style={{ marginTop: 5 }}>
@@ -126,14 +134,21 @@ const Inbox = ({ conversations }) => {
                       value={content}
                       onKeyDown={handleKeyDown}
                       onChange={handleChange}
-                      style={{ flexGrow: 1, color: "blue" }}
+                      style={{
+                        flexGrow: 1,
+                        border: "solid",
+                        borderColor: "black",
+                        borderRadius: 10,
+                        padding: 5,
+                      }}
                     />
                     <button
                       onClick={() => {
                         handleSendMessage();
                       }}
+                      style={{ color: "black" }}
                     >
-                      &nbsp; Send
+                      &nbsp; <FontAwesomeIcon icon={faPaperPlane} />
                     </button>
                   </div>
                 </div>

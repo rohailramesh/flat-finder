@@ -251,7 +251,7 @@ function FlatifyDashboard() {
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div
+        {/* <div
           style={{
             height: 38,
             margin: 12,
@@ -261,6 +261,30 @@ function FlatifyDashboard() {
           }}
         >
           FDM
+        </div> */}
+        <div
+          style={{
+            height: 38,
+            margin: 12,
+            // background: "rgba(255, 255, 255, 0.2)",
+            color: "white",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: collapsed ? "center" : "flex-start",
+          }}
+        >
+          <img
+            src={collapsed ? "/Fdm-logo-black.jpeg" : "/Fdm-logo-black.jpeg"}
+            style={{
+              height: collapsed ? 32 : 40,
+              width: collapsed ? 48 : 64,
+              marginRight: 18,
+              marginLeft: collapsed ? 18 : 60,
+              alignItems: collapsed ? "normal" : "center",
+              justifyContent: collapsed ? "normal" : "center",
+            }}
+          />
         </div>
 
         <Menu
