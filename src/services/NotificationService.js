@@ -43,8 +43,8 @@ export default class NotificationService {
         </p>
       ),
       description: <div style={{cursor: 'pointer'}}>
-        <ForumPost forumPost={fullPost} />
-        </div>,
+                      <ForumPost forumPost={fullPost} />
+                    </div>,
       placement: "topRight",
       duration: 4,
     });
