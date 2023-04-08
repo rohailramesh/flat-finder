@@ -74,9 +74,9 @@ function FlatifyDashboard() {
     await userService.logout(supabase);
   }
 
-  async function handleMessageEvent(new_record, user) {
+  async function handleMessageEvent(new_record, eventType, user) {
     //if we sent the message, don't notify!
-    if (new_record.sender_id !== user.id) {
+    if (new_record.sender_id !== user.id && eventType === 'INSERT') {
       const conversation = await messageService.getConversationById(
         new_record.conversation_id
       );
@@ -161,7 +161,7 @@ function FlatifyDashboard() {
         handleForumEvent(new_record, ownListings);
         break;
       case "message":
-        handleMessageEvent(new_record, user);
+        handleMessageEvent(new_record, eventType, user);
         break;
       case "ticket":
         handleTicketEvent(new_record, eventType, user);

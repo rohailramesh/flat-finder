@@ -8,29 +8,26 @@ import {
 } from "@ant-design/icons";
 const { Meta } = Card;
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedChatHistory } from "@/redux/selectedChatHistory";
+import selectedChatHistory, { setSelectedChatHistory } from "@/redux/selectedChatHistory";
 import { setSelectedConvo } from "@/redux/selectedConvoSlice";
+import { readConversation } from "@/redux/messagesSlice";
+import { messageService } from "@/services/Instances";
 
 const ConversationCard = ({ data }) => {
   const otherUser = data.user1.email ? data.user1 : data.user2;
   const allMessages = useSelector((state) => state.allMessages);
+  const selectedConvo = useSelector(state => state.selectedConvo);
+
   const [lastMessage, setLastMessage] = useState("");
   const [convoIndex, setConvoIndex] = useState(null);
   const [badgeCount, setBadgeCount] = useState(0);
   const dispatch = useDispatch();
 
-  const handleConversationPress = (item) => {
+
+  function handleConversationPress(item){
     dispatch(setSelectedConvo(item));
-
-    // Mark messages as read
-    allMessages[convoIndex].forEach((message) => {
-      if (message.sender_id === otherUser.id && !message.is_read) {
-        // Dispatch an action to mark the message as read in the store
-      }
-    });
-
-    setBadgeCount(0); // <-- Add this line to reset the badge count
-
+    dispatch(readConversation({conversation_id: item.id, sender_id: otherUser.id}))
+    setBadgeCount(0);
     for (const exchanges of allMessages) {
       if (exchanges[0].conversation_id === item.id) {
         dispatch(setSelectedChatHistory(exchanges));
@@ -45,11 +42,16 @@ const ConversationCard = ({ data }) => {
         allMessages[convoIndex][allMessages[convoIndex].length - 1]
       );
 
-      const count = allMessages[convoIndex].filter(
-        (message) => message.sender_id === otherUser.id && !message.is_read
-      ).length;
-
-      setBadgeCount(count);
+      console.log('🔴🔴🔴 CHECK CONVOID AND DATAID : ', {convoId: selectedConvo.id, dataId: data.id})
+      if (selectedConvo.id === data.id ){
+        console.log('🔴🔴🔴 INSIDE IFFF TO SET BADGE 0')
+        setBadgeCount(0);
+      } else {
+        const count = allMessages[convoIndex].filter(
+          (message) => message.sender_id === otherUser.id && !message.is_read
+          ).length;
+          setBadgeCount(count);
+        }
     }
   }, [allMessages, convoIndex]);
 
@@ -63,27 +65,8 @@ const ConversationCard = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    if (convoIndex !== null) {
-      setLastMessage(
-        allMessages[convoIndex][allMessages[convoIndex].length - 1]
-      );
-      const count = allMessages[convoIndex].filter(
-        (message) => message.sender_id === otherUser.id && !message.is_read
-      ).length;
-      setBadgeCount(count);
-    }
-  }, [allMessages, convoIndex]);
-
-  useEffect(() => {
     console.log("Last MESSAGE: ⚡️⚡️⚡️⚡️⚡️🔴🔴", lastMessage);
   }, []);
-
-  // function getBadgeCount() {
-  //   return (
-  //     convoIndex !== null &&
-  //     allMessages[convoIndex].filter((message) => !message.is_read).length
-  //   );
-  // }
 
   console.log("COnversation card all messages", allMessages.length);
   return (
