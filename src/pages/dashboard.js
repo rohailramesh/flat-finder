@@ -234,8 +234,6 @@ function FlatifyDashboard() {
         userService.getAuthUserProfile(supabase),
         listingService.getListings(),
       ]);
-      // user_profile.is_admin && router.push("/admin");
-      // setUser(user_profile);
       dispatch(setUser(user_profile));
       setListing((prevListing) => ({ ...prevListing, owner: user_profile.id }));
       setListings(allListings);
@@ -247,8 +245,6 @@ function FlatifyDashboard() {
           ticketService.getUserTicket(user_profile.id),
           messageService.getUserConversations(user_profile.id),
         ]);
-      // console.log({ new_favListings });
-      // setFavListings(new_favListings);
       dispatch(setFavListings(new_favListings));
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
@@ -266,7 +262,7 @@ function FlatifyDashboard() {
   }, []);
 
   useEffect(() => {
-    if (!isUnreadCountInitialized && allMessages.length > 0) {
+    if (allMessages.length > 0) {
       let initialCount = 0;
       for (const conversations of allMessages) {
         for (const message of conversations) {
@@ -297,9 +293,6 @@ function FlatifyDashboard() {
     setOptions(res);
   };
 
-  // const {
-  //   token: { colorBgContainer },
-  // } = theme.useToken();
 
   return (
     <Layout
