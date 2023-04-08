@@ -72,7 +72,7 @@ const Inbox = ({ conversations }) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
           gap: "1rem",
         }}
       >
@@ -152,7 +152,13 @@ const Inbox = ({ conversations }) => {
             </Card>
           </div>
         ) : (
-          <Empty description="Select a chat" />
+          <div style={{flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Empty description={
+                  <p style={{ color: "gray" }}>
+                    No chat selected 
+                  </p>
+                } />
+          </div>
         )}
       </div>
     </>
