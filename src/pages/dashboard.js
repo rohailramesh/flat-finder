@@ -113,20 +113,20 @@ function FlatifyDashboard() {
     console.log({ ownListings });
 
     //notify for subbed listing
-    for (const {listing} of favListings){
-      if (listing.forum == new_record.forum && listing.owner.id !== user.id){
+    for (const { listing } of favListings) {
+      if (listing.forum == new_record.forum && listing.owner.id !== user.id) {
         const fullPost = await forumPostService.getPostById(new_record.id);
-        notificationService.forumPost(fullPost, listing); 
-        return
+        notificationService.forumPost(fullPost, listing);
+        return;
       }
     }
     for (const listing of ownListings) {
-      console.log({ listing }); 
+      console.log({ listing });
       if (listing.forum == new_record.forum) {
         console.log("Inside if statement of handleForumEvent");
         const fullPost = await forumPostService.getPostById(new_record.id);
         notificationService.forumPost(fullPost, listing);
-        return 
+        return;
       }
     }
   }
@@ -286,7 +286,7 @@ function FlatifyDashboard() {
           }}
         >
           <img
-            src={collapsed ? "/Fdm-logo-black.jpeg" : "/Fdm-logo-black.jpeg"}
+            src={collapsed ? "/fdm.png" : "/fdm.png"}
             style={{
               height: collapsed ? 32 : 40,
               width: collapsed ? 48 : 64,
