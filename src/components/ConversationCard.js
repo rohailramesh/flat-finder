@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setSelectedChatHistory } from "@/redux/selectedChatHistory";
 import { setSelectedConvo } from "@/redux/selectedConvoSlice";
 
-const ConversationCard = ({ data, setOtherUser }) => {
+const ConversationCard = ({ data }) => {
   const otherUser = data.user1.email ? data.user1 : data.user2;
   const allMessages = useSelector((state) => state.allMessages);
   const [lastMessage, setLastMessage] = useState("");
@@ -21,7 +21,6 @@ const ConversationCard = ({ data, setOtherUser }) => {
 
   const handleConversationPress = (item) => {
     dispatch(setSelectedConvo(item));
-    setOtherUser(otherUser);
 
     // Mark messages as read
     allMessages[convoIndex].forEach((message) => {

@@ -17,12 +17,11 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 const { Meta } = Card;
 
 const Inbox = ({ conversations }) => {
-  // const [selectedContact, setSelectedContact] = useState(null);
   const [content, setContent] = useState("");
-  // const [chatHistory, setChatHistory] = useState([]);
   const selectedChatHistory = useSelector((state) => state.selectedChatHistory);
   const selectedConvo = useSelector((state) => state.selectedConvo);
-  const [otherUser, setOtherUser] = useState(emptyUser);
+
+  const otherUser = selectedConvo.id && selectedConvo.user1.email ? selectedConvo.user1 : selectedConvo.user2
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -78,8 +77,8 @@ const Inbox = ({ conversations }) => {
         }}
       >
         <div>
-          {conversations.map((data, index) => {
-            return <ConversationCard data={data} setOtherUser={setOtherUser} />;
+          {conversations.map((data) => {
+            return <ConversationCard key={data.id} data={data} />;
           })}
         </div>
         {selectedChatHistory.length ? (
@@ -89,9 +88,6 @@ const Inbox = ({ conversations }) => {
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
                 transform: "translateY(-2px)",
                 marginBottom: "10px",
-                // marginLeft: "-400px",
-                // width: "700px",
-                // height: "800px",
               }}
             >
               <div style={{ marginTop: 5 }}>
@@ -116,9 +112,8 @@ const Inbox = ({ conversations }) => {
                       overflow: "auto",
                     }}
                   >
-                    {/* <Empty description="Select a chat" /> */}
-                    {selectedChatHistory.map((message, index) => (
-                      <DirectMessage message={message} otherUser={otherUser} />
+                    {selectedChatHistory.map((message) => (
+                      <DirectMessage key={message.id} message={message} otherUser={otherUser} />
                     ))}
                   </div>
 
