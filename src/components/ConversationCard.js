@@ -8,8 +8,10 @@ import {
 } from "@ant-design/icons";
 const { Meta } = Card;
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedChatHistory } from "@/redux/selectedChatHistory";
+import selectedChatHistory, { setSelectedChatHistory } from "@/redux/selectedChatHistory";
 import { setSelectedConvo } from "@/redux/selectedConvoSlice";
+import { readConversation } from "@/redux/messagesSlice";
+import { messageService } from "@/services/Instances";
 
 const ConversationCard = ({ data }) => {
   const otherUser = data.user1.email ? data.user1 : data.user2;
@@ -19,23 +21,51 @@ const ConversationCard = ({ data }) => {
   const [badgeCount, setBadgeCount] = useState(0);
   const dispatch = useDispatch();
 
-  const handleConversationPress = (item) => {
-    dispatch(setSelectedConvo(item));
 
-    // Mark messages as read
-    allMessages[convoIndex].forEach((message) => {
-      if (message.sender_id === otherUser.id && !message.is_read) {
-        // Dispatch an action to mark the message as read in the store
+  async function readMessages() {
+    if (convoMessages.length === 0) {
+      return;
+    }
+    let sender_id = null;
+
+    const toReadMessages = convoMessages.reduce((result, message) => {
+      if (message.sender_id !== user.id && !message.is_read) {
+        sender_id = message.sender_id 
+        result.push(message.id);
       }
-    });
+      return result;
+    }, []);
 
-    setBadgeCount(0); // <-- Add this line to reset the badge count
+    
+    console.log("TO READ MESSAGES ! ", toReadMessages);
+    console.log("CONV. ID: ", convoMessages[0].conversation_id);
+    if (toReadMessages.length){
+      
+    }
+    dispatch(
+      readConversation({
+        conversation_id: convoMessages[0].conversation_id,
+        toReadMessages,
+      })
+    );
+  }
 
+
+  function handleConversationPress(item){
+    dispatch(setSelectedConvo(item));
+    dispatch(readConversation({conversation_id: item.id, sender_id: otherUser.id}))
+    setBadgeCount(0);
     for (const exchanges of allMessages) {
       if (exchanges[0].conversation_id === item.id) {
         dispatch(setSelectedChatHistory(exchanges));
         break;
       }
+    }
+    try {
+      const result = messageService.readUserMessages(otherUser.id, item.id).catch(error => console.log(error))
+      console.log('Result or reading! ', result)
+    } catch (e) {
+      console.log('Error reading: ', e)
     }
   };
 
