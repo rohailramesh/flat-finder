@@ -21,7 +21,7 @@ import { suffixSelector, beforeUpload, getBase64, emptyListing } from "@/utils";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import ListingService from "@/services/ListingService";
 import GoogleMapsService from "@/services/GoogleMapsService";
-
+import NotificationService from "@/services/NotificationService";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -48,7 +48,7 @@ function AddListingComponent({
   const listingService = new ListingService();
 
   // setListing(listing.concat());
-
+  const [api, contextHolder] = notification.useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [percent, setPercent] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -64,22 +64,23 @@ function AddListingComponent({
     setIsVerified(false);
   };
 
-  const [api, contextHolder] = notification.useNotification();
-  const openNotification = (placement) => {
-    api.info({
-      message: `Error`,
-      description: 'Please verify HCaptcha before clicking "Create Listing"',
-      placement,
-      type: "error",
-    });
-  };
+  // const [api, contextHolder] = notification.useNotification();
+  // const openNotification = (placement) => {
+  //   api.info({
+  //     message: `Error`,
+  //     description: 'Please verify HCaptcha before clicking "Create Listing"',
+  //     placement,
+  //     type: "error",
+  //   });
+  // };
+  const notificationService = new NotificationService(api);
 
   async function handleSubmit() {
     setIsModalOpen(true);
     if (!isVerified) {
       console.log("Not verified");
       setIsModalOpen(false);
-      openNotification("top");
+      notificationService.verifyCaptchaMessage("top");
 
       return;
     }

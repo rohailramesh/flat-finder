@@ -1,7 +1,7 @@
 import ForumPostService from "./ForumPostService";
 import ForumPost from "@/components/ForumPost";
 import MessageService from "./messageService";
-import { Tag } from "antd";
+import { Tag, notification } from "antd";
 import {
   MessageTwoTone,
   SoundTwoTone,
@@ -21,30 +21,39 @@ export default class NotificationService {
 
   constructor(api, setTabKey) {
     this.api = api;
-    this.dispatch = useDispatch()   
-    this.setTabKey = setTabKey
+    this.dispatch = useDispatch();
+    this.setTabKey = setTabKey;
   }
 
   async forumPost(fullPost, listing) {
     this.api.info({
       onClick: () => {
-        this.setTabKey(1)
-        this.dispatch(setSelectedListing(listing))
+        this.setTabKey(1);
+        this.dispatch(setSelectedListing(listing));
       },
       icon: <SoundTwoTone twoToneColor="#52c41a" />,
       style: {
         padding: "0.5rem",
       },
       message: (
-        <p 
-          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10, cursor: 'pointer'}}>
+        <p
+          style={{
+            margin: 0,
+            color: "gray",
+            fontWeight: "500",
+            fontSize: 10,
+            cursor: "pointer",
+          }}
+        >
           New comment under listing in{" "}
           <span style={{ color: "darkblue" }}>{listing.address.city}</span>
         </p>
       ),
-      description: <div style={{cursor: 'pointer'}}>
-                      <ForumPost forumPost={fullPost} />
-                    </div>,
+      description: (
+        <div style={{ cursor: "pointer" }}>
+          <ForumPost forumPost={fullPost} />
+        </div>
+      ),
       placement: "topRight",
       duration: 4,
     });
@@ -58,7 +67,8 @@ export default class NotificationService {
       },
       message: (
         <p
-          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}>
+          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}
+        >
           Ticket update
         </p>
       ),
@@ -85,7 +95,8 @@ export default class NotificationService {
       },
       message: (
         <p
-          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}>
+          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}
+        >
           New private message from{" "}
           <span style={{ color: "darkblue" }}>{author.name}</span>
         </p>
@@ -93,6 +104,15 @@ export default class NotificationService {
       description: <ForumPost forumPost={fullPost} />,
       placement: "topRight",
       duration: 4,
+    });
+  }
+
+  async verifyCaptchaMessage(placement) {
+    this.api.info({
+      message: `Error`,
+      description: 'Please verify HCaptcha before clicking "Create Listing"',
+      placement,
+      type: "error",
     });
   }
 }
