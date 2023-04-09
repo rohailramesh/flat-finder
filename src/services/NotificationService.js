@@ -13,6 +13,7 @@ import {
 import TicketNotification from "@/components/TicketNotification";
 import { useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
+import DirectMessage from "@/components/DirectMessage";
 
 export default class NotificationService {
   api;
@@ -79,29 +80,25 @@ export default class NotificationService {
   }
 
   async privateMessage(message, author) {
-    //Pretent the message is a forumPost to reuse ForumPost component
-    //Idea: Reuse ForumPost component instead of creating a messageNotification component.
-    const fullPost = {
-      content: message.content,
-      author,
-    };
-
-    console.log("Inside private message!!!!!!");
-
     this.api.info({
+      onClick: () => {
+        this.setTabKey(5);
+      },
       icon: <MessageTwoTone twoToneColor="#52c41a" />,
       style: {
         padding: "0.5rem",
       },
       message: (
         <p
-          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10 }}
+          style={{ margin: 0, color: "gray", fontWeight: "500", fontSize: 10, cursor: 'pointer' }}
         >
           New private message from{" "}
           <span style={{ color: "darkblue" }}>{author.name}</span>
         </p>
       ),
-      description: <ForumPost forumPost={fullPost} />,
+      description: <div style={{cursor: 'pointer'}}>
+        <DirectMessage otherUser={author} message={message} />
+        </div>,
       placement: "topRight",
       duration: 4,
     });
