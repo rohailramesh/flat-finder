@@ -49,11 +49,9 @@ function FlatifyDashboard() {
   const [api, contextHolder] = notification.useNotification();
 
   const [listings, setListings] = useState([]);
-  // const [favListings, setFavListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [conversations, setConversations] = useState([]);
-  // const [messages, setMessages] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
