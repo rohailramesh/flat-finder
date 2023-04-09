@@ -79,49 +79,67 @@ export default function Home() {
             isAdmin === false && <FlatifyDashboard />
           )
         ) : (
-          <Container className="main-container">
-            <Row>
-              <Col sm={12} md={6} className="text-light p-5">
-                <div className={styles.logo}>
-                  <Image
-                    src="/fdmlogo.png"
-                    width={200}
-                    height={200}
-                    alt="logo"
+          <>
+            <div
+              // className="container"
+              style={{
+                // width: "1189",
+                // height: "1000px",
+                backgroundColor: "#2a3e78",
+                display: "block",
+              }}
+            >
+              <div style={{ display: "flex" }}>
+                <Image
+                  src="/fdmlogo.png"
+                  width={200}
+                  height={200}
+                  alt="logo"
+                  style={{ margin: "1rem" }}
+                />
+                <Image
+                  src="/fdmlogo.png"
+                  width={200}
+                  height={200}
+                  alt="logo"
+                  style={{ margin: "1rem", marginLeft: "62rem" }}
+                />
+              </div>
+              <div style={{ display: "flex" }}>
+                <Login
+                  email={email}
+                  setEmail={setEmail}
+                  password={password}
+                  setPassword={setPassword}
+                  handleLogin={handleLogin}
+                />
+                <div style={{ marginLeft: "66rem" }}>
+                  <Register
+                    email={email}
+                    setEmail={setEmail}
+                    name={name}
+                    setName={setName}
+                    password={password}
+                    setPassword={setPassword}
+                    handleRegister={handleRegister}
                   />
                 </div>
-                <Row>
-                  <Col>
-                    <Login
-                      email={email}
-                      setEmail={setEmail}
-                      password={password}
-                      setPassword={setPassword}
-                      handleLogin={handleLogin}
-                    />
-                  </Col>
-                  <Col>
-                    <Register
-                      email={email}
-                      setEmail={setEmail}
-                      name={name}
-                      setName={setName}
-                      password={password}
-                      setPassword={setPassword}
-                      handleRegister={handleRegister}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-
-              <Col sm={12} md={6} className="p-5">
-                <div></div>
-                <div className="container">
-                  <Spline scene="https://prod.spline.design/G9WRoRn2ZkIOLcxr/scene.splinecode" />
-                </div>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+              <div
+                style={{
+                  width: "800px",
+                  height: "800px",
+                  // alignItems: "center",
+                  // position: "relative",
+                  marginLeft: "20rem",
+                  marginTop: "-350px",
+                  position: "initial",
+                }}
+              >
+                <Spline scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
+              </div>
+            </div>
+          </>
         )}
       </div>
     </LoadScript>
