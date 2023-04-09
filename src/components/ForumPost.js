@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, useDisclosure } from "@chakra-ui/react";
 import { Modal, Form, Row, Col, Button, Input } from "antd";
 import Lottie from "@amelix/react-lottie";
 import { successOptions } from "@/utils";
@@ -7,6 +7,9 @@ import { Popconfirm } from "antd";
 import { DeleteTwoTone, MessageTwoTone } from "@ant-design/icons";
 import ForumPostService from "@/services/ForumPostService";
 import MessageService from "@/services/messageService";
+import { addMessage } from "@/redux/messagesSlice";
+import { addConversation } from "@/redux/conversationSlice";
+import { useDispatch } from "react-redux";
 
 function ForumPost({ forumPost, user_id, setForumPosts }) {
   const { author } = forumPost;
@@ -20,16 +23,22 @@ function ForumPost({ forumPost, user_id, setForumPosts }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const messageService = new MessageService();
+  const dispatch = useDispatch();
 
   async function handleOk() {
     if (content && !success) {
       setConfirmLoading(true);
-      const response = await messageService.addMessage(
+      const {message, conversation} = await messageService.addMessage(
         user_id,
         content,
         author.id
       );
-      console.log(response);
+      // console.log('Response from adding message: ', response)
+      
+      dispatch(addMessage(message))
+      dispatch(addConversation(conversation));
+
+      // console.log(response);
       setConfirmLoading(false);
       setSuccess(true);
       setTimeout(() => {

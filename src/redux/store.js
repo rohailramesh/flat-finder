@@ -6,11 +6,13 @@ import selectedListingSlice from "./selectedListingSlice";
 import selectedConvoSlice from "./selectedConvoSlice";
 import favListingsSlice from "./favListingSlice";
 import selectedChatHistory from "./selectedChatHistory";
+import conversationSlice from "./conversationSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     allMessages: messagesReducer,
+    conversations: conversationSlice,
     selectedListing: selectedListingSlice,
     selectedConvo: selectedConvoSlice,
     favListings: favListingsSlice,

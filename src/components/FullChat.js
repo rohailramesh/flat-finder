@@ -51,19 +51,14 @@ export default function FullChat() {
 
   async function handleSendMessage() {
     if (content) {
-      const receiver =
-        selectedConvo.user1 === user.id
-          ? selectedConvo.user2.id
-          : selectedConvo.user1.id;
-      const result = await messageService.addMessage(
+      const result = await messageService.sendDirectMessage(
         user.id,
         content,
-        receiver
+        selectedConvo.id
       );
       setContent("");
       console.log(result);
       const new_message = result.data[0];
-
       console.log("Message we got back: ", new_message);
       dispatch(addMessageToSelectedChatHistory(new_message));
       dispatch(addMessage(new_message));
