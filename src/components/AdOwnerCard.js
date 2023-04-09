@@ -5,6 +5,9 @@ import { successOptions } from '@/utils'
 import { Avatar } from '@chakra-ui/react';
 import { MessageOutlined } from '@ant-design/icons';
 import MessageService from '@/services/messageService';
+import { useDispatch } from 'react-redux';
+import { addMessage } from '@/redux/messagesSlice';
+import { addConversation } from '@/redux/conversationSlice';
 
 
 
@@ -15,13 +18,18 @@ function AdOwnerCard({owner, user_id}) {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  const dispatch = useDispatch();
   const messageService = new MessageService()
 
   async function handleOk(){
     if (content && !success) {
       setConfirmLoading(true);
-      const response = await messageService.addMessage(user_id, content, owner.id)
-      console.log(response)
+      const {message, conversation} = await messageService.addMessage(user_id, content, owner.id)
+      // console.log('Response from adding message: ', response)
+      
+      dispatch(addMessage(message))
+      dispatch(addConversation(conversation));
+
       setConfirmLoading(false)
       setSuccess(true)
       setTimeout(()=>{

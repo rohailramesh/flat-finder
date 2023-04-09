@@ -41,6 +41,7 @@ import {
   LogoutOutlined,
   GlobalOutlined,
 } from "@ant-design/icons";
+import { addConversation, setConversations } from "@/redux/conversationSlice";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
@@ -51,7 +52,7 @@ function FlatifyDashboard() {
   const [listings, setListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
-  const [conversations, setConversations] = useState([]);
+  // const [conversations, setConversations] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
@@ -64,6 +65,7 @@ function FlatifyDashboard() {
   const user = useSelector((state) => state.user);
   const favListings = useSelector((state) => state.favListings);
   const selectedConvo = useSelector((state) => state.selectedConvo);
+  const conversations = useSelector(state => state.conversations);
   const allMessages = useSelector((state) => state.allMessages);
 
   const userRef = useRef(user);
@@ -118,12 +120,14 @@ function FlatifyDashboard() {
       if (conversation.user1.id === user.id) {
         notificationService.privateMessage(new_record, conversation.user2);
         dispatch(addMessage(new_record));
+        dispatch(addConversation(conversation))
         setUnreadCount(prev => prev + 1);
         //check is done in the redux store!
         dispatch(addMessageToSelectedChatHistory(new_record));
       } else if (conversation.user2.id === user.id) {
         notificationService.privateMessage(new_record, conversation.user1);
         dispatch(addMessage(new_record));
+        dispatch(addConversation(conversation))
         setUnreadCount(prev => prev + 1);
         //check is done in the redux store!
         dispatch(addMessageToSelectedChatHistory(new_record));
@@ -246,7 +250,7 @@ function FlatifyDashboard() {
       dispatch(setFavListings(new_favListings));
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
-      setConversations(new_conversations);
+      dispatch(setConversations(new_conversations))
 
       const twoDMessageArray = await Promise.all(
         new_conversations.map((conversation) => {

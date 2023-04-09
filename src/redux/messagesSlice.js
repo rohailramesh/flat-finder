@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { emptyUser } from "../models/User";
 
 const messages = createSlice({
   name: "allMessages",
