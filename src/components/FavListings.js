@@ -61,9 +61,10 @@ const FavListings = ({ favListings }) => {
         style={{
           display: "flex",
           overflowX: "scroll",
-          marginLeft: "-8px",
+          // marginLeft: "-8px",
           textAlign: "center",
           justifyContent: "center",
+          width: "100%",
         }}
       >
         {FavouriteListings && !FavouriteListings.length ? (
