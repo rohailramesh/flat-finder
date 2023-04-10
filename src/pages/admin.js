@@ -24,7 +24,7 @@ import ListingService from "@/services/ListingService";
 import TicketService from "@/services/TicketService";
 import ListingInfo from "@/components/ListingInfo";
 import { useRouter } from "next/router";
-import TicketView from "@/components/ TicketView";
+import TicketView from "@/components/TicketView";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {

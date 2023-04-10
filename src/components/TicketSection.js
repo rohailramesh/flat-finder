@@ -13,11 +13,14 @@ import {
   Badge,
   Space,
   Tag,
-  message,
+  Typography,
   Empty,
 } from "antd";
+import { CopyTwoTone } from "@ant-design/icons";
 import { useState } from "react";
 import TicketService from "@/services/TicketService";
+
+const { Paragraph } = Typography;
 
 import {
   CheckCircleOutlined,
@@ -27,12 +30,10 @@ import {
 } from "@ant-design/icons";
 import { ticketService } from "@/services/Instances";
 
+export default function TicketSection({tickets, title, setTickets}){
 
 
-export default function TicketView({tickets, setTickets}) {
   const [open, setOpen] = useState(false);
-
-  const unresolvedTickets = tickets.filter(ticket => ticket.status == 'unresolved');
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setOpen(false);
@@ -55,7 +56,7 @@ export default function TicketView({tickets, setTickets}) {
         fontSize: "18px",
       }}
     >
-      Unresolved Tickets
+      {title}
     </Divider>
     <div
       style={{
@@ -67,14 +68,14 @@ export default function TicketView({tickets, setTickets}) {
         width: "100%",
       }}
     >
-      {!unresolvedTickets.length ? (
+      {!tickets.length ? (
         <Empty
           description={
-            <p style={{ color: "gray" }}>Saved listings will show here</p>
+            <p style={{ color: "gray" }}> {title} show here</p>
           }
         />
       ) : 
-        unresolvedTickets.map(ticket => (
+        tickets.map(ticket => (
           <Card
           className="card hover-bg"
           title={
@@ -147,7 +148,6 @@ export default function TicketView({tickets, setTickets}) {
           bordered={false}
           style={{
             width: 300,
-
             overflow: "visible",
             wordWrap: "break-word",
             marginRight: 50,
@@ -157,7 +157,6 @@ export default function TicketView({tickets, setTickets}) {
             flexShrink: 0
           }}
         >
-          &nbsp;
           <h3>
             <strong>Title: </strong>
             {ticket.title}
@@ -166,12 +165,18 @@ export default function TicketView({tickets, setTickets}) {
             <strong>Description: </strong>
             {ticket.content}
           </p>
-          <p>
-            <strong>Admin comments: </strong>
-            {ticket.admin_comment
-              ? ticket.admin_comment
-              : "comments made by admin will be visible here"}
-          </p>
+            {ticket.admin_comment &&
+              <p>
+                <strong>Admin comments: </strong>
+                  {ticket.admin_comment}
+              </p>}
+              <Paragraph
+                style={{display: 'flex', alignItems: 'center'}}
+                copyable={{
+                  text: ticket.id,
+                  icon: <CopyTwoTone style={{marginBottom: '6px'}}/>
+                }}
+              >id: {ticket.id}</Paragraph>
         </Card>
         ))
       }
