@@ -10,6 +10,7 @@ import {
   InboxOutlined,
   HomeOutlined,
   LogoutOutlined,
+  ContainerOutlined
 } from "@ant-design/icons";
 import AdminTicketResolver from "@/components/AdminTicketResolver";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
@@ -23,6 +24,7 @@ import ListingService from "@/services/ListingService";
 import TicketService from "@/services/TicketService";
 import ListingInfo from "@/components/ListingInfo";
 import { useRouter } from "next/router";
+import TicketView from "@/components/TicketView";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -38,7 +40,8 @@ const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Delete listings", "2", <SearchOutlined />),
   getItem("Tickets", "3", <InboxOutlined />),
-  getItem("Logout", "4", <LogoutOutlined />),
+  getItem('Tickets View', '4', <ContainerOutlined />),
+  getItem("Logout", "5", <LogoutOutlined />),
 ];
 
 const AdminDashboard = () => {
@@ -130,7 +133,7 @@ const AdminDashboard = () => {
           mode="inline"
           items={items}
           onClick={({ key }) => {
-            if (key === "4") {
+            if (key === "5") {
               handleLogout();
             } else {
               setTabKey(key);
@@ -188,6 +191,7 @@ const AdminDashboard = () => {
           {tabKey == "3" && (
             <AdminTicketResolver tickets={tickets} user={user} />
           )}
+          {tabKey == '4' && <TicketView tickets={tickets} setTickets={setTickets} />}
         </Content>
         <Footer
           style={{
