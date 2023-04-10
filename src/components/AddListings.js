@@ -123,6 +123,7 @@ function AddListingComponent({
     setTimeout(() => {
       setIsModalOpen(false);
       setPercent(0);
+      emptyListing.images = [];
       emptyListing.owner = user.id;
       setListing(emptyListing);
     }, 2500);

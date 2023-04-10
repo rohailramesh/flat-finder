@@ -30,7 +30,7 @@ const Inbox = ({ conversations }) => {
           gap: "1rem",
         }}
       >
-        <div>
+        <div style={{minWidth: '30%', maxWidth: '30%'}}>
           {conversations.map((data) => {
             return <ConversationCard key={data.id} data={data} />;
           })}
