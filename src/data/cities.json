@@ -71,6 +71,14 @@
     {
       "name": "Singapore",
       "country": "Singapore"
+    },
+    {
+      "name": "Sydney",
+      "country": "Australia"
+    },
+    {
+      "name": "Melbourne",
+      "country": "Australia"
     }
   ]
 }
