@@ -25,6 +25,7 @@ import {
   SyncOutlined,
   DeleteTwoTone,
 } from "@ant-design/icons";
+import { ticketService } from "@/services/Instances";
 
 function TicketsComponent({ user_id, setTickets, tickets }) {
   const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
   const [success, setSuccess] = useState(false);
   const [messageApi, alert] = message.useMessage();
 
-  const ticketService = new TicketService();
+  // const ticketService = new TicketService();
 
   const showModal = () => {
     setOpen(true);
