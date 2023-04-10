@@ -66,14 +66,15 @@ const SearchResultPage = (props) => {
               /* flexGrow: 1, */ display: "flex",
               flexDirection: "column",
               marginBottom: "5rem",
+              //  height: '100%',
             }}
           >
             {!props.searchValue ? (
-              <Empty
-                description={
-                  <p style={{ color: "gray" }}>Search for something :D</p>
-                }
-              />
+              <Empty description={
+                    <p style={{ color: "gray" }}>
+                    Search by city to see some results!
+                    </p>
+                  } />
             ) : !searchedListings.length ? (
               <Empty
                 description={
