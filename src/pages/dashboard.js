@@ -433,7 +433,13 @@ function FlatifyDashboard() {
                 conversations={conversations}
               />
             ) : (
-              <Empty description="Inbox is empty" />
+              <div style={{flexGrow: 1, height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <Empty description={
+                    <p style={{ color: "gray" }}>
+                       Inbox is empty
+                    </p>
+                  } />
+            </div>
             ))}
         </Content>
         <Footer
