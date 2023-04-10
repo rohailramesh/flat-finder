@@ -58,16 +58,7 @@ export default function TicketSection({tickets, title, setTickets}){
     >
       {title}
     </Divider>
-    <div
-      style={{
-        display: "flex",
-        overflowX: "scroll",
-        // marginLeft: "-8px",
-        textAlign: "center",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
+    <div>
       {!tickets.length ? (
         <Empty
           description={
@@ -75,7 +66,18 @@ export default function TicketSection({tickets, title, setTickets}){
           }
         />
       ) : 
-        tickets.map(ticket => (
+      <div
+      style={{
+        display: "flex",
+        alignItems: "center", 
+        overflowX: "scroll",
+        textAlign: "center",
+        justifyContent: "flex-start",
+        width: "100%",
+        paddingLeft: "8px",
+      }}
+    >
+        {tickets.map(ticket => (
           <Card
           className="card hover-bg"
           title={
@@ -178,7 +180,8 @@ export default function TicketSection({tickets, title, setTickets}){
                 }}
               >id: {ticket.id}</Paragraph>
         </Card>
-        ))
+        ))}
+    </div>
       }
     </div>
   </div>

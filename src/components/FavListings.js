@@ -57,26 +57,46 @@ const FavListings = ({ favListings }) => {
       >
         Saved listings
       </Divider>
-      <div
-        style={{
-          display: "flex",
-          overflowX: "scroll",
-          // marginLeft: "-8px",
-          textAlign: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
+
+
         {FavouriteListings && !FavouriteListings.length ? (
+                <div
+                style={{
+                  display: "flex",
+                  alignItems: "center", 
+                  overflowX: "scroll",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  paddingLeft: "8px",
+                }}
+              >
           <Empty
             description={
               <p style={{ color: "gray" }}>Saved listings will show here</p>
             }
           />
+          </div>
         ) : (
-          FavouriteListings &&
-          FavouriteListings.map((listing) => (
-            <div style={{ position: "relative" }}>
+          <div
+          style={{
+            display: "flex",
+            alignItems: "center", 
+            overflowX: "scroll",
+            textAlign: "center",
+            justifyContent: "flex-start",
+            width: "100%",
+            paddingLeft: "8px",
+          }}
+        >
+          {FavouriteListings &&
+          FavouriteListings.map((listing, index) => (
+            <div
+              style={{
+                position: "relative",
+                marginRight: "8px", // Add consistent right margin
+              }}
+              >
               <Carousel
                 key={listing.id}
                 style={{
@@ -117,9 +137,8 @@ const FavListings = ({ favListings }) => {
                 <FontAwesomeIcon icon={faSquareUpRight} beat className="icon" />
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+          </div>)}
     </div>
   );
 };
