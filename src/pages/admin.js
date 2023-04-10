@@ -2,6 +2,7 @@ import React from "react";
 import { AutoComplete } from "antd";
 import citiesData from "../data/cities.json";
 import AdminResultPage from "@/components/adminResults";
+import AdminListingView from "@/components/AdminListingView";
 import Lottie from "@amelix/react-lottie";
 import { moderationOption } from "@/utils";
 import {
@@ -10,7 +11,8 @@ import {
   InboxOutlined,
   HomeOutlined,
   LogoutOutlined,
-  ContainerOutlined
+  ContainerOutlined,
+  ShopOutlined
 } from "@ant-design/icons";
 import AdminTicketResolver from "@/components/AdminTicketResolver";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
@@ -40,8 +42,9 @@ const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Delete listings", "2", <SearchOutlined />),
   getItem("Tickets", "3", <InboxOutlined />),
-  getItem('Tickets View', '4', <ContainerOutlined />),
-  getItem("Logout", "5", <LogoutOutlined />),
+  getItem('Listings View', '4', <ShopOutlined />),
+  getItem('Tickets View', '5', <ContainerOutlined />),
+  getItem("Logout", "6", <LogoutOutlined />),
 ];
 
 const AdminDashboard = () => {
@@ -133,7 +136,7 @@ const AdminDashboard = () => {
           mode="inline"
           items={items}
           onClick={({ key }) => {
-            if (key === "5") {
+            if (key === "6") {
               handleLogout();
             } else {
               setTabKey(key);
@@ -191,7 +194,10 @@ const AdminDashboard = () => {
           {tabKey == "3" && (
             <AdminTicketResolver tickets={tickets} user={user} />
           )}
-          {tabKey == '4' && <TicketView tickets={tickets} setTickets={setTickets} />}
+
+          {tabKey == "4" && <AdminListingView listings={listings} user_id={user.id} />}
+
+          {tabKey == '5' && <TicketView tickets={tickets} setTickets={setTickets} />}
         </Content>
         <Footer
           style={{
