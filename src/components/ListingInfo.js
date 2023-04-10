@@ -14,6 +14,7 @@ import {
   Image,
   Descriptions,
   Carousel,
+  Typography,
 } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 
@@ -26,6 +27,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
 
 const { TextArea } = Input;
+const { Paragraph } = Typography;
 
 const ListingInfo = ({ userId }) => {
   const [content, setContent] = useState("");
@@ -67,13 +69,16 @@ const ListingInfo = ({ userId }) => {
         <FontAwesomeIcon icon={faArrowLeft} />
       </Button>{" "}
       <br></br>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex"}}>
         <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>
-        <p>
-          Listing id:
-          {listing.id}
-        </p>
+
+        <Paragraph copyable = {{text: listing.id,
+                                tooltips: ['Copy ID', 'ID Copied!!'],
+                                }}> </Paragraph>
+
       </div>
+      
+      
       <Descriptions.Item>
         <div
           style={{
