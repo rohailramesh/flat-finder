@@ -108,7 +108,7 @@ const ConversationCard = ({ data }) => {
               {lastMessage.sender_id === otherUser.id
                 ? otherUser.name.split(" ")[0]
                 : "You"}
-              : {lastMessage.content}
+              : {lastMessage?.content?.length > 15 ? lastMessage.content.slice(0, 14) + '...' : lastMessage.content}
             </p>
           </>
         }

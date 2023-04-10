@@ -65,11 +65,6 @@ function OwnListings({ ownListings }) {
               <Carousel
                 className="card hover-scale"
                 style={{
-                  // width: "350px",
-                  // padding: "5px",
-                  // overflow: "scroll",
-                  // whiteSpace: "nowrap",
-                  // flexShrink: 0,
                   width: "350px",
                   padding: "5px",
                   overflow: "scroll",
@@ -77,7 +72,6 @@ function OwnListings({ ownListings }) {
                   overflowX: "auto",
                   flexShrink: 0,
                 }}
-                // onClick={() => dispatch(setSelectedListing(listing))}
               >
                 {listing.images.map((image, index) => (
                   <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>

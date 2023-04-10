@@ -22,6 +22,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import ListingService from "@/services/ListingService";
 import GoogleMapsService from "@/services/GoogleMapsService";
 import NotificationService from "@/services/NotificationService";
+import { useSelector } from "react-redux";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -46,6 +47,7 @@ function AddListingComponent({
   const supabase = useSupabaseClient();
   const googleMapsService = new GoogleMapsService();
   const listingService = new ListingService();
+  const user = useSelector(state => state.user);
 
   // setListing(listing.concat());
   const [api, contextHolder] = notification.useNotification();
@@ -64,15 +66,6 @@ function AddListingComponent({
     setIsVerified(false);
   };
 
-  // const [api, contextHolder] = notification.useNotification();
-  // const openNotification = (placement) => {
-  //   api.info({
-  //     message: `Error`,
-  //     description: 'Please verify HCaptcha before clicking "Create Listing"',
-  //     placement,
-  //     type: "error",
-  //   });
-  // };
   const notificationService = new NotificationService(api);
 
   async function handleSubmit() {
@@ -130,6 +123,8 @@ function AddListingComponent({
     setTimeout(() => {
       setIsModalOpen(false);
       setPercent(0);
+      emptyListing.images = [];
+      emptyListing.owner = user.id;
       setListing(emptyListing);
     }, 2500);
   }
