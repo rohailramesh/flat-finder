@@ -1,37 +1,15 @@
-// import { Card } from "antd";
 import React from "react";
-import Listing from "@/models/Listing";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { StarFilled, StarOutlined } from "@ant-design/icons";
-import { faBed } from "@fortawesome/free-solid-svg-icons";
-import { faBath } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import ListingInfo from "./ListingInfo";
-import FavListings from "./FavListings";
 import SearchListingCard from "./SearchListingCard";
 
-import {
-  ChakraProvider,
-  Stack,
-  CardBody,
-  CardFooter,
-  Heading,
-  Button,
-  Image,
-  Card,
-  Text,
-  Collapse,
-} from "@chakra-ui/react";
 import { Empty, Pagination } from "antd";
-import FavListingService from "@/services/FavListingService";
-import { useDispatch, useSelector } from "react-redux";
-import { addFavListing, unfavListing } from "@/redux/favListingSlice";
+import { useSelector } from "react-redux";
+
 const SearchResultPage = (props) => {
 
-  // const [selectedListing, setSelectedListing] = useState(null);
   const selectedListing = useSelector(state => state.selectedListing)
-  const { listings, setFavListings, user_id, forum } = props;
+  const { listings, user_id } = props;
   const [sliceIndex, setSliceIndex] = useState(3);
 
   const searchedListings = listings.filter(
@@ -61,34 +39,56 @@ const SearchResultPage = (props) => {
             gap: "1rem",
           }}
         >
-          <div
-            style={{
-              /* flexGrow: 1, */ display: "flex",
-              flexDirection: "column",
-              marginBottom: "5rem",
-            }}
-          >
+
             {!props.searchValue ? (
-              <Empty
-                description={
-                  <p style={{ color: "gray" }}>Search for something :D</p>
-                }
-              />
+              <div
+              style={{
+                /* flexGrow: 1, */ display: "flex",
+                flexDirection: "column",
+                marginBottom: "5rem",
+                 height: '100%',
+              }}
+            >
+              <div style={{flexGrow: 1, height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <Empty description={
+                <p style={{ color: "gray" }}>
+                    Search by city to see some results!
+                    </p>
+                  } />
+                </div>
+              </div>
             ) : !searchedListings.length ? (
-              <Empty
-                description={
-                  <p style={{ color: "gray" }}>
+              <div
+              style={{
+                /* flexGrow: 1, */ display: "flex",
+                flexDirection: "column",
+                marginBottom: "5rem",
+                 height: '100%',
+              }}
+            >
+              <div style={{flexGrow: 1, height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <Empty description={
+                <p style={{ color: "gray" }}>
                     No listings in {props.searchValue}
-                  </p>
-                }
-              />
-            ) : (
-              searchedListings
+                    </p>
+                  } />
+                </div>
+              </div>
+            ) : 
+              <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "5rem",
+              }}
+            >
+              {searchedListings
                 .slice(sliceIndex - 3, sliceIndex)
-                .map((listing) => (<SearchListingCard listing={listing}/>)))}
-          </div>
+                .map((listing) => <SearchListingCard listing={listing}/>)}
+                </div>
+                } 
           <Pagination
-            /* style={{justifySelf: 'flex-end'}} */ style={{
+            style={{
               position: "absolute",
               bottom: "5.5rem",
             }}
