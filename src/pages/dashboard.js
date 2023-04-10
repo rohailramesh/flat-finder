@@ -52,7 +52,6 @@ function FlatifyDashboard() {
   const [listings, setListings] = useState([]);
   const [ownListings, setOwnListings] = useState([]);
   const [tickets, setTickets] = useState([]);
-  // const [conversations, setConversations] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [listing, setListing] = useState(emptyListing);
