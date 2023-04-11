@@ -12,7 +12,7 @@ import {
   HomeOutlined,
   LogoutOutlined,
   ContainerOutlined,
-  ShopOutlined
+  ShopOutlined,
 } from "@ant-design/icons";
 import AdminTicketResolver from "@/components/AdminTicketResolver";
 import { Avatar, Space, Breadcrumb, Layout, Menu, theme } from "antd";
@@ -41,9 +41,9 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("Home", "1", <HomeOutlined />),
   getItem("Delete listings", "2", <SearchOutlined />),
-  getItem("Tickets", "3", <InboxOutlined />),
-  getItem('Listings View', '4', <ShopOutlined />),
-  getItem('Tickets View', '5', <ContainerOutlined />),
+  getItem("Handle Tickets", "3", <InboxOutlined />),
+  getItem("Listings View", "4", <ShopOutlined />),
+  getItem("Tickets View", "5", <ContainerOutlined />),
   getItem("Logout", "6", <LogoutOutlined />),
 ];
 
@@ -195,9 +195,13 @@ const AdminDashboard = () => {
             <AdminTicketResolver tickets={tickets} user={user} />
           )}
 
-          {tabKey == "4" && <AdminListingView listings={listings} user_id={user.id} />}
+          {tabKey == "4" && (
+            <AdminListingView listings={listings} user_id={user.id} />
+          )}
 
-          {tabKey == '5' && <TicketView tickets={tickets} setTickets={setTickets} />}
+          {tabKey == "5" && (
+            <TicketView tickets={tickets} setTickets={setTickets} />
+          )}
         </Content>
         <Footer
           style={{
