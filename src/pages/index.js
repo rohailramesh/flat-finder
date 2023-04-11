@@ -27,6 +27,7 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [user, setCurrentUser] = useState("");
   const [isAdmin, setIsAdmin] = useState(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   const [api, popUp] = notification.useNotification();
 
@@ -46,6 +47,7 @@ export default function Home() {
 
   async function handleRegister() {
     const user = await userService.register(supabase, name, email, password);
+    setEmailSent(true);
     openNotificationWithIcon("success");
     setCurrentUser(user);
   }
@@ -82,7 +84,11 @@ export default function Home() {
           <>
             <div
               style={{
-                backgroundColor: "#2a3e78",
+                // backgroundColor: "#2a3e78",
+                // background: "linear-gradient(135deg, #2a3e78, #4e6cb0)",
+                // background: "linear-gradient(135deg, #2a3e78, #5a5ab6, #2a3e78, #5d6b94)",
+                background: "linear-gradient(135deg, #2a3e78, #5a5ab6, #2a3e78)",
+                // background: "linear-gradient(135deg,  #ff7e5f, #4e6cb0)",
                 height: '100vh',
                 width: '100vw',
                 display: 'flex',
@@ -100,7 +106,7 @@ export default function Home() {
                   alt="logo"
                   // style={{ margin: "1rem" }}
                 /> 
-                  <SignIn name={name} email={email} password={password} setEmail={setEmail} setName={setName} setPassword={setPassword} handleLogin={handleLogin} handleRegister={handleRegister}/>
+                  <SignIn name={name} email={email} password={password} setEmail={setEmail} setName={setName} setPassword={setPassword} handleLogin={handleLogin} handleRegister={handleRegister} emailSent={emailSent}/>
                 </div>
 
                 <div style={{ minWidth: '50%', alignSelf: 'stretch', maxWidth: '70%'}}>
