@@ -19,6 +19,7 @@ import { setSelectedChatHistory } from "@/redux/selectedChatHistory";
 export default function FullChat() {
 
   const [content, setContent] = useState("");
+  const [isSending, setIsSending] = useState(false)
   const selectedChatHistory = useSelector((state) => state.selectedChatHistory);
   const selectedConvo = useSelector((state) => state.selectedConvo);
   const allMessages = useSelector(state => state.allMessages)
@@ -50,7 +51,9 @@ export default function FullChat() {
 
 
   async function handleSendMessage() {
-    if (content) {
+    if (content && !isSending) {
+      setIsSending(true);
+      
       const result = await messageService.sendDirectMessage(
         user.id,
         content,
@@ -62,6 +65,8 @@ export default function FullChat() {
       console.log("Message we got back: ", new_message);
       dispatch(addMessageToSelectedChatHistory(new_message));
       dispatch(addMessage(new_message));
+
+      setIsSending(false);
     }
   }
 
