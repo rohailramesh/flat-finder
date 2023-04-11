@@ -18,6 +18,7 @@ import Loading from "../components/Loading";
 import AdminDashboard from "./admin";
 import { useDispatch } from "react-redux";
 import { setCurrentUser, setUser } from "@/redux/userSlice";
+import SignIn from "@/components/SignIn";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Home() {
@@ -68,7 +69,6 @@ export default function Home() {
       googleMapsApiKey={GOOGLE_MAPS_API_KEY}
       loadingElement={<Loading />}
     >
-      <div className="main-div">
         {popUp}
         {session ? (
           isAdmin === null ? (
@@ -81,67 +81,35 @@ export default function Home() {
         ) : (
           <>
             <div
-              // className="container"
               style={{
-                // width: "1189",
-                // height: "1000px",
                 backgroundColor: "#2a3e78",
-                display: "block",
+                height: '100vh',
+                width: '100vw',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
-              <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", height: '100%', width: '100%', justifyContent: 'center', gap: '2rem', alignItems: 'center' }}>
+
+                <div style={{backgroundColor: 'white', minWidth: '20%', padding: '2rem', borderRadius: '10px', transform: 'translateY(-2rem)'}}>
                 <Image
-                  src="/fdmlogo.png"
+                  src="/Fdm-logo-black.jpeg"
                   width={200}
                   height={200}
                   alt="logo"
-                  style={{ margin: "1rem" }}
-                />
-                <Image
-                  src="/fdmlogo.png"
-                  width={200}
-                  height={200}
-                  alt="logo"
-                  style={{ margin: "1rem", marginLeft: "62rem" }}
-                />
-              </div>
-              <div style={{ display: "flex" }}>
-                <Login
-                  email={email}
-                  setEmail={setEmail}
-                  password={password}
-                  setPassword={setPassword}
-                  handleLogin={handleLogin}
-                />
-                <div style={{ marginLeft: "66rem" }}>
-                  <Register
-                    email={email}
-                    setEmail={setEmail}
-                    name={name}
-                    setName={setName}
-                    password={password}
-                    setPassword={setPassword}
-                    handleRegister={handleRegister}
-                  />
+                  // style={{ margin: "1rem" }}
+                /> 
+                  <SignIn name={name} email={email} password={password} setEmail={setEmail} setName={setName} setPassword={setPassword} handleLogin={handleLogin} handleRegister={handleRegister}/>
                 </div>
-              </div>
-              <div
-                style={{
-                  width: "800px",
-                  height: "800px",
-                  // alignItems: "center",
-                  // position: "relative",
-                  marginLeft: "20rem",
-                  marginTop: "-350px",
-                  position: "initial",
-                }}
-              >
-                <Spline scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
+
+                <div style={{ minWidth: '50%', alignSelf: 'stretch', maxWidth: '70%'}}>
+                  <Spline className='fade-in' scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
+                </div>
               </div>
             </div>
           </>
         )}
-      </div>
     </LoadScript>
   );
 }
