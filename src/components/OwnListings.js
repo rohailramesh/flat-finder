@@ -35,6 +35,7 @@ function OwnListings({ ownListings }) {
           textAlign: "left",
           fontFamily: "IBM_Plex_Serif",
           fontSize: "18px",
+          border: "None",
         }}
       >
         Own listings
@@ -50,72 +51,82 @@ function OwnListings({ ownListings }) {
       >
         {!ownListings.length ? (
           <div
-          style={{
-            display: "flex",
-            alignItems: "center", 
-            overflowX: "scroll",
-            textAlign: "center",
-            justifyContent: "center",
-            width: "100%",
-            paddingLeft: "8px",
-          }}
-        >
-          <Empty
-            description={
-              <p style={{ color: "gray" }}>Personal listings will show here</p>
-            }
-          />
-        </div>
+            style={{
+              display: "flex",
+              alignItems: "center",
+              overflowX: "scroll",
+              textAlign: "center",
+              justifyContent: "center",
+              width: "100%",
+              paddingLeft: "8px",
+            }}
+          >
+            <Empty
+              description={
+                <p style={{ color: "gray" }}>
+                  Personal listings will show here
+                </p>
+              }
+            />
+          </div>
         ) : (
           <div
-          style={{
-            display: "flex",
-            alignItems: "center", 
-            overflowX: "scroll",
-            textAlign: "center",
-            justifyContent: "flex-start",
-            width: "100%",
-            paddingLeft: "8px",
-          }}
-        >
-          {ownListings.map((listing) => (
-            <div style={{ position: "relative" }}>
-              <Carousel
-                className="card hover-scale"
-                style={{
-                  width: "350px",
-                  padding: "5px",
-                  overflow: "scroll",
-                  whiteSpace: "nowrap",
-                  overflowX: "auto",
-                  flexShrink: 0,
-                }}
-              >
-                {listing.images.map((image, index) => (
-                  <Carousel.Item activeIndex={indexC1} onSelect={handleSelect}>
-                    <img
-                      className="d-block w-150"
-                      src={image}
-                      alt="Carousel Slide"
-                      style={{ width: "500px", height: "200px" }}
-                    />
-                    <Carousel.Caption>
-                      {index == 0 && <p>{listing.title}</p>}
-                      {index == 1 && <p>{listing.monthly_price}</p>}
-                    </Carousel.Caption>
-                  </Carousel.Item>
-                ))}
-              </Carousel>
-              <div
-                className="glass-icon-container top-right"
-                style={{ cursor: "pointer", zIndex: 2 }}
-                onClick={() => dispatch(setSelectedListing(listing))}
-              >
-                <FontAwesomeIcon icon={faSquareUpRight} beat className="icon" />
+            style={{
+              display: "flex",
+              alignItems: "center",
+              overflowX: "scroll",
+              textAlign: "center",
+              justifyContent: "flex-start",
+              width: "100%",
+              paddingLeft: "8px",
+            }}
+          >
+            {ownListings.map((listing) => (
+              <div style={{ position: "relative" }}>
+                <Carousel
+                  className="card hover-scale"
+                  style={{
+                    width: "350px",
+                    padding: "5px",
+                    overflow: "scroll",
+                    whiteSpace: "nowrap",
+                    overflowX: "auto",
+                    flexShrink: 0,
+                  }}
+                >
+                  {listing.images.map((image, index) => (
+                    <Carousel.Item
+                      activeIndex={indexC1}
+                      onSelect={handleSelect}
+                    >
+                      <img
+                        className="d-block w-150"
+                        src={image}
+                        alt="Carousel Slide"
+                        style={{ width: "500px", height: "200px" }}
+                      />
+                      <Carousel.Caption>
+                        {index == 0 && <p>{listing.title}</p>}
+                        {index == 1 && <p>{listing.monthly_price}</p>}
+                      </Carousel.Caption>
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+                <div
+                  className="glass-icon-container top-right"
+                  style={{ cursor: "pointer", zIndex: 2 }}
+                  onClick={() => dispatch(setSelectedListing(listing))}
+                >
+                  <FontAwesomeIcon
+                    icon={faSquareUpRight}
+                    beat
+                    className="icon"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>)}
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

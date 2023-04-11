@@ -51,7 +51,11 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
     if (!success) {
       setConfirmLoading(true);
       if (title && content) {
-        const new_ticket = await ticketService.addTicket(title, content, user_id);
+        const new_ticket = await ticketService.addTicket(
+          title,
+          content,
+          user_id
+        );
         console.log("Ticket that we got back: ", new_ticket);
         setConfirmLoading(false);
         setSuccess(true);
@@ -87,6 +91,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
           fontFamily: "IBM_Plex_Serif",
           fontSize: "18px",
           // paddingRight: "-300px",
+          border: "None",
         }}
       >
         My tickets
@@ -119,36 +124,38 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                 >
                   Status: &nbsp;
                   {ticket.status === "resolved" && (
-                     <div style={{width: 90}}>
-                     <Tag 
-                     style={{
-                       display: "flex",
-                       alignItems: "center",
-                       gap: "0.3rem",
-                       flexGrow: 0,
-                       flexShrink: 0,
-                     }} 
-                     color="success">
-                       <CheckCircleOutlined />
-                       resolved
-                     </Tag>
-                     </div>
+                    <div style={{ width: 90 }}>
+                      <Tag
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.3rem",
+                          flexGrow: 0,
+                          flexShrink: 0,
+                        }}
+                        color="success"
+                      >
+                        <CheckCircleOutlined />
+                        resolved
+                      </Tag>
+                    </div>
                   )}
                   {ticket.status === "in-progress" && (
-                    <div style={{width: 110}}>
-                    <Tag 
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.3rem",
-                      flexGrow: 0,
-                      flexShrink: 0,
-                    }} 
-                    color="processing">
-                      <SyncOutlined spin/>
-                      in progress
-                    </Tag>
-                  </div>
+                    <div style={{ width: 110 }}>
+                      <Tag
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.3rem",
+                          flexGrow: 0,
+                          flexShrink: 0,
+                        }}
+                        color="processing"
+                      >
+                        <SyncOutlined spin />
+                        in progress
+                      </Tag>
+                    </div>
                   )}
                   {ticket.status === "unresolved" && (
                     <Tag
