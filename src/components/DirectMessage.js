@@ -12,8 +12,9 @@ const DirectMessage = ({ message, otherUser }) => {
         display: "flex",
         alignItems: "center",
         gap: "1rem",
-        marginTop: "15%",
-        padding: "2em",
+        // marginTop: "15%",
+        width: '100%',
+        padding: "1em",
         flexDirection: isFromUser ? "row-reverse" : "row",
       }}
     >
@@ -22,18 +23,18 @@ const DirectMessage = ({ message, otherUser }) => {
         name={isFromUser ? user.name : otherUser.name}
         src={isFromUser ? user.avatar_url : otherUser.avatar_url}
       />
-      <div style={{ display: "flex" }}>
-        <p className={isFromUser ? "senderBubble" : "receiverBubble"}>
-          {message.content.trim()} &nbsp;{" "}
+      <div className={isFromUser ? "senderBubble" : "receiverBubble"}>
+        <p style={{marginBottom: 0}}>
+          {message.content.trim()}
         </p>
-        <span className="timestamp">
-          <strong>
+        {/* <div className="timestamp"> */}
+          <p style={{marginBottom: 0, alignSelf: isFromUser ? 'flex-end' : 'flex-start', color: isFromUser ? "#BBDEFB" : "#474747"}} className="timestamp">
             {new Date(message.created_at).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             })}
-          </strong>
-        </span>
+          </p>
+        {/* </div> */}
       </div>
     </div>
   );
