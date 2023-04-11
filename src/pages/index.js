@@ -96,7 +96,7 @@ export default function Home() {
                 alignItems: 'center'
               }}
             >
-              <div style={{ display: "flex", height: '100%', width: '100%', justifyContent: 'center', gap: '2rem', alignItems: 'center' }}>
+              <div style={{ display: "flex", height: '100%', width: '100%', justifyContent: 'space-evenly', alignItems: 'center' }}>
 
                 <div style={{backgroundColor: 'white', minWidth: '20%', padding: '2rem', borderRadius: '10px', transform: 'translateY(-2rem)'}}>
                 <Image
