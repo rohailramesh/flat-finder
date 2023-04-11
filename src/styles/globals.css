@@ -121,25 +121,21 @@
 
 .senderBubble,
 .receiverBubble {
-  border-radius: 20px;
-  padding: 15px;
-  /* padding-bottom: 10px; */
+  border-radius: 25px;
+  padding: 10px;
   display: flex;
-  /* align-content: center; */
-  /* align-self: center; */
-  /* align-items: center; */
-  justify-content: center;
-  margin-bottom: 30px;
-  /* position: relative; */
-  max-width: fit-content;
+  flex-direction: column;
+
+  /* justify-content: center; */
+  /* width: fit-content; */
+
+  /* max-width: 20rem; */
+  max-width: 60%;
+
 }
 
 .timestamp {
-  /* position: absolute; */
-  margin-top: 50px;
-  margin-left: -40px;
-  right: 15px;
-  font-size: 12px;
+  font-size: 0.7rem;
   color: black;
 }
 
@@ -147,6 +143,7 @@
   background-color: #2196f3;
   justify-content: center;
   color: white;
+  align-items: flex-end;
 }
 
 .receiverBubble {
