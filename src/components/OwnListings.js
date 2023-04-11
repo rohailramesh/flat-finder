@@ -41,11 +41,6 @@ function OwnListings({ ownListings }) {
       </Divider>
       <div
         style={{
-          // display: "flex",
-          // marginLeft: "-8px",
-          // textAlign: "center",
-          // justifyContent: "center",
-          // overflowX: "scroll",
           display: "flex",
           overflowX: "scroll",
           marginLeft: "-8px",
@@ -54,13 +49,36 @@ function OwnListings({ ownListings }) {
         }}
       >
         {!ownListings.length ? (
+          <div
+          style={{
+            display: "flex",
+            alignItems: "center", 
+            overflowX: "scroll",
+            textAlign: "center",
+            justifyContent: "center",
+            width: "100%",
+            paddingLeft: "8px",
+          }}
+        >
           <Empty
             description={
               <p style={{ color: "gray" }}>Personal listings will show here</p>
             }
           />
+        </div>
         ) : (
-          ownListings.map((listing) => (
+          <div
+          style={{
+            display: "flex",
+            alignItems: "center", 
+            overflowX: "scroll",
+            textAlign: "center",
+            justifyContent: "flex-start",
+            width: "100%",
+            paddingLeft: "8px",
+          }}
+        >
+          {ownListings.map((listing) => (
             <div style={{ position: "relative" }}>
               <Carousel
                 className="card hover-scale"
@@ -96,8 +114,8 @@ function OwnListings({ ownListings }) {
                 <FontAwesomeIcon icon={faSquareUpRight} beat className="icon" />
               </div>
             </div>
-          ))
-        )}
+          ))}
+        </div>)}
       </div>
     </div>
   );

@@ -106,22 +106,6 @@ function FlatifyDashboard() {
             </div>, "5", <InboxOutlined />),
     getItem("Logout", "6", <LogoutOutlined />),
   ];
-  
-
-  // function playSound() {
-  //   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  //   const source = audioContext.createBufferSource();
-  
-  //   fetch('/assets/message-blip.mp3')
-  //     .then(response => response.arrayBuffer())
-  //     .then(data => audioContext.decodeAudioData(data))
-  //     .then(buffer => {
-  //       source.buffer = buffer;
-  //       source.connect(audioContext.destination);
-  //       source.start();
-  //     })
-  //     .catch(err => console.error('Error with decoding audio data:', err));
-  // };
 
 
   async function handleMessageEvent(new_record, eventType, user) {
