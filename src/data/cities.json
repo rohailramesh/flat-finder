@@ -79,6 +79,14 @@
     {
       "name": "Melbourne",
       "country": "Australia"
+    },
+    {
+      "name": "Brandenburg an der Havel",
+      "country": "Germany"
+    },
+    {
+      "name": "Dublin",
+      "country": "Ireland"
     }
   ]
 }
