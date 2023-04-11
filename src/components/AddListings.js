@@ -47,7 +47,9 @@ function AddListingComponent({
   const supabase = useSupabaseClient();
   const googleMapsService = new GoogleMapsService();
   const listingService = new ListingService();
+  const date = new Date();
   const user = useSelector(state => state.user);
+
 
   // setListing(listing.concat());
   const [api, contextHolder] = notification.useNotification();
@@ -83,7 +85,7 @@ function AddListingComponent({
     //Handle pictures updloaded
     for (const { originFileObj } of listing.temp_fileList) {
       //Step 1: upload image to db
-      const imgName = `${listing.owner}_${originFileObj.name}`;
+      const imgName = `${listing.owner}_${date.getTime()}_${originFileObj.name}`;
       const { data, error } = await supabase.storage
         .from("listing-images")
         .upload(imgName, originFileObj, {
