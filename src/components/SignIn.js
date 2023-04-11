@@ -1,8 +1,8 @@
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, Result } from 'antd';
 import {useState} from 'react'
 
-export default function SignIn({name, email, password, setName, setEmail, setPassword, handleLogin, handleRegister}) {
+export default function SignIn({name, email, password, setName, setEmail, setPassword, handleLogin, handleRegister, emailSent}) {
 
   const [showRegister, setShowRegister] = useState(false)
 
@@ -19,6 +19,15 @@ export default function SignIn({name, email, password, setName, setEmail, setPas
       }}
       onFinish={showRegister ? handleRegister : handleLogin}
     >
+      {
+        showRegister && emailSent ? 
+        <Result
+          className='fade-in'
+          status="success"
+          title="Email sent "
+        /> 
+      :
+    <div>
       {showRegister &&
             <Form.Item
             name="Name"
@@ -77,15 +86,17 @@ export default function SignIn({name, email, password, setName, setEmail, setPas
             
           }
         </Button>
+        
       </Form.Item>
+      </div>}
         {
           showRegister ?  
           <div>
-            Back to <a onClick={() => setShowRegister(false)}>sign in!</a>
+            Back to <a onClick={() => setShowRegister(false)} style={{color: 'orange'}}>sign in</a>
           </div>
             :
           <div>
-            Or <a onClick={() => setShowRegister(true)}>register now!</a>
+            New consultant? <a onClick={() => setShowRegister(true)} style={{color: 'orange'}}>Register now</a>
           </div>
         }
     </Form>
