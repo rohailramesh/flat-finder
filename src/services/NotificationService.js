@@ -26,6 +26,21 @@ export default class NotificationService {
     this.setTabKey = setTabKey;
   }
 
+  async playSound() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createBufferSource();
+  
+    fetch('/assets/message-blip.mp3')
+      .then(response => response.arrayBuffer())
+      .then(data => audioContext.decodeAudioData(data))
+      .then(buffer => {
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        source.start();
+      })
+      .catch(err => console.error('Error with decoding audio data:', err));
+  };
+ 
   async forumPost(fullPost, listing) {
     this.api.info({
       onClick: () => {

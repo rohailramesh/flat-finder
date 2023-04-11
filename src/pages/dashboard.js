@@ -108,6 +108,21 @@ function FlatifyDashboard() {
   ];
   
 
+  // function playSound() {
+  //   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  //   const source = audioContext.createBufferSource();
+  
+  //   fetch('/assets/message-blip.mp3')
+  //     .then(response => response.arrayBuffer())
+  //     .then(data => audioContext.decodeAudioData(data))
+  //     .then(buffer => {
+  //       source.buffer = buffer;
+  //       source.connect(audioContext.destination);
+  //       source.start();
+  //     })
+  //     .catch(err => console.error('Error with decoding audio data:', err));
+  // };
+
 
   async function handleMessageEvent(new_record, eventType, user) {
     //if we sent the message, don't notify!
@@ -118,6 +133,7 @@ function FlatifyDashboard() {
       console.log("Here is the user state var: ", { user });
       if (conversation.user1.id === user.id) {
         notificationService.privateMessage(new_record, conversation.user2);
+        notificationService.playSound();
         dispatch(addMessage(new_record));
         dispatch(addConversation(conversation))
         setUnreadCount(prev => prev + 1);
@@ -125,6 +141,7 @@ function FlatifyDashboard() {
         dispatch(addMessageToSelectedChatHistory(new_record));
       } else if (conversation.user2.id === user.id) {
         notificationService.privateMessage(new_record, conversation.user1);
+        notificationService.playSound();
         dispatch(addMessage(new_record));
         dispatch(addConversation(conversation))
         setUnreadCount(prev => prev + 1);
