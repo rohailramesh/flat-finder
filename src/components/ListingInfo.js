@@ -32,12 +32,11 @@ const { Paragraph } = Typography;
 const ListingInfo = ({ userId }) => {
   const [content, setContent] = useState("");
   const [forumPosts, setForumPosts] = useState([]);
-  const listing = useSelector(state => state.selectedListing)
+  const listing = useSelector((state) => state.selectedListing);
   const { owner } = listing;
 
   const forumPostService = new ForumPostService();
   const dispatch = useDispatch();
-
 
   async function addPost() {
     if (content.length > 0) {
@@ -45,8 +44,8 @@ const ListingInfo = ({ userId }) => {
         userId,
         content,
         listing.forum
-        );
-        console.log(postToAdd);
+      );
+      console.log(postToAdd);
       setContent("");
       setForumPosts((prev) => prev.concat([postToAdd]));
     }
@@ -69,16 +68,15 @@ const ListingInfo = ({ userId }) => {
         <FontAwesomeIcon icon={faArrowLeft} />
       </Button>{" "}
       <br></br>
-      <div style={{ display: "flex"}}>
+      <div style={{ display: "flex" }}>
         <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>
 
-        <Paragraph copyable = {{text: listing.id,
-                                tooltips: ['Copy ID', 'ID Copied!!'],
-                                }}> </Paragraph>
-
+        <Paragraph
+          copyable={{ text: listing.id, tooltips: ["Copy ID", "ID Copied!!"] }}
+        >
+          {" "}
+        </Paragraph>
       </div>
-      
-      
       <Descriptions.Item>
         <div
           style={{
@@ -113,7 +111,7 @@ const ListingInfo = ({ userId }) => {
         <h3 style={{ fontFamily: "IBM_Plex_Serif" }}>Extra information</h3>
         <br />
       </Descriptions.Item>
-      <Descriptions layout="vertical" style={{"white-space":"pre-line"}}>
+      <Descriptions layout="vertical" style={{ "white-space": "pre-line" }}>
         <Descriptions.Item label="Rent">
           £{listing.monthly_price} (pcm)
         </Descriptions.Item>
@@ -121,14 +119,14 @@ const ListingInfo = ({ userId }) => {
           £{listing.deposit}
         </Descriptions.Item>
         <Descriptions.Item label="Listing created on">
-          {listing.created_at}
+          {new Date(listing.created_at).toLocaleDateString()}
         </Descriptions.Item>
 
         <Descriptions.Item label="Address" span={2}>
-          {listing.address.first_line && listing.address.first_line + ', '}
-          {listing.address.second_line && listing.address.second_line + ', '}
-          {listing.address.postcode && listing.address.postcode + ', '} 
-          {listing.address.city && listing.address.city + ', '}
+          {listing.address.first_line && listing.address.first_line + ", "}
+          {listing.address.second_line && listing.address.second_line + ", "}
+          {listing.address.postcode && listing.address.postcode + ", "}
+          {listing.address.city && listing.address.city + ", "}
           {listing.address.country && listing.address.country}
         </Descriptions.Item>
         <Descriptions.Item label="Contract length">
@@ -170,23 +168,28 @@ const ListingInfo = ({ userId }) => {
       </Descriptions>
       <div>
         {forumPosts.map((forumPost) => (
-          <ForumPost key={forumPost.id} forumPost={forumPost} user_id={userId} setForumPosts={setForumPosts}/>
+          <ForumPost
+            key={forumPost.id}
+            forumPost={forumPost}
+            user_id={userId}
+            setForumPosts={setForumPosts}
+          />
         ))}
-          <Row gutter={16}>
-            <Col span={24}>
-                <TextArea
-                style={{width: '80%'}}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={4}
-                placeholder="Post message"
-                maxLength={120}
-                />
-            </Col>
-          </Row>
-          <Button type="primary" onClick={addPost}>
-            Add post
-          </Button>
+        <Row gutter={16}>
+          <Col span={24}>
+            <TextArea
+              style={{ width: "80%" }}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              rows={4}
+              placeholder="Post message"
+              maxLength={120}
+            />
+          </Col>
+        </Row>
+        <Button type="primary" onClick={addPost}>
+          Add post
+        </Button>
       </div>
       <div>{/* <ForumPost forumPost={forumPosts[0]} /> */}</div>
     </>
