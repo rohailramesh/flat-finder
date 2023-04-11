@@ -64,7 +64,7 @@ export default function SearchListingCard({ listing }) {
           objectFit="cover"
           // maxW={{ base: "100%", lg: "150px" }}
           style={{ width: "300px" }}
-          src={listing.images[2]}
+          src={listing.images[0]}
           alt="Caffe Latte"
         />
 

@@ -67,7 +67,7 @@ export default function MapInfoCard({ listing }) {
             objectFit="cover"
             w="300px"
             h="200px"
-            src={listing.images[2]}
+            src={listing.images[0]}
             alt="Caffe Latte"
             />
           <div
