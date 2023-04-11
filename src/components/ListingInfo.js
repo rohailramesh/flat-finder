@@ -125,9 +125,11 @@ const ListingInfo = ({ userId }) => {
         </Descriptions.Item>
 
         <Descriptions.Item label="Address" span={2}>
-          {listing.address.first_line}, {listing.address.second_line},{" "}
-          {listing.address.postcode}, {listing.address.city},{" "}
-          {listing.address.country}
+          {listing.address.first_line && listing.address.first_line + ', '}
+          {listing.address.second_line && listing.address.second_line + ', '}
+          {listing.address.postcode && listing.address.postcode + ', '} 
+          {listing.address.city && listing.address.city + ', '}
+          {listing.address.country && listing.address.country}
         </Descriptions.Item>
         <Descriptions.Item label="Contract length">
           {listing.contract_length} (months)
