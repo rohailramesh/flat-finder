@@ -90,30 +90,21 @@ export default function Home() {
                 alignItems: 'center'
               }}
             >
-              {/* <div style={{ display: "flex" }}>
-                <Image
-                  src="/fdmlogo.png"
-                  width={200}
-                  height={200}
-                  alt="logo"
-                  style={{ margin: "1rem" }}
-                />
-                <Image
-                  src="/fdmlogo.png"
-                  width={200}
-                  height={200}
-                  alt="logo"
-                  style={{ margin: "1rem", marginLeft: "62rem" }}
-                />
-              </div> */}
               <div style={{ display: "flex", height: '100%', width: '100%', justifyContent: 'center', gap: '2rem', alignItems: 'center' }}>
 
-                <div style={{backgroundColor: 'white', minWidth: '20%', padding: '2rem', borderRadius: '10px'}}>
-                  <SignIn/>
+                <div style={{backgroundColor: 'white', minWidth: '20%', padding: '2rem', borderRadius: '10px', transform: 'translateY(-2rem)'}}>
+                <Image
+                  src="/Fdm-logo-black.jpeg"
+                  width={200}
+                  height={200}
+                  alt="logo"
+                  // style={{ margin: "1rem" }}
+                /> 
+                  <SignIn name={name} email={email} password={password} setEmail={setEmail} setName={setName} setPassword={setPassword} handleLogin={handleLogin} handleRegister={handleRegister}/>
                 </div>
 
                 <div style={{ minWidth: '50%', alignSelf: 'stretch', maxWidth: '70%'}}>
-                  <Spline scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
+                  <Spline className='fade-in' scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
                 </div>
               </div>
             </div>

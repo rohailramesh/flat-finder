@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import {useState} from 'react'
 
-export default function SignIn() {
+export default function SignIn({name, email, password, setName, setEmail, setPassword, handleLogin, handleRegister}) {
 
   const [showRegister, setShowRegister] = useState(false)
 
@@ -13,15 +13,16 @@ export default function SignIn() {
   return (
     <Form
       name="normal_login"
-      className="login-form"
+      className="login-form fade-in"
       initialValues={{
         remember: true,
       }}
-      onFinish={onFinish}
+      onFinish={showRegister ? handleRegister : handleLogin}
     >
       {showRegister &&
             <Form.Item
             name="Name"
+            className="fade-in"
             rules={[
               {
                 required: true,
@@ -29,7 +30,11 @@ export default function SignIn() {
               },
             ]}
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Name" />
+            <Input prefix={<UserOutlined className="site-form-item-icon" />}
+             placeholder="Name"
+             value={name}
+             onChange={(e) => setName(e.target.value)}
+             />
           </Form.Item> 
     }
       <Form.Item
@@ -41,7 +46,10 @@ export default function SignIn() {
           },
         ]}
       >
-        <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email" />
+        <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email" 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        />
       </Form.Item>
       <Form.Item
         name="password"
@@ -56,11 +64,18 @@ export default function SignIn() {
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button" block>
-          Log in
+          {
+            showRegister ? 
+            'Verify email' :
+            'Log in'
+            
+          }
         </Button>
       </Form.Item>
         {
