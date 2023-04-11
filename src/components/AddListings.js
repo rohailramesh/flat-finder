@@ -19,8 +19,7 @@ import {
 import { useState, useEffect } from "react";
 import { suffixSelector, beforeUpload, getBase64, emptyListing } from "@/utils";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import ListingService from "@/services/ListingService";
-import GoogleMapsService from "@/services/GoogleMapsService";
+import { listingService, googleMapsService, date } from "@/services/Instances";
 import NotificationService from "@/services/NotificationService";
 import { useSelector } from "react-redux";
 const { RangePicker } = DatePicker;
@@ -45,13 +44,9 @@ function AddListingComponent({
   setListings,
 }) {
   const supabase = useSupabaseClient();
-  const googleMapsService = new GoogleMapsService();
-  const listingService = new ListingService();
-  const date = new Date();
+
   const user = useSelector(state => state.user);
 
-
-  // setListing(listing.concat());
   const [api, contextHolder] = notification.useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [percent, setPercent] = useState(0);
