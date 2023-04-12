@@ -24,7 +24,7 @@ import ForumPost from "./ForumPost.js";
 import AdOwnerCard from "./AdOwnerCard.js";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
-import { setSelectedForumPosts } from "@/redux/selectedForumPostsSlice.js";
+import { addMessageToForumPosts, setSelectedForumPosts } from "@/redux/selectedForumPostsSlice.js";
 
 const { TextArea } = Input;
 const { Paragraph } = Typography;
@@ -48,7 +48,6 @@ const ListingInfo = ({ userId }) => {
       );
       console.log(postToAdd);
       setContent("");
-      setForumPosts((prev) => prev.concat([postToAdd]));
     }
   }
 
