@@ -64,9 +64,13 @@ const ListingInfo = ({ userId }) => {
   }, []);
   return (
     <>
-      <Button onClick={() => dispatch(setSelectedListing({}))}>
-        <FontAwesomeIcon icon={faArrowLeft} />
-      </Button>{" "}
+      {/* <Button onClick={() => dispatch(setSelectedListing({}))}> */}
+      <div style={{cursor: 'pointer', padding: '1rem 1rem 1rem 0rem', display: 'flex', alignItems: 'center', gap: '1rem', maxWidth: '10%'}}
+      >
+        <FontAwesomeIcon icon={faArrowLeft} onClick={() => dispatch(setSelectedListing({}))} />
+        <p style={{marginBottom: 0}}>Back</p>
+      </div>
+      {/* </Button> */}
       <br></br>
       <div style={{ display: "flex" }}>
         <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>
@@ -169,7 +173,7 @@ const ListingInfo = ({ userId }) => {
           <Map listings={[listing]} />
         </div>
         <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-          <h4>Forum ({forumPosts.length})</h4>
+          <h6>Forum ({forumPosts.length})</h6>
           <div>
           {forumPosts.map((forumPost) => (
             <ForumPost
