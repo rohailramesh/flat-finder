@@ -52,6 +52,7 @@ import {
   GlobalOutlined,
 } from "@ant-design/icons";
 import { addConversation, setConversations } from "@/redux/conversationSlice";
+import { addMessageToForumPosts } from "@/redux/selectedForumPostsSlice";
 const { Header, Content, Footer, Sider } = Layout;
 
 function FlatifyDashboard() {
@@ -77,9 +78,11 @@ function FlatifyDashboard() {
   const selectedConvo = useSelector((state) => state.selectedConvo);
   const conversations = useSelector((state) => state.conversations);
   const allMessages = useSelector((state) => state.allMessages);
+  const selectedForumPosts = useSelector(state => state.selectedForumPosts);
 
   const userRef = useRef(user);
   const ownListingsRef = useRef(ownListings);
+  const forumPostsRef = useRef(selectedForumPosts)
 
   const listingService = new ListingService();
   const favListingSevice = new FavListingService();
@@ -156,7 +159,7 @@ function FlatifyDashboard() {
     }
   }
 
-  async function handleForumEvent(new_record, ownListings) {
+  async function handleForumEvent(new_record, ownListings, forumPosts) {
     console.log("Inside handleForumEvent: ", new_record);
     // const new_record = payload.new;
     console.log({ new_record });
@@ -166,6 +169,7 @@ function FlatifyDashboard() {
     for (const { listing } of favListings) {
       if (listing.forum == new_record.forum && listing.owner.id !== user.id) {
         const fullPost = await forumPostService.getPostById(new_record.id);
+        dispatch(addMessageToForumPosts(fullPost))
         notificationService.forumPost(fullPost, listing);
         return;
       }
@@ -175,6 +179,7 @@ function FlatifyDashboard() {
       if (listing.forum == new_record.forum) {
         console.log("Inside if statement of handleForumEvent");
         const fullPost = await forumPostService.getPostById(new_record.id);
+        dispatch(addMessageToForumPosts(fullPost))
         notificationService.forumPost(fullPost, listing);
         return;
       }
@@ -199,7 +204,7 @@ function FlatifyDashboard() {
     }
   }
 
-  function handleRealtimeEvents(payload, user, ownListings) {
+  function handleRealtimeEvents(payload, user, ownListings, forumPosts) {
     console.log(payload);
     const [new_record, table, eventType] = [
       payload.new,
@@ -208,7 +213,7 @@ function FlatifyDashboard() {
     ];
     switch (table) {
       case "forum_post":
-        handleForumEvent(new_record, ownListings);
+        handleForumEvent(new_record, ownListings, forumPosts);
         break;
       case "message":
         handleMessageEvent(new_record, eventType, user);
@@ -231,7 +236,7 @@ function FlatifyDashboard() {
           schema: "public",
         },
         (payload) =>
-          handleRealtimeEvents(payload, userRef.current, ownListingsRef.current)
+          handleRealtimeEvents(payload, userRef.current, ownListingsRef.current, forumPostsRef.current)
       )
       .subscribe();
   }, [supabase]);
@@ -240,6 +245,7 @@ function FlatifyDashboard() {
     console.log("User from redux", user);
     userRef.current = user;
     ownListingsRef.current = ownListings;
+    forumPostsRef.current = selectedForumPosts
   }, [user, ownListings]);
 
   useEffect(() => {
