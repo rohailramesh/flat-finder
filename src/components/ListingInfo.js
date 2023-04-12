@@ -15,6 +15,7 @@ import {
   Descriptions,
   Carousel,
   Typography,
+  BackTop,
 } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 
@@ -64,6 +65,7 @@ const ListingInfo = ({ userId }) => {
   }, []);
   return (
     <>
+      <BackTop />
       <Button onClick={() => dispatch(setSelectedListing({}))}>
         <FontAwesomeIcon icon={faArrowLeft} />
       </Button>{" "}

@@ -3,7 +3,17 @@ import { AutoComplete, message } from "antd";
 import citiesData from "../data/cities.json";
 import SearchResultPage from "@/components/searchResults";
 import FavListings from "@/components/FavListings";
-import { Avatar, Space, Breadcrumb, Layout, Menu, theme, Empty, Badge } from "antd";
+import {
+  Avatar,
+  Space,
+  Breadcrumb,
+  Layout,
+  Menu,
+  theme,
+  Empty,
+  Badge,
+  BackTop,
+} from "antd";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { User, emptyUser } from "@/models/User";
@@ -57,14 +67,15 @@ function FlatifyDashboard() {
   const [listing, setListing] = useState(emptyListing);
   const [tabKey, setTabKey] = useState("1");
   const [unreadCount, setUnreadCount] = useState(0);
-  const [isUnreadCountInitialized, setIsUnreadCountInitialized] = useState(false);
+  const [isUnreadCountInitialized, setIsUnreadCountInitialized] =
+    useState(false);
 
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
   const favListings = useSelector((state) => state.favListings);
   const selectedConvo = useSelector((state) => state.selectedConvo);
-  const conversations = useSelector(state => state.conversations);
+  const conversations = useSelector((state) => state.conversations);
   const allMessages = useSelector((state) => state.allMessages);
 
   const userRef = useRef(user);
@@ -84,7 +95,6 @@ function FlatifyDashboard() {
     await userService.logout(supabase);
   }
 
-
   function getItem(label, key, icon, children) {
     return {
       key,
@@ -93,24 +103,26 @@ function FlatifyDashboard() {
       label,
     };
   }
-  
+
   const items = [
     getItem("Home", "1", <HomeOutlined />),
     getItem("Search", "2", <SearchOutlined />),
     getItem("Global View", "3", <GlobalOutlined />),
     getItem("Add listings", "4", <AppstoreAddOutlined />),
-    getItem(<div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-              <p style={{marginBottom: 0}}>Inbox</p>
-                {unreadCount > 0 && (
-                <Badge count={unreadCount} size='small'/>)}
-            </div>, "5", <InboxOutlined />),
+    getItem(
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <p style={{ marginBottom: 0 }}>Inbox</p>
+        {unreadCount > 0 && <Badge count={unreadCount} size="small" />}
+      </div>,
+      "5",
+      <InboxOutlined />
+    ),
     getItem("Logout", "6", <LogoutOutlined />),
   ];
 
-
   async function handleMessageEvent(new_record, eventType, user) {
     //if we sent the message, don't notify!
-    if (new_record.sender_id !== user.id && eventType === 'INSERT') {
+    if (new_record.sender_id !== user.id && eventType === "INSERT") {
       const conversation = await messageService.getConversationById(
         new_record.conversation_id
       );
@@ -119,16 +131,16 @@ function FlatifyDashboard() {
         notificationService.privateMessage(new_record, conversation.user2);
         notificationService.playSound();
         dispatch(addMessage(new_record));
-        dispatch(addConversation(conversation))
-        setUnreadCount(prev => prev + 1);
+        dispatch(addConversation(conversation));
+        setUnreadCount((prev) => prev + 1);
         //check is done in the redux store!
         dispatch(addMessageToSelectedChatHistory(new_record));
       } else if (conversation.user2.id === user.id) {
         notificationService.privateMessage(new_record, conversation.user1);
         notificationService.playSound();
         dispatch(addMessage(new_record));
-        dispatch(addConversation(conversation))
-        setUnreadCount(prev => prev + 1);
+        dispatch(addConversation(conversation));
+        setUnreadCount((prev) => prev + 1);
         //check is done in the redux store!
         dispatch(addMessageToSelectedChatHistory(new_record));
       } else {
@@ -250,7 +262,7 @@ function FlatifyDashboard() {
       dispatch(setFavListings(new_favListings));
       setOwnListings(new_ownListings);
       setTickets(new_tickets);
-      dispatch(setConversations(new_conversations))
+      dispatch(setConversations(new_conversations));
 
       const twoDMessageArray = await Promise.all(
         new_conversations.map((conversation) => {
@@ -295,13 +307,14 @@ function FlatifyDashboard() {
     setOptions(res);
   };
 
-
   return (
     <Layout
       style={{
         minHeight: "100vh",
       }}
     >
+      <BackTop />
+
       {contextHolder}
       <Sider
         collapsible
@@ -433,13 +446,19 @@ function FlatifyDashboard() {
                 conversations={conversations}
               />
             ) : (
-              <div style={{flexGrow: 1, height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <Empty description={
-                    <p style={{ color: "gray" }}>
-                       Inbox is empty
-                    </p>
-                  } />
-            </div>
+              <div
+                style={{
+                  flexGrow: 1,
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Empty
+                  description={<p style={{ color: "gray" }}>Inbox is empty</p>}
+                />
+              </div>
             ))}
         </Content>
         <Footer

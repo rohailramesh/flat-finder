@@ -70,7 +70,7 @@ const FavListings = ({ favListings }) => {
           textAlign: "left",
           fontFamily: "IBM_Plex_Serif",
           fontSize: "18px",
-          border: "None",
+          // border: "None",
         }}
       >
         Saved listings
