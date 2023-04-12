@@ -65,10 +65,12 @@ const ListingInfo = ({ userId }) => {
   }, []);
   return (
     <>
-      <BackTop />
-      <Button onClick={() => dispatch(setSelectedListing({}))}>
-        <FontAwesomeIcon icon={faArrowLeft} />
-      </Button>{" "}
+      <div style={{cursor: 'pointer', padding: '1rem 1rem 1rem 0rem', display: 'flex', alignItems: 'center', gap: '1rem', maxWidth: '10%'}}
+      >
+        <FontAwesomeIcon icon={faArrowLeft} onClick={() => dispatch(setSelectedListing({}))} />
+        <p style={{marginBottom: 0}}>Back</p>
+      </div>
+
       <br></br>
       <div style={{ display: "flex" }}>
         <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>
@@ -159,24 +161,30 @@ const ListingInfo = ({ userId }) => {
             false
           )}
         </Descriptions.Item>
-        <Descriptions.Item label="Description">
+      </Descriptions>
+      <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+
+       <div style={{ "white-space": "pre-line" }}>
+          <p style={{color: 'gray'}}>Description:</p>
           {listing.description} Listing id: {listing.id}
-        </Descriptions.Item>
-      </Descriptions>
-      <Descriptions>
-        <Descriptions.Item label="View it on a map">
+       </div>
+        <div style={{width: '100%'}}>
+        <p style={{color: 'gray'}}>Map:</p>
           <Map listings={[listing]} />
-        </Descriptions.Item>
-      </Descriptions>
-      <div>
-        {forumPosts.map((forumPost) => (
-          <ForumPost
+        </div>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+          <h6>Forum ({forumPosts.length})</h6>
+          <div>
+          {forumPosts.map((forumPost) => (
+            <ForumPost
             key={forumPost.id}
             forumPost={forumPost}
             user_id={userId}
             setForumPosts={setForumPosts}
-          />
-        ))}
+            />
+            ))}
+          </div>
+      </div>
         <Row gutter={16}>
           <Col span={24}>
             <TextArea
@@ -189,11 +197,12 @@ const ListingInfo = ({ userId }) => {
             />
           </Col>
         </Row>
-        <Button type="primary" onClick={addPost}>
+        <div style={{width: '30%'}}>
+          <Button type="primary" onClick={addPost} style={{flexShrink: 1, flexGrow: 0}}>
           Add post
         </Button>
+        </div>
       </div>
-      <div>{/* <ForumPost forumPost={forumPosts[0]} /> */}</div>
     </>
   );
 };
