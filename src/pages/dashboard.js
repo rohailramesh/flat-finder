@@ -169,8 +169,10 @@ function FlatifyDashboard() {
     for (const { listing } of favListings) {
       if (listing.forum == new_record.forum && listing.owner.id !== user.id) {
         const fullPost = await forumPostService.getPostById(new_record.id);
-        dispatch(addMessageToForumPosts(fullPost))
-        notificationService.forumPost(fullPost, listing);
+        if (new_record.author !== user.id){
+          dispatch(addMessageToForumPosts(fullPost))
+          notificationService.forumPost(fullPost, listing);
+        }
         return;
       }
     }
@@ -179,8 +181,10 @@ function FlatifyDashboard() {
       if (listing.forum == new_record.forum) {
         console.log("Inside if statement of handleForumEvent");
         const fullPost = await forumPostService.getPostById(new_record.id);
-        dispatch(addMessageToForumPosts(fullPost))
-        notificationService.forumPost(fullPost, listing);
+        if (new_record.author !== user.id){
+          dispatch(addMessageToForumPosts(fullPost))
+          notificationService.forumPost(fullPost, listing);
+        }
         return;
       }
     }

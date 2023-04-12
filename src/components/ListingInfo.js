@@ -48,6 +48,7 @@ const ListingInfo = ({ userId }) => {
       );
       console.log(postToAdd);
       setContent("");
+      dispatch(addMessageToForumPosts(postToAdd))
     }
   }
 
