@@ -178,9 +178,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                     okText="Yes"
                     cancelText="No"
                   >
-                    {/* <Button> */}
                     <DeleteTwoTone />
-                    {/* </Button> */}
                   </Popconfirm>
                 </div>
               }
@@ -196,7 +194,6 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                 textAlign: "left",
               }}
             >
-              &nbsp;
               <h3>
                 <strong>Title: </strong>
                 {ticket.title}
@@ -205,12 +202,12 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
                 <strong>Description: </strong>
                 {ticket.content}
               </p>
-              <p>
-                <strong>Admin comments: </strong>
-                {ticket.admin_comment
-                  ? ticket.admin_comment
-                  : "comments made by admin will be visible here"}
-              </p>
+              {ticket.admin_comment && (
+                  <p>
+                    <strong>Admin comments: </strong>
+                    {ticket.admin_comment}
+                  </p>
+                )}
             </Card>
           ))
         )}
