@@ -78,50 +78,83 @@ export default function Home() {
       googleMapsApiKey={GOOGLE_MAPS_API_KEY}
       loadingElement={<Loading />}
     >
-        {popUp}
-        {session ? (
-          isAdmin === null ? (
-            <Loading />
-          ) : isAdmin ? (
-            <AdminDashboard />
-          ) : (
-            isAdmin === false && <FlatifyDashboard />
-          )
+      {popUp}
+      {session ? (
+        isAdmin === null ? (
+          <Loading />
+        ) : isAdmin ? (
+          <AdminDashboard />
         ) : (
-          <>
+          isAdmin === false && <FlatifyDashboard />
+        )
+      ) : (
+        <>
+          <div
+            style={{
+              // backgroundColor: "#2a3e78",
+              // background: "linear-gradient(135deg, #2a3e78, #4e6cb0)",
+              // background: "linear-gradient(135deg, #2a3e78, #5a5ab6, #2a3e78, #5d6b94)",
+              background: "linear-gradient(135deg, #2a3e78, #5a5ab6, #2a3e78)",
+              // background: "linear-gradient(135deg,  #ff7e5f, #4e6cb0)",
+              height: "100vh",
+              width: "100vw",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <div
               style={{
-                // backgroundColor: "#2a3e78",
-                // background: "linear-gradient(135deg, #2a3e78, #4e6cb0)",
-                // background: "linear-gradient(135deg, #2a3e78, #5a5ab6, #2a3e78, #5d6b94)",
-                background: "linear-gradient(135deg, #2a3e78, #5a5ab6, #2a3e78)",
-                // background: "linear-gradient(135deg,  #ff7e5f, #4e6cb0)",
-                height: '100vh',
-                width: '100vw',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
+                display: "flex",
+                height: "100%",
+                width: "100%",
+                justifyContent: "space-evenly",
+                alignItems: "center",
               }}
             >
-              <div style={{ display: "flex", height: '100%', width: '100%', justifyContent: 'space-evenly', alignItems: 'center' }}>
-
-                <div style={{backgroundColor: 'white', minWidth: '20%', padding: '2rem', borderRadius: '10px', transform: 'translateY(-2rem)'}}>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  minWidth: "20%",
+                  padding: "2rem",
+                  borderRadius: "10px",
+                  transform: "translateY(-2rem)",
+                }}
+              >
                 <Image
                   src="/Fdm-logo-black.jpeg"
                   width={200}
                   height={200}
                   alt="logo"
-                /> 
-                  <SignIn name={name} email={email} password={password} setEmail={setEmail} setName={setName} setPassword={setPassword} handleLogin={handleLogin} handleRegister={handleRegister} emailSent={emailSent}/>
-                </div>
+                  // style={{ margin: "1rem" }}
+                />
+                <SignIn
+                  name={name}
+                  email={email}
+                  password={password}
+                  setEmail={setEmail}
+                  setName={setName}
+                  setPassword={setPassword}
+                  handleLogin={handleLogin}
+                  handleRegister={handleRegister}
+                  emailSent={emailSent}
+                />
+              </div>
 
-                <div style={{ minWidth: '50%', alignSelf: 'stretch', maxWidth: '70%', position: 'relative'}}>
-                <Spline style={{zIndex: 1}} className='fade-in' scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
-                </div>
+              <div
+                style={{
+                  minWidth: "50%",
+                  alignSelf: "stretch",
+                  maxWidth: "70%",
+                  position: 'relative'
+                }}
+              >
+                <Spline scene="https://prod.spline.design/hi0Jxh3HBgXwoleJ/scene.splinecode" />
               </div>
             </div>
-          </>
-        )}
+          </div>
+        </>
+      )}
     </LoadScript>
   );
 }
