@@ -14,6 +14,9 @@ export default class UserService {
         },
       },
     });
+
+    console.log({error})
+    if (error) throw Error(error.message);
     const response = await supabase
       .from("profile")
       .insert({
@@ -34,6 +37,8 @@ export default class UserService {
       email,
       password,
     });
+    console.log({error})
+    if (error) throw Error(error.message);
     const response = await supabase
       .from("profile")
       .update({ last_sign_in_at: data.user.last_sign_in_at })
