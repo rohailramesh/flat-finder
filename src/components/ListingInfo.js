@@ -33,7 +33,7 @@ const ListingInfo = ({ userId }) => {
   const [content, setContent] = useState("");
   // const [forumPosts, setForumPosts] = useState([]);
   const listing = useSelector((state) => state.selectedListing);
-  const forumPosts = useSelector(state => state.selectedForumPosts)
+  const forumPosts = useSelector((state) => state.selectedForumPosts);
   const { owner } = listing;
 
   const forumPostService = new ForumPostService();
@@ -65,14 +65,22 @@ const ListingInfo = ({ userId }) => {
   }, []);
   return (
     <>
-      <div style={{cursor: 'pointer', padding: '1rem 1rem 1rem 0rem', display: 'flex', alignItems: 'center', gap: '1rem', maxWidth: '10%'}}
-      onClick={() => {
-        dispatch(setSelectedListing({}))
-        dispatch(setSelectedForumPosts(null))
-        }} 
+      <div
+        style={{
+          cursor: "pointer",
+          padding: "1rem 1rem 1rem 0rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          maxWidth: "10%",
+        }}
+        onClick={() => {
+          dispatch(setSelectedListing({}));
+          dispatch(setSelectedForumPosts(null));
+        }}
       >
-        <FontAwesomeIcon icon={faArrowLeft}/>
-        <p style={{marginBottom: 0}}>Back</p>
+        <FontAwesomeIcon icon={faArrowLeft} />
+        <p style={{ marginBottom: 0 }}>Back</p>
       </div>
 
       <br></br>
@@ -166,29 +174,29 @@ const ListingInfo = ({ userId }) => {
           )}
         </Descriptions.Item>
       </Descriptions>
-      <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-
-       <div style={{ "white-space": "pre-line" }}>
-          <p style={{color: 'gray'}}>Description:</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div style={{ "white-space": "pre-line" }}>
+          <p style={{ color: "gray" }}>Description:</p>
           {listing.description} Listing id: {listing.id}
-       </div>
-        <div style={{width: '100%'}}>
-        <p style={{color: 'gray'}}>Map:</p>
+        </div>
+        <div style={{ width: "100%" }}>
+          <p style={{ color: "gray" }}>Map:</p>
           <Map listings={[listing]} />
         </div>
-        <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <h6>Forum ({forumPosts ? forumPosts.length : 0})</h6>
           <div>
-          {forumPosts && forumPosts.map((forumPost) => (
-            <ForumPost
-            key={forumPost.id}
-            forumPost={forumPost}
-            user_id={userId}
-            // setForumPosts={setForumPosts}
-            />
-            ))}
+            {forumPosts &&
+              forumPosts.map((forumPost) => (
+                <ForumPost
+                  key={forumPost.id}
+                  forumPost={forumPost}
+                  user_id={userId}
+                  // setForumPosts={setForumPosts}
+                />
+              ))}
           </div>
-      </div>
+        </div>
         <Row gutter={16}>
           <Col span={24}>
             <TextArea
@@ -201,10 +209,14 @@ const ListingInfo = ({ userId }) => {
             />
           </Col>
         </Row>
-        <div style={{width: '30%'}}>
-          <Button type="primary" onClick={addPost} style={{flexShrink: 1, flexGrow: 0}}>
-          Add post
-        </Button>
+        <div style={{ width: "30%" }}>
+          <Button
+            type="primary"
+            onClick={addPost}
+            style={{ flexShrink: 1, flexGrow: 0 }}
+          >
+            Add post
+          </Button>
         </div>
       </div>
     </>
