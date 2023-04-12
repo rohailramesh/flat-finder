@@ -157,24 +157,30 @@ const ListingInfo = ({ userId }) => {
             false
           )}
         </Descriptions.Item>
-        <Descriptions.Item label="Description">
+      </Descriptions>
+      <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+
+       <div style={{ "white-space": "pre-line" }}>
+          <p style={{color: 'gray'}}>Description:</p>
           {listing.description} Listing id: {listing.id}
-        </Descriptions.Item>
-      </Descriptions>
-      <Descriptions>
-        <Descriptions.Item label="View it on a map">
+       </div>
+        <div style={{width: '100%'}}>
+        <p style={{color: 'gray'}}>Map:</p>
           <Map listings={[listing]} />
-        </Descriptions.Item>
-      </Descriptions>
-      <div>
-        {forumPosts.map((forumPost) => (
-          <ForumPost
+        </div>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+          <h4>Forum ({forumPosts.length})</h4>
+          <div>
+          {forumPosts.map((forumPost) => (
+            <ForumPost
             key={forumPost.id}
             forumPost={forumPost}
             user_id={userId}
             setForumPosts={setForumPosts}
-          />
-        ))}
+            />
+            ))}
+          </div>
+      </div>
         <Row gutter={16}>
           <Col span={24}>
             <TextArea
@@ -187,11 +193,12 @@ const ListingInfo = ({ userId }) => {
             />
           </Col>
         </Row>
-        <Button type="primary" onClick={addPost}>
+        <div style={{width: '30%'}}>
+          <Button type="primary" onClick={addPost} style={{flexShrink: 1, flexGrow: 0}}>
           Add post
         </Button>
+        </div>
       </div>
-      <div>{/* <ForumPost forumPost={forumPosts[0]} /> */}</div>
     </>
   );
 };
