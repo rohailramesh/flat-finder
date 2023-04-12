@@ -17,12 +17,10 @@ import {
   Typography,
   BackTop,
 } from "antd";
-import { MessageOutlined } from "@ant-design/icons";
 
 import Map from "../components/Map.js";
 import ForumPostService from "@/services/ForumPostService.js";
 import ForumPost from "./ForumPost.js";
-import { Avatar, flexbox } from "@chakra-ui/react";
 import AdOwnerCard from "./AdOwnerCard.js";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";

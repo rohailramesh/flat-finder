@@ -1,13 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import styles from "../styles/login_register.module.css";
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Spline from "@splinetool/react-spline";
-import Login from "@/components/login";
-import Register from "@/components/register";
 import Image from "next/image";
 import FlatifyDashboard from "./dashboard";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -18,7 +11,10 @@ import Loading from "../components/Loading";
 import AdminDashboard from "./admin";
 import { useDispatch } from "react-redux";
 import { setCurrentUser, setUser } from "@/redux/userSlice";
+import  { Suspense } from "react";
 import SignIn from "@/components/SignIn";
+
+// const Spline = React.lazy(() => import('@splinetool/react-spline'));
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Home() {
@@ -28,6 +24,7 @@ export default function Home() {
   const [user, setCurrentUser] = useState("");
   const [isAdmin, setIsAdmin] = useState(null);
   const [emailSent, setEmailSent] = useState(false);
+  // const [showSpline, setShowSpline] = useState(false);
 
   const [api, popUp] = notification.useNotification();
 
@@ -36,27 +33,36 @@ export default function Home() {
   const session = useSession();
   const supabase = useSupabaseClient();
 
-  function openNotificationWithIcon(type) {
+  function openNotificationWithIcon(type, message, description) {
     api[type]({
-      message: "Confirmation email sent!",
+      message,
       duration: 3,
-      description:
-        "We sent you a confirmation email. Click on the link provided to confirm your account and login",
+      description,
     });
   }
 
   async function handleRegister() {
-    const user = await userService.register(supabase, name, email, password);
-    setEmailSent(true);
-    openNotificationWithIcon("success");
-    setCurrentUser(user);
+    try {
+      const user = await userService.register(supabase, name, email, password);
+      setEmailSent(true);
+      openNotificationWithIcon("success", "Confirmation email sent!", "We sent you a confirmation email. Click on the link provided to confirm your account and login");
+      setCurrentUser(user);
+    } catch (error) {
+      console.log(error)
+      openNotificationWithIcon('error', 'Registration error', error.message)
+    }
   }
 
   async function handleLogin() {
-    const user = await userService.login(supabase, email, password);
-    setIsAdmin(user.is_admin);
-    dispatch(setUser(user));
-    setCurrentUser(user);
+    try {
+      const user = await userService.login(supabase, email, password);
+      setIsAdmin(user.is_admin);
+      dispatch(setUser(user));
+      setCurrentUser(user);
+    } catch (error) {
+      console.log(error)
+      openNotificationWithIcon('error', 'Login unsuccessful', error.message)
+    }
   }
 
   useEffect(() => {
@@ -65,6 +71,7 @@ export default function Home() {
       setIsAdmin(user_profile.is_admin);
     })();
   }, [session]);
+
 
   return (
     <LoadScript
@@ -104,13 +111,12 @@ export default function Home() {
                   width={200}
                   height={200}
                   alt="logo"
-                  // style={{ margin: "1rem" }}
                 /> 
                   <SignIn name={name} email={email} password={password} setEmail={setEmail} setName={setName} setPassword={setPassword} handleLogin={handleLogin} handleRegister={handleRegister} emailSent={emailSent}/>
                 </div>
 
-                <div style={{ minWidth: '50%', alignSelf: 'stretch', maxWidth: '70%'}}>
-                  <Spline className='fade-in' scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
+                <div style={{ minWidth: '50%', alignSelf: 'stretch', maxWidth: '70%', position: 'relative'}}>
+                <Spline style={{zIndex: 1}} className='fade-in' scene="https://prod.spline.design/vSBp0ZsBbz8R18l5/scene.splinecode" />
                 </div>
               </div>
             </div>
