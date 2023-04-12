@@ -24,14 +24,16 @@ import ForumPost from "./ForumPost.js";
 import AdOwnerCard from "./AdOwnerCard.js";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedListing } from "@/redux/selectedListingSlice";
+import { setSelectedForumPosts } from "@/redux/selectedForumPostsSlice.js";
 
 const { TextArea } = Input;
 const { Paragraph } = Typography;
 
 const ListingInfo = ({ userId }) => {
   const [content, setContent] = useState("");
-  const [forumPosts, setForumPosts] = useState([]);
+  // const [forumPosts, setForumPosts] = useState([]);
   const listing = useSelector((state) => state.selectedListing);
+  const forumPosts = useSelector(state => state.selectedForumPosts)
   const { owner } = listing;
 
   const forumPostService = new ForumPostService();
@@ -55,7 +57,7 @@ const ListingInfo = ({ userId }) => {
       listing.forum
     );
     // console.log(fetchPostsResponse);
-    setForumPosts(fetchPostsResponse.data);
+    dispatch(setSelectedForumPosts(fetchPostsResponse.data));
   }
 
   useEffect(() => {
@@ -64,8 +66,12 @@ const ListingInfo = ({ userId }) => {
   return (
     <>
       <div style={{cursor: 'pointer', padding: '1rem 1rem 1rem 0rem', display: 'flex', alignItems: 'center', gap: '1rem', maxWidth: '10%'}}
+      onClick={() => {
+        dispatch(setSelectedListing({}))
+        dispatch(setSelectedForumPosts(null))
+        }} 
       >
-        <FontAwesomeIcon icon={faArrowLeft} onClick={() => dispatch(setSelectedListing({}))} />
+        <FontAwesomeIcon icon={faArrowLeft}/>
         <p style={{marginBottom: 0}}>Back</p>
       </div>
 
@@ -171,14 +177,14 @@ const ListingInfo = ({ userId }) => {
           <Map listings={[listing]} />
         </div>
         <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-          <h6>Forum ({forumPosts.length})</h6>
+          <h6>Forum ({forumPosts ? forumPosts.length : 0})</h6>
           <div>
-          {forumPosts.map((forumPost) => (
+          {forumPosts && forumPosts.map((forumPost) => (
             <ForumPost
             key={forumPost.id}
             forumPost={forumPost}
             user_id={userId}
-            setForumPosts={setForumPosts}
+            // setForumPosts={setForumPosts}
             />
             ))}
           </div>

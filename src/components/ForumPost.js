@@ -10,6 +10,7 @@ import MessageService from "@/services/messageService";
 import { addMessage } from "@/redux/messagesSlice";
 import { addConversation } from "@/redux/conversationSlice";
 import { useDispatch } from "react-redux";
+import { removeForumPost } from "@/redux/selectedForumPostsSlice";
 
 function ForumPost({ forumPost, user_id, setForumPosts }) {
   const { author } = forumPost;
@@ -58,7 +59,8 @@ function ForumPost({ forumPost, user_id, setForumPosts }) {
   async function handleDelete() {
     const { error } = await forumPostService.removeForumPost(forumPost.id);
     if (!error)
-      setForumPosts((prev) => prev.filter((post) => post.id !== forumPost.id));
+      // setForumPosts((prev) => prev.filter((post) => post.id !== forumPost.id));
+      dispatch(removeForumPost(forumPost.id))
   }
 
   return (

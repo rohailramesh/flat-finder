@@ -7,6 +7,7 @@ import selectedConvoSlice from "./selectedConvoSlice";
 import favListingsSlice from "./favListingSlice";
 import selectedChatHistory from "./selectedChatHistory";
 import conversationSlice from "./conversationSlice";
+import selectedForumPostsSlice from "./selectedForumPostsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,5 +18,6 @@ export const store = configureStore({
     selectedConvo: selectedConvoSlice,
     favListings: favListingsSlice,
     selectedChatHistory: selectedChatHistory,
+    selectedForumPosts: selectedForumPostsSlice
   },
 });
