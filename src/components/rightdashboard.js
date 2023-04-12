@@ -21,7 +21,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 const RightDashboard = ({ user }) => {
   const supabase = useSupabaseClient();
   return (
-    <div className={styles.outerContainer}>
+    <div className={styles.outerContainer + ' glass-container'}>
       <ProfilePicture
         url={user.avatar_url}
         user_id={user.id}
@@ -30,9 +30,6 @@ const RightDashboard = ({ user }) => {
       <div>
         <Paragraph>{user.name}</Paragraph>
       </div>
-      {/* <div className={styles.flexContainer}>
-      <InboxOutlined color="black" />
-    </div> */}
       <Button
         style={{ display: "flex", alignItems: "center" }}
         onClick={() => {

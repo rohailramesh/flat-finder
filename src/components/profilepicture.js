@@ -63,7 +63,7 @@ const ProfilePicture = ({ url, name }) => {
     </div>
   );
   return (
-    <>
+    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       <Upload
         name="avatar"
         listType="picture-circle"
@@ -72,9 +72,9 @@ const ProfilePicture = ({ url, name }) => {
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
-        <Avatar size='xl' name={name} src={user.avatar_url}/>
+        <Avatar size='xl' name={name} src={user.avatar_url} />
       </Upload>
-    </>
+    </div>
   );
 };
 export default ProfilePicture;
