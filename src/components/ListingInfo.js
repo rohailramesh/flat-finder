@@ -15,6 +15,7 @@ import {
   Descriptions,
   Carousel,
   Typography,
+  BackTop,
 } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 
@@ -64,13 +65,12 @@ const ListingInfo = ({ userId }) => {
   }, []);
   return (
     <>
-      {/* <Button onClick={() => dispatch(setSelectedListing({}))}> */}
       <div style={{cursor: 'pointer', padding: '1rem 1rem 1rem 0rem', display: 'flex', alignItems: 'center', gap: '1rem', maxWidth: '10%'}}
       >
         <FontAwesomeIcon icon={faArrowLeft} onClick={() => dispatch(setSelectedListing({}))} />
         <p style={{marginBottom: 0}}>Back</p>
       </div>
-      {/* </Button> */}
+
       <br></br>
       <div style={{ display: "flex" }}>
         <h2 style={{ fontFamily: "IBM_Plex_Serif" }}>{listing.title}</h2>

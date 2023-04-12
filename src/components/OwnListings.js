@@ -35,7 +35,7 @@ function OwnListings({ ownListings }) {
           textAlign: "left",
           fontFamily: "IBM_Plex_Serif",
           fontSize: "18px",
-          border: "None",
+          // border: "None",
         }}
       >
         Own listings

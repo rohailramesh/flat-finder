@@ -4,7 +4,7 @@ import OwnListings from "./OwnListings";
 import TicketsComponent from "./Tickets";
 import ListingInfo from "./ListingInfo";
 import { useSelector } from "react-redux";
-
+import { BackTop } from "antd";
 const ConsultantHomePage = ({
   favListings,
   ownListings,
@@ -13,10 +13,11 @@ const ConsultantHomePage = ({
   tickets,
 }) => {
   // const [selectedListing, setSelectedListing] = useState("");
-  const selectedListing = useSelector(state => state.selectedListing)
+  const selectedListing = useSelector((state) => state.selectedListing);
 
   return (
     <>
+      <BackTop />
       {Object.keys(selectedListing).length ? (
         <ListingInfo
           listing={selectedListing}
