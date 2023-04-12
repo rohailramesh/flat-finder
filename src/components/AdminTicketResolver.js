@@ -65,10 +65,10 @@ const AdminTicketResolver = (props) => {
     }
   }
 
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
-    setOpen(false);
-  };
+  // const handleCancel = () => {
+  //   console.log("Clicked cancel button");
+  //   setOpen(false);
+  // };
 
   // function changeStatus(newStatus) {
   //   const ticketId = selectedTicket.id;
@@ -195,7 +195,6 @@ const AdminTicketResolver = (props) => {
                 title="Delete ticket"
                 description="Do you wish to delete this ticket?"
                 onConfirm={() => deleteTicket()}
-                onCancel={handleCancel}
                 okText="Yes"
                 cancelText="No"
               >

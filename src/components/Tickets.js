@@ -91,7 +91,7 @@ function TicketsComponent({ user_id, setTickets, tickets }) {
           fontFamily: "IBM_Plex_Serif",
           fontSize: "18px",
           // paddingRight: "-300px",
-          border: "None",
+          // border: "None",
         }}
       >
         My tickets
