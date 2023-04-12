@@ -79,7 +79,8 @@ export default function SearchListingCard({ listing }) {
             <div>
               <p>
                 <FontAwesomeIcon icon={faMapMarkerAlt} /> &nbsp;
-                {listing.address.second_line}, {listing.address.city}
+                {listing.address.first_line && listing.address.first_line + ','}
+                {listing.address.city}
               </p>
             </div>
             {/* <br /> */}
