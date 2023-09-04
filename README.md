@@ -18,10 +18,10 @@ And much more. There are two other repositories that you could find, which are f
 
 ## Screenshots ⚡️
 <div style="display: flex">
-  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682604855/Screenshot_2023-04-27_at_15.14.06_wwonbw.png" alt="drawing" width="500"/>
-  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682605359/Screenshot_2023-04-27_at_15.21.52_ww37qh.png" alt="drawing" width="500"/>
-  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682605451/Screenshot_2023-04-27_at_15.24.01_z1q6qv.png" alt="drawing" width="500"/>
-  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682605598/Screenshot_2023-04-27_at_15.26.19_o5oae1.png" alt="drawing" width="500"/>
+  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682604855/Screenshot_2023-04-27_at_15.14.06_wwonbw.png" alt="drawing" width="400"/>
+  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682605359/Screenshot_2023-04-27_at_15.21.52_ww37qh.png" alt="drawing" width="400"/>
+  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682605451/Screenshot_2023-04-27_at_15.24.01_z1q6qv.png" alt="drawing" width="400"/>
+  <img src="https://res.cloudinary.com/gianni-bertuzzi/image/upload/v1682605598/Screenshot_2023-04-27_at_15.26.19_o5oae1.png" alt="drawing" width="400"/>
 </div>
 
 ### Contributors 🚀 
